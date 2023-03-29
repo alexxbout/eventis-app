@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Styles de base des éléments HTML : polices, marges, couleurs de fond... */
+@layer base {}
+
+/* Styles de composants : boutons, formulaires, cartes... */
+@layer components {
+    .active {
+        @apply text-primary;
+    }
+
+    .inactive {
+        @apply text-custom-gray;
+    }
+}
+
+/* Styles utilitaires : centrage, positionnement, taille et couleur du texte... */
+@layer utilities {}
+
+* {
+    -webkit-tap-highlight-color: rgba(0,0,0,0); /* Retire le halo bleu sur les liens sur mobile */
+}
