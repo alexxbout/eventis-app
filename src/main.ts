@@ -2,9 +2,9 @@ import { createApp } from "vue"
 import "./style.css"
 import App from "./App.vue"
 
-import Accueil from "./Accueil.vue"
+import Home from "./Home.vue"
 import Messages from "./Messages.vue"
-import Profil from "./Profil.vue"
+import Profil from "./Profile.vue"
 import Notifs from "./Notifs.vue"
 
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
@@ -16,7 +16,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
         name: "Accueil",
-        component: Accueil
+        component: Home
     },
     {
         path: "/messages",
@@ -24,7 +24,7 @@ const routes: Array<RouteRecordRaw> = [
         component: Messages
     },
     {
-        path: "/profil",
+        path: "/profile",
         name: "Profil",
         component: Profil
     },

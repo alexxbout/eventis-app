@@ -1,7 +1,7 @@
 <template>
-    <div class="w-full flex flex-col rounded-2xl h-max overflow-hidden shadow-custom">
+    <div class=" w-full flex flex-col rounded-2xl h-max overflow-hidden shadow-card">
         <!-- Image -->
-        <div :style="{ backgroundImage: 'url(' + data.image + ')' }" class="h-[366px] w-full bg-no-repeat bg-cover">
+        <div :style="{ backgroundImage: 'url(' + data.image + ')' }" :class="data.ended ? 'grayscale' : 'grayscale-0'" class="h-[366px] w-full bg-no-repeat bg-cover">
         </div>
 
         <!-- Info -->
@@ -10,7 +10,7 @@
                 class="uppercase font-semibold text-sm"> {{ data.ended ? "Évènement terminé" : "Évènement en cours"
                 }}</span>
 
-            <span class="text-2xl font-semibold text-secondary">{{ data.title }}</span>
+            <span class="text-2xl font-semibold text-black">{{ data.title }}</span>
 
             <span class="text-custom-gray text-sm font-light">{{ data.subtitle }}</span>
         </div>
@@ -33,4 +33,5 @@ defineProps({
         required: true
     }
 });
+
 </script>

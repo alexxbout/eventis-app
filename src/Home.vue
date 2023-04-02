@@ -1,9 +1,9 @@
 <template>
-    <div class="flex flex-col gap-y-10 mb-20" ref="container">
+    <div class="flex flex-col gap-y-10 mb-20">
 
         <div class="flex flex-col gap-y-2">
             <span class="uppercase text-custom-gray font-semibold text-sm">{{ date }}</span>
-            <span class="text-4xl font-semibold text-secondary">Évènements</span>
+            <span class="text-4xl font-bold text-black">Évènements</span>
         </div>
 
         <EventCard v-for="event in events" :event="event" :data="event" />
@@ -20,8 +20,6 @@ const date = ref(new Date().toLocaleDateString("fr-FR", {
     day: "numeric",
     month: "long"
 }));
-
-const container = ref<HTMLElement>();
 
 const events = ref<IEvent[]>([]);
 

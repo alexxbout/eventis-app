@@ -1,5 +1,7 @@
 <template>
-    <p>Notifs</p>
+    <div class="flex flex-col gap-y-10 mb-20">
+        <span class="text-4xl font-bold text-black">Notifications</span>
+    </div>
 </template>
 
 <script setup lang="ts">

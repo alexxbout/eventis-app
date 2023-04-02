@@ -16,7 +16,8 @@ module.exports = {
         "inter": ["Inter", "sans-serif"]
       },
       boxShadow: {
-        "custom": "0px 0px 70px 0px hsla(0, 0%, 45%, 0.25)"
+        "card": "0px 0px 70px 0px hsla(0, 0%, 45%, 0.25)",
+        "navbar": "0px 0px 40px 11px hsla(0, 0%, 0%, 0.4)"
       }
     },
   },

@@ -1,17 +1,25 @@
 <template>
-    <div class="border-t-[0.2px] border-custom-gray fixed w-screen bottom-0 py-2 bg-white grid grid-cols-5 text-xs">
+    <div class="fixed bottom-1 w-screen flex items-center justify-center z-10">
 
-        <router-link v-for="tab in tabs" class="flex flex-col items-center justify-center focus:bg-none" :class="getStatusClass(tab.path)" :to="tab.path">
+        <div :class="showLabels ? 'gap-5 p-2' : 'gap-12 py-4 px-6'" class="rounded-3xl shadow-navbar w-max grid grid-cols-5 text-xs bg-black/80 backdrop-blur-[33px] bg-blend-overlay">
 
-            <i v-if="tab.name != 'Recherche'" :class="tab.svg" class="text-2xl"></i>
-            <span v-if="tab.name != 'Recherche'">{{ tab.name }}</span>
-
-            <div v-else class="w-full flex items-center justify-center">
-                <div class="absolute w-[65px] h-[65px] bg-primary rounded-full -inset-y-6 flex items-center justify-center">
-                    <i class="text-3xl text-white" :class="tab.svg"></i>
+            <div v-for="tab in tabs">
+                <div v-if="tab.preventRender" @click="searchCallBack">
+                    <div class="w-full flex items-center justify-center">
+                        <div class="absolute w-[60px] h-[60px] bg-primary rounded-full -inset-y-6 flex items-center justify-center">
+                            <i class="text-[30px] text-white" :class="tab.svg"></i>
+                        </div>
+                    </div>
                 </div>
+
+                <router-link v-else :to="tab.path" :class="getStatusClass(tab.path)" class="flex flex-col items-center justify-center focus:bg-none">
+                    <div class="w-full flex flex-col items-center justify-center">
+                        <i :class="tab.svg" class="text-2xl"></i>
+                        <span v-if="showLabels">{{ tab.name }}</span>
+                    </div>
+                </router-link>
             </div>
-        </router-link>
+        </div>
 
     </div>
 </template>
@@ -30,26 +38,37 @@
  * router.beforeEach : called outside of a component, when the route changes
  */
 
-import { Ref, ref } from "vue";
+import { Ref, ref, toRefs, PropType } from "vue";
 import { useRoute } from "vue-router";
+
+defineProps({
+    searchCallBack: {
+        type: Function as PropType<() => void>,
+        required: true
+    }
+});
 
 const current = useRoute();
 
 interface tab {
     name: string;
     path: string;
-    svg?: string;
+    svg: string;
+    preventRender?: boolean;
 }
 
 const tabs: Ref<tab[]> = ref([
     { name: "Accueil", path: "/", svg: "bi bi-house-fill" },
     { name: "Messages", path: "/messages", svg: "bi bi-chat-fill" },
-    { name: "Recherche", path: "", svg: "bi bi-person-plus-fill" },
-    { name: "Profil", path: "/profil", svg: "bi bi-person-circle" },
+    { name: "Recherche", path: "", svg: "bi bi-search", preventRender: true },
+    { name: "Profil", path: "/profile", svg: "bi bi-person-circle" },
     { name: "Notifs", path: "/notifs", svg: "bi bi-bell-fill" }
 ]);
+
+const showLabels = ref(false);
 
 function getStatusClass(to: string) {
     return to == current.path ? "active" : "inactive";
 }
+
 </script>
