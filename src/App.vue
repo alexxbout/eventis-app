@@ -20,14 +20,13 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, ref, onMounted, ComponentPublicInstance } from "vue";
+import { ref, onMounted } from "vue";
 import { gsap } from "gsap";
-import { CustomEase } from "gsap/CustomEase";
 import Navbar from "./components/Navbar.vue";
 import Search from "./components/Search.vue";
 
+// Bug quand on utilise une ref ici
 let searchComponentAnimation: GSAPAnimation | null = null;
-let contentAnimation: GSAPAnimation | null = null;
 
 const searchComponent = ref<InstanceType<typeof Search> | null>(null);
 
@@ -35,12 +34,12 @@ const showSearch = ref(false);
 
 const content = ref<HTMLElement | null>(null);
 
+let prevScrollY = 0;
+
 const toggleSearch = () => {
   showSearch.value = !showSearch.value;
   animeSearch();
 }
-
-let prevScrollY = 0;
 
 function animeSearch() {
   const currentScrollY = window.scrollY;
@@ -56,11 +55,11 @@ function animeSearch() {
       window.scrollTo(0, currentScrollY);
     }
 
+    searchComponentAnimation?.timeScale(1);
     searchComponentAnimation?.play();
-    contentAnimation?.play();
   } else {
+    searchComponentAnimation?.timeScale(2.5);
     searchComponentAnimation?.reverse();
-    contentAnimation?.reverse();
 
     if (content.value) {
       content.value.style.position = "relative";
@@ -77,29 +76,15 @@ onMounted(() => {
     e.preventDefault();
   });
 
-
   if (searchComponent.value?.card) {
-
-    contentAnimation = gsap.fromTo(content.value,
-      {
-        opacity: 1,
-      },
-      {
-        opacity: 0.2,
-        duration: 0.3,
-        ease: "power2.out",
-        paused: true
-      }
-    );
-
     searchComponentAnimation = gsap.fromTo(searchComponent.value.card,
       {
-        translateY: "100%",
+        translateY: "100%"
       },
       {
         translateY: "0%",
-        duration: 0.3,
-        ease: "power2.out",
+        duration: 0.75,
+        ease: "expo.out",
         paused: true,
         onReverseComplete: () => {
           searchComponent.value?.card?.classList.add("hidden");

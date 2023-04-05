@@ -14,6 +14,10 @@
     .inactive {
         @apply text-custom-gray;
     }
+
+    .header {
+        @apply font-bold text-3xl text-black;
+    }
 }
 
 /* Styles utilitaires : centrage, positionnement, taille et couleur du texte... */

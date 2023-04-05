@@ -2,21 +2,26 @@
     <div ref="card" class="fixed h-screen w-screen z-20 bottom-0">
         <div class="h-1/4 w-full" @click="searchCallBack"></div>
 
-        <div class="h-3/4 w-full rounded-t-[35px] bg-white p-8 shadow-card overscroll-contain">
-            <div class="h-full overflow-y-auto">
+        <div id="search_header" class="h-3/4 w-full rounded-t-[35px] bg-white shadow-card overscroll-contain">
+            <!-- Recherche header avec input et zone de drag -->
+            <div  class="h-max overflow-y-auto flex flex-col gap-y-5 p-8">
                 <div>
-                    <span class="font-semibold text-3xl text-black">Recherche</span>
+                    <span class="text-black text-3xl font-medium">Recherche</span>
                 </div>
 
-                <div class="h-screen"></div>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <i class="bi bi-search text-[#818181] text-lg"></i>
+                    </div>
+                    <input type="text" class="bg-[#EEEFF1] placeholder-[#818181] rounded-lg block w-full pl-10 p-2.5" placeholder="Recherche">
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { PropType, Ref, ref } from "vue";
-import { gsap } from "gsap";
+import { PropType, ref } from "vue";
 
 defineProps({
     searchCallBack: {
