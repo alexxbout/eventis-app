@@ -1,12 +1,12 @@
 <template>
-    <div class="fixed bottom-1 w-screen flex items-center justify-center z-10">
+    <div ref="el" class="fixed bottom-1 w-screen flex items-center justify-center z-10 opacity-100">
 
-        <div :class="showLabels ? 'gap-5 p-2' : 'gap-12 py-4 px-6'" class="rounded-3xl shadow-navbar w-max grid grid-cols-5 text-xs bg-black/80 backdrop-blur-[33px]">
+        <div :class="showLabels ? 'gap-5 p-2' : 'gap-12 py-3 px-5'" class="rounded-2xl shadow-navbar w-max grid grid-cols-5 text-xs bg-black/80 backdrop-blur-[33px]">
 
             <div v-for="tab in tabs">
                 <div v-if="tab.preventRender" @click="searchCallBack">
                     <div class="w-full flex items-center justify-center">
-                        <div class="absolute w-[60px] h-[60px] bg-primary rounded-full -inset-y-4 flex items-center justify-center">
+                        <div class="absolute w-[60px] h-[60px] bg-primary rounded-full -inset-y-5 flex items-center justify-center">
                             <i class="text-[30px] text-white" :class="tab.svg"></i>
                         </div>
                     </div>
@@ -48,6 +48,8 @@ defineProps({
     }
 });
 
+const el = ref<HTMLElement | null>(null);
+
 const current = useRoute();
 
 interface tab {
@@ -70,5 +72,9 @@ const showLabels = ref(false);
 function getStatusClass(to: string) {
     return to == current.path ? "active" : "inactive";
 }
+
+defineExpose({
+    el
+});
 
 </script>

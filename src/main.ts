@@ -2,7 +2,7 @@ import { createApp } from "vue"
 import "./style.css"
 import App from "./App.vue"
 
-import Home from "./Home.vue"
+import Events from "./Events.vue"
 import Messages from "./Messages.vue"
 import Profil from "./Profile.vue"
 import Notifs from "./Notifs.vue"
@@ -16,7 +16,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
         name: "Accueil",
-        component: Home
+        component: Events
     },
     {
         path: "/messages",

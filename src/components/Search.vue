@@ -1,5 +1,5 @@
 <template>
-    <div ref="card" class="fixed h-screen w-screen z-20 bottom-0">
+    <div ref="el" class="fixed h-screen w-screen z-20 bottom-0">
         <div class="h-1/4 w-full" @click="searchCallBack"></div>
 
         <div id="search_header" class="h-3/4 w-full rounded-t-[35px] bg-white shadow-card overscroll-contain">
@@ -30,10 +30,10 @@ defineProps({
     }
 });
 
-const card = ref<HTMLElement | null>(null);
+const el = ref<HTMLElement | null>(null);
 
 defineExpose({
-    card
+    el
 });
 
 </script>
