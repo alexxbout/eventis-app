@@ -3,37 +3,44 @@
     <div :style="{ height: (topCardSize + bottomCardSize) + 'px' }" class="w-full">
 
         <!-- Card -->
-        <div ref="card" @touchstart="touchStart" @touchend="touchEnd" @click="openCard" :style="{ height: (topCardSize + bottomCardSize) + 'px', overflowY: (opened ? 'scroll' : 'hidden') }" class="relative w-full flex flex-col overflow-hidden shadow-card rounded-2xl bg-white">
-
-            <i ref="close" @click="closeCard" class="bi bi-x-circle-fill absolute opacity-0 top-5 right-5 text-3xl text-white z-10"></i>
+        <div ref="card" @touchstart="touchStart" @touchend="touchEnd" @click="openCard" :style="{ height: (topCardSize + bottomCardSize) + 'px' }" class="relative w-full shadow-card overflow-hidden rounded-2xl bg-white overscroll-contain">
 
             <!-- Image -->
-            <div ref="topCard" :style="{ backgroundImage: 'url(' + data.image + ')', height: topCardSize + 'px'}" class="w-full bg-no-repeat bg-cover bg-center">
+            <div ref="topCard" :style="{ backgroundImage: 'url(' + data.image + ')', height: topCardSize + 'px' }" class="w-full bg-no-repeat bg-cover bg-center">
             </div>
 
             <!-- Info -->
             <div :style="{ height: bottomCardSize + 'px' }" class="w-full flex flex-col p-5">
-                <span :class="{ 'text-custom-gray': !data.ended, 'text-custom-red': data.ended }" class="uppercase font-semibold text-sm"> {{ data.ended ? "Évènement terminé" : "Évènement en cours"
-                }}</span>
+                <span :class="{ 'text-custom-gray': !data.ended, 'text-custom-red': data.ended }" class="uppercase font-semibold text-sm">
+                    {{ data.ended ? "Évènement terminé" : "Évènement en cours" }}
+                </span>
 
                 <span class="text-2xl font-semibold text-black">{{ data.title }}</span>
 
                 <span class="text-custom-gray text-sm font-light">{{ data.subtitle }}</span>
             </div>
 
-            <div class="h-0">
-                <div class="p-5 gap-y-5 flex flex-col text-custom-gray">
-                    <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt dignissimos ipsum optio numquam laudantium similique distinctio dolores modi, obcaecati id delectus, velit, expedita quis quam sapiente tempora beatae exercitationem illo!</span>
-                    <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam ratione quos veritatis, repudiandae, exercitationem, amet fuga aperiam nihil quibusdam explicabo voluptatum rem. Odit veniam maiores alias unde sapiente voluptate laboriosam adipisci harum, in veritatis ea placeat provident sed sequi, minus pariatur exercitationem vitae! Nemo sequi in dolor sint eum id tenetur, accusantium perferendis incidunt molestias esse adipisci cum expedita hic inventore quo dolore exercitationem autem quae voluptates nostrum molestiae voluptatum reiciendis asperiores? Quae, necessitatibus omnis explicabo illum inventore fugiat ea reprehenderit saepe dignissimos tenetur esse ad cumque nam fugit cupiditate doloribus magnam non accusamus commodi consequuntur porro mollitia ullam. Culpa maiores, mollitia labore est ullam commodi sequi sunt unde suscipit, consequatur excepturi, quaerat amet! Quis ea, soluta dignissimos rerum quae nemo laborum, cupiditate amet, blanditiis dolores quisquam voluptatibus eum aspernatur sequi sit. Sed fuga eos, corrupti ea optio quibusdam reiciendis ipsa odit tempora animi amet sit, voluptatum sequi nisi velit!</span>
+            <!-- Content -->
+            <div ref="content" class="p-5 hidden pb-14">
+                <div v-for="data in props.data.description" class="flex-col flex gap-y-5 text-custom-gray">
+                    <span>{{ data }}</span>
+                    <br>
                 </div>
             </div>
         </div>
+
+        <i ref="close" @click="closeCard" class="bi bi-x-circle-fill text-3xl text-black hidden fixed top-5 right-5 z-10"></i>
     </div>
 </template>
 
 <script setup lang="ts">
+/**
+ * NB: Pour les animations avec GSAP, on préfère les définir dans une constante globale afin de pouvoir appeler la fonction reverse() par la suite.
+ * Cependant, les animations de ce composant ne peuvent pas être enregistrées dans une variable globale car certains paramètres (comme la taille de la carte) ne sont pas encore définis.
+ */
+
 import { IApp } from "../App.vue";
-import { ref, PropType, onMounted } from "vue";
+import { ref, PropType, onMounted, onUnmounted } from "vue";
 import { gsap } from "gsap";
 
 export interface IEvent {
@@ -41,12 +48,8 @@ export interface IEvent {
     subtitle: string;
     ended: boolean;
     image: string;
+    description?: Array<string>;
 }
-
-const topCardSize = ref(320);
-const bottomCardSize = ref(115);
-
-const opened = ref(false);
 
 const props = defineProps({
     data: {
@@ -59,64 +62,100 @@ const props = defineProps({
     }
 });
 
+const opened = ref(false);
+
+const topCardSize = ref(350);
+const bottomCardSize = ref(115);
+
 const card = ref<HTMLElement>();
 const topCard = ref<HTMLElement>();
+const content = ref<HTMLElement>();
 const close = ref<HTMLElement>();
 
-onMounted(() => {
-    // Handle ref errors
-    if (!card.value) {
-        console.log("card is undefined");
-        return;
-    }
-});
-
 function openCard() {
-    if (!card.value || !topCard.value || !close.value || opened.value) return;
+    if (!card.value || !topCard.value || !content.value || !close.value || opened.value) return;
 
+    // Update opened value
     opened.value = true;
 
+    // Hide navbar
     props.funcs.hideNavbar();
 
+    // Reset card size (in case of touch event)
     card.value.style.transform = "scale(1)";
 
+    // Remove box-shadow of card to improve performances
     card.value.classList.remove("shadow-card");
 
-    gsap.to(close.value, {
-        opacity: 1,
-        duration: 0.6,
-        ease: "power4.out"
-    });
+    // Allow scroll on card
+    card.value.style.overflowY = "scroll";
 
-    gsap.to(card.value, {
+
+    const tl = gsap.timeline();
+
+    tl.to(card.value, {
         translateX: card.value.getBoundingClientRect().left * -1 + "px",
         translateY: card.value.getBoundingClientRect().top * -1 + "px",
         width: "100vw",
         height: "100vh",
         borderRadius: "0",
         zIndex: "10",
-        duration: 0.6,
-        ease: "power4.out"
+        duration: 1,
+        ease: "elastic.out(1, 1)",
     });
 
+    tl.fromTo(close.value,
+        {
+            opacity: 0
+        },
+        {
+            onStart: () => {
+                // Show close button
+                close.value?.classList.remove("hidden");
+            },
+            opacity: 1,
+            duration: 0.5
+        }, "<0.5");
+
+    content.value.classList.remove("hidden");
+
+    // Animate content
+    gsap.fromTo(content.value,
+        {
+            opacity: 0
+        },
+        {
+            opacity: 1,
+            duration: 1.5,
+            ease: "power4.out"
+        });
+
+    // Set body fixed to prevent scroll
     props.funcs.setFixed();
 }
 
 function closeCard() {
-    if (!card.value || !topCard.value || !close.value || !opened.value) return;
+    if (!card.value || !topCard.value || !content.value || !close.value || !opened.value) return;
 
+    // Show navbar
     props.funcs.showNavbar();
 
+    // Restore box-shadow of card
     card.value.classList.add("shadow-card");
 
-    gsap.to(close.value, {
-        opacity: 0,
-        duration: 0.6,
-        ease: "power4.out"
-    });
+    // Hide close button
+    close.value?.classList.add("hidden");
 
+    // Scroll to top
     card.value?.scrollTo(0, 0);
 
+    // Prevent card scroll
+    card.value.style.overflowY = "hidden";
+
+    // Remove body fixed for scroll
+    props.funcs.removeFixed();
+
+    // Animate card
     gsap.to(card.value, {
         translateX: "0",
         translateY: "0",
@@ -124,20 +163,22 @@ function closeCard() {
         height: (topCardSize.value + bottomCardSize.value) + "px",
         borderRadius: "1rem",
         zIndex: "1",
-        duration: 0.6,
-        ease: "power4.out"
+        duration: 1.2,
+        ease: "elastic.out(1, 1.2)",
     }).then(() => {
+        // Update opened value
         opened.value = false;
     });
 
-    props.funcs.removeFixed();
+    // Hide content
+    content.value.classList.add("hidden");
 }
 
 function touchStart() {
     if (!card.value || opened.value) return;
 
     gsap.to(card.value, {
-        scale: 0.95,
+        scale: 0.93,
         duration: 0.5
     });
 }

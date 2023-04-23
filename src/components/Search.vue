@@ -2,7 +2,7 @@
     <div ref="el" class="fixed h-screen w-screen z-20 bottom-0">
         <div class="h-1/4 w-full" @click="searchCallBack"></div>
 
-        <div id="search_header" class="h-3/4 w-full rounded-t-[35px] bg-white shadow-card overscroll-contain">
+        <div id="search_header" class="h-3/4 w-full rounded-t-[35px] bg-white overscroll-contain">
             <!-- Recherche header avec input et zone de drag -->
             <div  class="h-max overflow-y-auto flex flex-col gap-y-5 p-8">
                 <div>

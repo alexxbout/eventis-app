@@ -16,7 +16,7 @@
     }
 
     .header {
-        @apply font-bold text-3xl text-black;
+        @apply font-semibold text-3xl text-black;
     }
 }
 

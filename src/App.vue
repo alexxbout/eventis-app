@@ -104,7 +104,7 @@ function animeSearch() {
     searchComponentAnimation?.timeScale(1);
     searchComponentAnimation?.play();
   } else {
-    searchComponentAnimation?.timeScale(2.5);
+    searchComponentAnimation?.timeScale(2);
     searchComponentAnimation?.reverse();
 
     removeFixed();

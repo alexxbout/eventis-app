@@ -1,7 +1,7 @@
 <template>
-    <div ref="el" class="fixed bottom-1 w-screen flex items-center justify-center z-10 opacity-100">
+    <div ref="el" class="fixed bottom-0 w-screen flex items-center justify-center z-10 opacity-100">
 
-        <div :class="showLabels ? 'gap-5 p-2' : 'gap-12 py-3 px-5'" class="rounded-2xl shadow-navbar w-max grid grid-cols-5 text-xs bg-black/80 backdrop-blur-[33px]">
+        <div :class="showLabels ? 'gap-5 p-2' : 'gap-12 py-3 px-5'" class="border-t w-screen grid grid-cols-5 text-xs bg-white">
 
             <div v-for="tab in tabs">
                 <div v-if="tab.preventRender" @click="searchCallBack">
@@ -67,7 +67,7 @@ const tabs: Ref<tab[]> = ref([
     { name: "Notifs", path: "/notifs", svg: "bi bi-bell-fill" }
 ]);
 
-const showLabels = ref(false);
+const showLabels = ref(true);
 
 function getStatusClass(to: string) {
     return to == current.path ? "active" : "inactive";

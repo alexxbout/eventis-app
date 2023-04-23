@@ -17,7 +17,8 @@ module.exports = {
       },
       boxShadow: {
         "card": "0px 0px 70px 0px hsla(0, 0%, 45%, 0.25)",
-        "navbar": "0px 0px 40px 5px hsla(0, 0%, 0%, 0.4)"
+        "navbar": "0px 0px 40px 5px hsla(0, 0%, 0%, 0.4)",
+        "actionbar": "0px -33px 55px 15px #FFFFFF"
       }
     },
   },
