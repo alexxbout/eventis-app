@@ -23,3 +23,11 @@ export interface ITab {
   svg : string;
   custom?: boolean;
 }
+
+export interface IConversationCard {
+  userFullName    : string;
+  lastMessage     : string;
+  lastMessageTime : string;
+  nbUnreadMessages: number;
+  userAvatar?     : string;
+}

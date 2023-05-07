@@ -6,7 +6,7 @@
         <div id="search_header" class="h-3/4 w-full rounded-t-[35px] bg-white overscroll-contain shadow-card">
             <div class="h-max overflow-y-auto flex flex-col gap-y-5 p-8">
                 <div>
-                    <span class="text-black text-3xl font-medium">Recherche</span>
+                    <span class="text-black text-3xl font-semibold">Recherche</span>
                 </div>
 
                 <div class="relative">

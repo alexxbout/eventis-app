@@ -9,8 +9,11 @@ module.exports = {
       colors: {
         "primary": "#166CF7",
         "secondary": "#17305C",
+        "custom-light-blue": "#ECF3FD",
         "custom-gray": "#A2A2A2",
+        "custom-light-gray": "#FAFAFA",
         "custom-red": "#D0454A",
+        "custom-green": "#82D045"
       },
       fontFamily: {
         "inter": ["Inter", "sans-serif"]
