@@ -47,8 +47,4 @@ const open = () => {
 }
 
 defineExpose({ open });
-
-onMounted(() => {
-    console.log(props.app);
-});
 </script>
