@@ -2,13 +2,15 @@ import { createApp } from "vue"
 import "./style.css"
 import App from "./App.vue"
 
-import Events from "./Events.vue"
-import Messages from "./Messages.vue"
-import Profil from "./Profile.vue"
-import Notifs from "./Notifs.vue"
+import Events from "./router/Events.vue"
+import Messages from "./router/Messages.vue"
+import Profil from "./router/Profile.vue"
+import Notifs from "./router/Notifs.vue"
 
+// Importation des méthodes pour créer le router
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
+// Permet d'utiliser les icônes de Bootstrap
 import "bootstrap-icons/font/bootstrap-icons.css"
 
 // Définition des routes
