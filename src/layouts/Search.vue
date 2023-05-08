@@ -1,6 +1,6 @@
 <template>
     <!-- Search -->
-    <div v-show="opened" class="fixed h-screen w-screen z-20 bottom-0">
+    <div v-show="opened" class="fixed h-screen bg-gray-200/60 backdrop-blur w-screen z-20 bottom-0">
         <div class="h-1/4 w-full" @click="close"></div>
 
         <div id="search_header" class="h-3/4 w-full rounded-t-[35px] bg-white overscroll-contain shadow-card">
