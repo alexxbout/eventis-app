@@ -16,9 +16,8 @@
 </template>
 
 <script setup lang="ts">
-import type { IEvent } from "../types/interfaces";
-
-import EventCard from "../components/EventCard.vue"
+import type { IEvent } from "@/types/interfaces";
+import EventCard from "@/components/events/EventCard.vue"
 import { ref } from "vue"
 
 // ########################################### Variables ###########################################  

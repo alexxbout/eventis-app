@@ -18,9 +18,9 @@
 
 <script setup lang="ts">
 import { ref, onMounted, PropType } from "vue";
-import Navbar from "./layouts/Navbar.vue";
-import Search from "./layouts/Search.vue";
-import { IApp } from "./types/interfaces";
+import Navbar from "@/layouts/Navbar.vue";
+import Search from "@/layouts/Search.vue";
+import { IApp } from "@/types/interfaces";
 
 // ########################################### Variables ###########################################  
 const searchComponent = ref<InstanceType<typeof Search> | null>(null);

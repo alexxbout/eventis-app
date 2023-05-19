@@ -7,9 +7,9 @@
 </template>
 
 <script setup lang="ts">
-import type { IConversationCard } from "../types/interfaces";
+import type { IConversationCard } from "@/types/interfaces";
 
-import ConversationCard from "../components/ConversationCard.vue";
+import ConversationCard from "@/components/conversation/ConversationCard.vue";
 import { ref } from "vue";
 
 const conversations = ref<IConversationCard[]>([

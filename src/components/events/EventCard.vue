@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import type IEvent from "../types/interfaces";
+import type { IEvent } from "@/types/interfaces";
 
 import { ref, PropType } from "vue";
 
