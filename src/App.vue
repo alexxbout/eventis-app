@@ -1,15 +1,15 @@
 <template>
   <!-- Desktop -->
-  <div class="hidden w-screen h-screen md:flex items-center justify-center">
+  <div class="items-center justify-center hidden w-screen h-screen md:flex">
     <div>Revenez nous voir sur mobile !</div>
   </div>
 
   <!-- Mobile -->
-  <div class="md:hidden w-screen h-full select-none">
+  <div class="w-screen h-full select-none md:hidden">
     <Search ref="searchComponent" :app="{ setFixed, removeFixed }" />
 
     <div ref="content">
-      <router-view class="px-5 py-10 bg-white"></router-view>
+      <router-view class="bg-white margins"></router-view>
     </div>
 
     <Navbar ref="navbar" @@open-search="handleSearch" />
@@ -17,10 +17,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, PropType } from "vue";
-import Navbar from "@/layouts/Navbar.vue";
-import Search from "@/layouts/Search.vue";
-import { IApp } from "@/types/interfaces";
+import { ref, onMounted } from "vue";
+import Navbar from "./layouts/Navbar.vue";
+import Search from "./layouts/Search.vue";
 
 // ########################################### Variables ###########################################  
 const searchComponent = ref<InstanceType<typeof Search> | null>(null);

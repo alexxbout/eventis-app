@@ -14,14 +14,15 @@ module.exports = {
         "custom-light-gray": "#FAFAFA",
         "custom-red": "#D0454A",
         "custom-red-alert": "#DB2121",
-        "custom-green": "#82D045"
+        "custom-green": "#69AF31"
       },
       fontFamily: {
         "inter": ["Inter", "sans-serif"]
       },
       boxShadow: {
         "card": "0px 0px 70px 0px hsla(0, 0%, 45%, 0.25)",
-        "navbar": "0px 0px 44px 20px rgba(0,0,0,0.1)"
+        "navbar": "0px 0px 44px 20px rgba(0,0,0,0.1)",
+        "modal": "0px 20px 140px 67px rgba(0, 0, 0, 0.19)"
       }
     },
   },

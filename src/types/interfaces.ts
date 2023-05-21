@@ -1,7 +1,8 @@
 export interface IUser {
-  name    : string;
-  lastname: string;
-  login   : string;
+  firstname: string;
+  lastname : string;
+  password?: string;
+  login   ?: string;
 }
 
 export interface IApp {
@@ -30,4 +31,9 @@ export interface IConversationCard {
   lastMessageTime : string;
   nbUnreadMessages: number;
   userAvatar?     : string;
+}
+
+export interface IRegistration {
+  next    : () => void;
+  previous: () => void;
 }

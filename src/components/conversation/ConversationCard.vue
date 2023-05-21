@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import type { IConversationCard } from "@/types/interfaces";
+import type { IConversationCard } from "../../types/interfaces";
 
 import { PropType } from "vue";
 

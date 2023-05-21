@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col gap-y-8 mb-20">
+    <div class="flex flex-col mb-20 gap-y-8">
         <span class="header">Messages</span>
 
         <ConversationCard v-for="conv in conversations" :data="conv" />
@@ -7,9 +7,9 @@
 </template>
 
 <script setup lang="ts">
-import type { IConversationCard } from "@/types/interfaces";
+import type { IConversationCard } from "../../types/interfaces";
 
-import ConversationCard from "@/components/conversation/ConversationCard.vue";
+import ConversationCard from "../../components/conversation/ConversationCard.vue";
 import { ref } from "vue";
 
 const conversations = ref<IConversationCard[]>([

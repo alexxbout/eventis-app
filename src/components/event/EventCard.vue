@@ -1,6 +1,6 @@
 <template>
     <!-- Card wrapper -->
-    <div :style="{ height: (topCardSize + bottomCardSize) + 'px' }" class="w-full">
+    <div :style="{ height: (topCardSize + bottomCardSize) + 'px' }" class="w-full" @click="openEvent">
 
         <!-- Card -->
         <div :style="{ height: (topCardSize + bottomCardSize) + 'px' }" class="relative w-full shadow-card overflow-hidden rounded-2xl bg-white overscroll-contain">
@@ -19,22 +19,16 @@
 
                 <span class="text-custom-gray text-sm font-light">{{ data.subtitle }}</span>
             </div>
-
-            <!-- Content -->
-            <div class="p-5 hidden pb-14">
-                <div v-for="data in props.data.description" class="flex-col flex gap-y-5 text-custom-gray">
-                    <span>{{ data }}</span>
-                    <br>
-                </div>
-            </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import type { IEvent } from "@/types/interfaces";
-
+import type { IEvent } from "../../types/interfaces";
 import { ref, PropType } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const props = defineProps({
     data: {
@@ -45,5 +39,12 @@ const props = defineProps({
 
 const topCardSize = ref(350);
 const bottomCardSize = ref(115);
+
+function openEvent() {
+    router.push({ name: "eventDetail", params: { id: 1 } });
+
+    console.log("Open event");
+    
+}
 
 </script>
