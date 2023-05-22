@@ -46,6 +46,14 @@
     .btn-primary {
         @apply disabled:bg-gray-600 flex gap-x-2 items-center justify-center bg-primary rounded-full text-white font-semibold px-10 py-3;
     }
+
+    .btn-primary-xs {
+        @apply disabled:bg-gray-600 flex gap-x-2 items-center justify-center bg-primary rounded-full text-white font-semibold px-5 py-2;
+    }
+
+    .btn-secondary {
+        @apply disabled:bg-gray-600 flex gap-x-2 items-center justify-center border-2 border-primary bg-white rounded-full text-primary font-semibold px-10 py-3;
+    }
 }
 
 /* Styles utilitaires : centrage, positionnement, taille et couleur du texte... */

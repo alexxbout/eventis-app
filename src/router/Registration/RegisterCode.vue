@@ -25,8 +25,8 @@
         </div>
 
         <!-- Suivant -->
-        <div class="flex items-center justify-end w-full">
-            <button :disabled="!readyToSubmit" class="btn-primary">
+        <div class="flex items-center justify-end w-full gap-x-5">
+            <button :disabled="!readyToSubmit" class="btn-primary w-1/2">
                 <span>Suivant</span>
                 <i class="text-xl bi bi-arrow-right-short"></i>
             </button>
@@ -39,7 +39,7 @@ import type { IRegistration } from "../../types/interfaces";
 
 import Spinner from "../../components/Spinner.vue";
 
-import ApiService from "../../services/ApiService";
+import ApiService from "../../utils/UtilsApi";
 
 import { useRouter } from "vue-router";
 import { PropType, ref, } from "vue";

@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import authService from "../../services/AuthService";
+import UtilsAuth from "../../utils/UtilsAuth";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 
@@ -62,10 +62,10 @@ function openRegistration() {
 }
 
 async function handleLogin() {
-    await authService.login(loginField.value, passwordField.value);
+    await UtilsAuth.login(loginField.value, passwordField.value);
 
-    if (authService.isLoggedIn()) {
-        router.push("/events");
+    if (UtilsAuth.isLoggedIn()) {
+        router.push({ name: "events"});
     }
 }
 

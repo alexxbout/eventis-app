@@ -1,5 +1,5 @@
 import { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
-import authService from "./AuthService";
+import authService from "../utils/UtilsAuth";
 
 export function routesGuard(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
     const requiresAuth = to.meta.requiresAuth;

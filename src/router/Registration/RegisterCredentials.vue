@@ -6,17 +6,17 @@
             <div class="flex flex-col gap-y-7">
                 <div>
                     <label for="">Nom</label>
-                    <input v-model="lastnameField" @input="handleInput" type="text" class="input" placeholder=" " minlength="1" maxlength="30" required>
+                    <input v-model="lastnameInput" @input="handleInput" type="text" class="input" placeholder=" " minlength="1" maxlength="30" required>
                 </div>
 
                 <div>
                     <label for="">Prénom</label>
-                    <input v-model="firstnameField" @input="handleInput" type="text" class="input" placeholder=" " minlength="1" maxlength="30" required>
+                    <input v-model="firstnameInput" @input="handleInput" type="text" class="input" placeholder=" " minlength="1" maxlength="30" required>
                 </div>
 
                 <div>
                     <label for="">Mot de passe</label>
-                    <input v-model="passwordField" @input="handleInput" type="password" class="input" placeholder=" " pattern="^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,100}$" required>
+                    <input v-model="passwordInput" @input="handleInput" type="password" class="input" placeholder=" " pattern="^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,100}$" required>
 
                     <div class="flex w-full justify-between pt-2">
                         <div class="flex flex-col">
@@ -69,7 +69,7 @@
  * Il faut alors exposer les données personnelles dans le composant parent
  */
 
-import type { IUser } from "../../types/interfaces";
+import type IUser from "../../types/User";
 import { ref, PropType, onBeforeMount, onMounted } from "vue";
 import { useRoute } from "vue-router";
 
@@ -80,9 +80,9 @@ const reqNumber = ref(false);
 const reqSpecialChar = ref(false);
 const reqCount = ref(false);
 
-const firstnameField = ref("");
-const lastnameField = ref("");
-const passwordField = ref("");
+const firstnameInput = ref("");
+const lastnameInput = ref("");
+const passwordInput = ref("");
 const readyToSubmit = ref(false);
 const form = ref<HTMLFormElement | null>(null);
 
@@ -93,9 +93,9 @@ const handleSubmit = () => {
     if (form.value?.checkValidity()) {
         emit("@sendCredentials",
             <IUser>{
-                firstname: firstnameField.value,
-                lastname: lastnameField.value,
-                password: passwordField.value
+                firstname: firstnameInput.value,
+                lastname: lastnameInput.value,
+                password: passwordInput.value
             });
     }
 }
@@ -110,7 +110,7 @@ function getFormValidity(): boolean {
 }
 
 function updateRequirements() {
-    const password = passwordField.value;
+    const password = passwordInput.value;
 
     reqUppercase.value = /[A-Z]/.test(password);
     reqLowercase.value = /[a-z]/.test(password);

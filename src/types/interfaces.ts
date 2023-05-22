@@ -1,9 +1,11 @@
-export interface IUser {
-  firstname: string;
-  lastname : string;
-  password?: string;
-  login   ?: string;
-}
+// TO BE DELETED
+
+// export interface IUser {
+//   firstname: string;
+//   lastname : string;
+//   password?: string;
+//   login   ?: string;
+// }
 
 export interface IApp {
   setFixed   : () => void;

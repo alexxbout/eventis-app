@@ -4,19 +4,13 @@ import App from "./App.vue"
 
 import { routesGuard } from "./services/RouteGuard";
 
-import Home                from "./router/App/Home.vue"
-import Register            from "./router/Registration/Register.vue"
-import RegisterCredentials from "./router/Registration/RegisterCredentials.vue"
-import RegisterCode        from "./router/Registration/RegisterCode.vue"
-import RegisterPicture     from "./router/Registration/RegisterPicture.vue"
-import RegisterFriends     from "./router/Registration/RegisterFriends.vue"
-import RegisterInterests   from "./router/Registration/RegisterInterests.vue"
-import RegisterCongrats    from "./router/Registration/RegisterCongrats.vue"
-import Events              from "./router/App/Events.vue"
+import Home                from "./router/app/Home.vue"
+import Register            from "./router/registration/Register.vue"
+import Events              from "./router/app/Events.vue"
 import EventDetail         from "./components/event/EventDetail.vue"
-import Messages            from "./router/App/Messages.vue"
-import Profil              from "./router/App/Profile.vue"
-import Notifs              from "./router/App/Notifs.vue"
+import Messages            from "./router/app/Messages.vue"
+import Profil              from "./router/app/Profile.vue"
+import Notifs              from "./router/app/Notifs.vue"
 
 // Importation des méthodes pour créer le router
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
@@ -43,63 +37,6 @@ const routes: Array<RouteRecordRaw> = [
             requiresAuth: false,
             hideNavbar: true
         }
-        // children: [
-        //     {
-        //         path: "code",
-        //         name: "registerCode",
-        //         component: RegisterCode,
-        //         meta: {
-        //             requiresAuth: false,
-        //             hideNavbar: true
-        //         }
-        //     },
-        //     {
-        //         path: "credentials",
-        //         name: "registerCredentials",
-        //         component: RegisterCredentials,
-        //         meta: {
-        //             requiresAuth: false,
-        //             hideNavbar: true
-        //         },
-        //         props: true
-        //     },
-        //     {
-        //         path: "picture",
-        //         name: "registerPicture",
-        //         component: RegisterPicture,
-        //         meta: {
-        //             requiresAuth: true,
-        //             hideNavbar: true
-        //         }
-        //     },
-        //     {
-        //         path: "friends",
-        //         name: "registerFriends",
-        //         component: RegisterFriends,
-        //         meta: {
-        //             requiresAuth: true,
-        //             hideNavbar: true
-        //         }
-        //     },
-        //     {
-        //         path: "interests",
-        //         name: "registerInterests",
-        //         component: RegisterInterests,
-        //         meta: {
-        //             requiresAuth: true,
-        //             hideNavbar: true
-        //         }
-        //     },
-        //     {
-        //         path: "congrats",
-        //         name: "registerCongrats",
-        //         component: RegisterCongrats,
-        //         meta: {
-        //             requiresAuth: true,
-        //             hideNavbar: true
-        //         }
-        //     }
-        // ]
     },
     {
         path: "/events",
@@ -138,7 +75,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "notifs",
         component: Notifs,
         meta: {
-            requiresAuth: true
+            requiresAuth: true,
         }
     }
 ];
