@@ -69,7 +69,7 @@
  * Il faut alors exposer les données personnelles dans le composant parent
  */
 
-import type IUser from "../../types/User";
+import type { IUser } from "../../types/User";
 import { ref, PropType, onBeforeMount, onMounted } from "vue";
 import { useRoute } from "vue-router";
 

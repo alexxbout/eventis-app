@@ -1,78 +1,106 @@
 <template>
-    <button @click="handleClick" :class="customClasses" class="text-[14px] flex items-center justify-center font-semibold text-center text-white disabled:bg-gray-600 gap-x-2 bg-primary">
-        {{ props.data.text }}
+    <button @click="handleClick" :style="defaultStyle" class="text-[14px] flex items-center justify-center font-semibold text-center text-white disabled:bg-gray-600">
+        {{ buttonProps.text }}
     </button>
 </template>
-
+  
 <script setup lang="ts">
-import { PropType, ref } from "vue";
+import type { IButton } from "../types/Button";
+import {
+    PropType,
+    computed,
+    onMounted,
+    ref,
+    defineProps,
+    defineEmits,
+    defineExpose,
+} from "vue";
+
+const COLORS = {
+    BLUE: "#166CF7",
+    GREEN: "#69AF31",
+    RED: "#D0454A",
+    GRAY: "#A2A2A2",
+    WHITE: "#FFF",
+    TRANSPARENT: "transparent",
+};
 
 const props = defineProps({
     data: {
         type: Object as PropType<IButton>,
-        required: true
-    }
+        required: true,
+    },
 });
 
-interface IButton {
-    text: string;
-    type: "PRIMARY" | "SECONDARY";
-    color: "BLUE" | "GREEN" | "RED";
-    size: "BASE" | "XS";
-    borderRadius?: "BASE" | "FULL";
-}
+const buttonProps = ref(props.data);
 
-const size = (): string => {
-    switch (props.data.size) {
-        case "XS":
-            return "px-8 py-4";
-        default:
-            return "px-10 py-8";
+const defaultStyle = computed(() => {
+    return {
+        ...getSizeStyle(buttonProps.value.size),
+        ...getBorderRadiusStyle(buttonProps.value.size, buttonProps.value.borderRadius),
+        ...getColorStyle(buttonProps.value.type, buttonProps.value.color),
+    };
+});
+
+// ############################################## Functions ##############################################
+const getSizeStyle = (size: "BASE" | "XS") => {
+    return size === "XS" ? { padding: "8px 17px" } : { padding: "13px 20px" };
+};
+
+const getBorderRadiusStyle = (size: "BASE" | "XS", borderRadius?: "BASE" | "FULL") => {
+    if (size === "XS") {
+        return { "border-radius": "9999px" };
+    } else {
+        return borderRadius === "FULL" ? { "border-radius": "100%" } : { "border-radius": "14px" };
     }
-}
+};
 
-const borderRadius = (): string => {
-    if (props.data.borderRadius) {
-        switch (props.data.borderRadius) {
-            case "BASE":
-                return "rounded-[14px]";
-            case "FULL":
-                return "rounded-full";
+const getColorStyle = (type: "PRIMARY" | "SECONDARY", color: "BLUE" | "GREEN" | "RED" | "WHITE" | "GRAY") => {
+    const { TRANSPARENT, BLUE, GREEN, RED, GRAY, WHITE } = COLORS;
+
+    if (type === "SECONDARY") {
+        switch (color) {
+            case "RED":
+                return { "background-color": TRANSPARENT, "border-color": RED, color: RED, "border-width": "2px" };
+            case "GRAY":
+                return { "background-color": TRANSPARENT, "border-color": GRAY, color: GRAY, "border-width": "2px" };
+            case "BLUE":
             default:
-                return "";
+                return { "background-color": TRANSPARENT, "border-color": BLUE, color: BLUE, "border-width": "2px" };
         }
     }
-    else if (props.data.size === "XS") {
-        return "rounded-full";
-    }
-    else {
-        return "rounded-[14px]";
-    }
-}
 
-const color = (): string => {
-    switch (props.data.color) {
-        case "BLUE":
-            return "bg-primary";
+    switch (color) {
         case "GREEN":
-            return "bg-custom-green";
+            return { "background-color": GREEN };
         case "RED":
-            return "bg-custome-red";
-
+            return { "background-color": RED };
+        case "WHITE":
+            return { "background-color": WHITE };
+        case "GRAY":
+            return { "background-color": GRAY };
+        case "BLUE":
         default:
-            return "";
+            return { "background-color": BLUE };
     }
-}
-
-const customClasses = (): string => {
-    return size() + " " + borderRadius() + " " + color();
-}
+};
 
 // ############################################## Events ##############################################
-const emtis = defineEmits(["@trigger"]);
+const emits = defineEmits(["trigger"]);
 
 const handleClick = () => {
-    emtis("@trigger");
-}
+    emits("trigger");
+};
 
+// ############################################## Expose ##############################################
+const update = (newProps: IButton) => {
+    buttonProps.value = newProps;
+};
+
+onMounted(() => {
+    update(props.data);
+});
+
+defineExpose({ update });
 </script>
+  

@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import jwt_decode from "jwt-decode";
-import type IUser from "../types/User";
+import type { IUser } from "../types/User";
 
 const API_URL = "http://localhost:8080/api/";
 

@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import type { IRegistration } from "../../types/interfaces";
-import type IUser from "../../types/User";
+import type { IUser } from "../../types/User";
 
 import UtilsApi from "../../utils/UtilsApi";
 import UtilsAuth from "../../utils/UtilsAuth";

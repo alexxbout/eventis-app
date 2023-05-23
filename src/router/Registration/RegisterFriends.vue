@@ -14,7 +14,7 @@
 
             <!-- UserCard -->
             <div class="grid w-full h-full gap-3 overflow-hidden overflow-y-auto 2xs:grid-cols-1 xs:grid-cols-2 place-items-center">
-                <UserCard v-for="card in users" :data="card" />
+                <UserCard v-for="card in users" :data="card" :hideFriends="true" />
             </div>
         </div>
 
@@ -33,7 +33,7 @@ import { PropType, onMounted, ref } from "vue";
 
 import UserCard from "../../components/user/UserCard.vue";
 
-import type IUser from "../../types/User";
+import type { IUser } from "../../types/User";
 import { IRegistration } from "../../types/interfaces";
 import UtilsApi from "../../utils/UtilsApi";
 import UtilsAuth from "../../utils/UtilsAuth";
@@ -49,16 +49,19 @@ const props = defineProps({
 const users = ref<IUser[]>([]);
 
 // ############################################## Fonctions ##############################################
-onMounted(() => {
+onMounted(async () => {
     const user = UtilsAuth.getCurrentUser();
 
     if (user) {
         const idFoyer = user.idFoyer;
 
         if (idFoyer) {
-            UtilsApi.getUsersByFoyer(idFoyer)
+            await UtilsApi.getUsersByFoyer(idFoyer)
                 .then((response) => {
                     users.value = response.data.data;
+                    
+                    // Enlève l'utilisateur courant de la liste
+                    removeUser(user.id);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -66,5 +69,13 @@ onMounted(() => {
         }
     }
 });
+
+const removeUser = (id: number) => {
+    const index = users.value.findIndex((user) => user.id === id);
+
+    if (index !== -1) {
+        users.value.splice(index, 1);
+    }
+}
 
 </script>
