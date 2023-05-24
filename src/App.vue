@@ -20,6 +20,7 @@
 import { ref, onMounted } from "vue";
 import Navbar from "./layouts/Navbar.vue";
 import Search from "./layouts/Search.vue";
+import UtilsApi from "./utils/UtilsApi";
 
 // ########################################### Variables ###########################################  
 const searchComponent = ref<InstanceType<typeof Search> | null>(null);

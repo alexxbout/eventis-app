@@ -23,8 +23,8 @@ class UtilsApi {
         return axios.get(this.baseUrl + "auth/code/" + code);
     }
 
-    getAllCode(){
-        return axios.get(this.baseUrl + "auth/code/",{
+    getAllCode() {
+        return axios.get(this.baseUrl + "auth/code/", {
             headers: {
                 "Authorization": "Bearer " + AuthService.getToken(),
                 "Content-Type": "multipart/form-data"
@@ -32,8 +32,8 @@ class UtilsApi {
         });
     }
 
-    getAllCodeByFoyer(idFoyer: number){
-        return axios.get(this.baseUrl + "auth/code/"+idFoyer, {
+    getAllCodeByFoyer(idFoyer: number) {
+        return axios.get(this.baseUrl + "auth/code/" + idFoyer, {
             headers: {
                 "Authorization": "Bearer " + AuthService.getToken(),
                 "Content-Type": "multipart/form-data"
@@ -41,8 +41,8 @@ class UtilsApi {
         });
     }
 
-    generateCode(){
-        return axios.post(this.baseUrl + "v1/user/code/",null, {
+    generateCode() {
+        return axios.post(this.baseUrl + "v1/user/code/", null, {
             headers: {
                 "Authorization": "Bearer " + AuthService.getToken(),
                 "Content-Type": "application/json"
@@ -110,11 +110,11 @@ class UtilsApi {
         });
     }
 
-    // Il manque des paramètres
-    updateUser(idUser: number, firstname: string | null, lastname: string | null) {
+    updateUser(idUser: number, firstname: string | null, lastname: string | null, pseudo: string | null) {
         return axios.put(this.baseUrl + "v1/user/" + idUser, {
             "firstname": firstname,
-            "lastname": lastname
+            "lastname": lastname,
+            "pseudo": pseudo
         }, {
             headers: {
                 "Authorization": "Bearer " + AuthService.getToken(),
@@ -146,6 +146,15 @@ class UtilsApi {
             "oldPassword": oldpass,
             "newPassword": newpass
         }, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        });
+    }
+
+    getAffinities(idUser: number) {
+        return axios.get(this.baseUrl + "v1/user/" + idUser + "/affinities", {
             headers: {
                 "Authorization": "Bearer " + AuthService.getToken(),
                 "Content-Type": "application/json"
@@ -219,6 +228,17 @@ class UtilsApi {
 
     // ############################################## BLOCKED ##############################################
     // checkBloqued() --> pas faite dans l'api, a faire 
+
+    checkBlocked(idUser: number, idUser2:number){
+        return axios.get(this.baseUrl + "v1/user/blocked/" + idUser+"/"+idUser2, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        });
+    }
+
+
     getAllUsersBlocked(idUser: number) {
         return axios.get(this.baseUrl + "v1/user/blocked/" + idUser, {
             headers: {
@@ -247,6 +267,7 @@ class UtilsApi {
     }
 
     // ############################################## ROLE ##############################################
+
     getAllRole() {
         return axios.get(this.baseUrl + "v1/user/role/", {
             headers: {
@@ -257,6 +278,7 @@ class UtilsApi {
     }
 
     // ############################################## FOYER ##############################################
+
     getAllFoyer() {
         return axios.get(this.baseUrl + "v1/foyer/", {
             headers: {
@@ -265,8 +287,9 @@ class UtilsApi {
             }
         });
     }
+
     getAllFoyersByZip(zip: number) {
-        return axios.get(this.baseUrl + "v1/foyer/zip/"+ zip, {
+        return axios.get(this.baseUrl + "v1/foyer/zip/" + zip, {
             headers: {
                 "Authorization": "Bearer " + AuthService.getToken(),
                 "Content-Type": "application/json"
@@ -274,7 +297,136 @@ class UtilsApi {
         });
     }
 
-    // addFoyer
+    addFoyer(siret: number, city: string, zip: number, address: string) {
+
+        return axios.post(this.baseUrl + "v1/foyer/", {
+            "siret": siret,
+            "zip": zip,
+            "city": city,
+            "address": address
+        }, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        });
+    }
+
+    // ############################################## EVENTS ##############################################
+
+    getAllEvents() {
+        return axios.get(this.baseUrl + "v1/event/", {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        });
+    }
+
+    getEventsByZip(zip: number) {
+        return axios.get(this.baseUrl + "v1/event/zip/" + zip, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        });
+    }
+
+    getEventById(idEvent: number) {
+        return axios.get(this.baseUrl + "v1/event/" + idEvent, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        });
+    }
+
+    addEvent(idFoyer: number, zip: number, address: string, city: string, start: Date, title: string, category: number, description: string | null) {
+        return axios.post(this.baseUrl + "v1/event/", {
+            "idFoyer": idFoyer,
+            "zip": zip,
+            "city": city,
+            "address": address,
+            "start": start,
+            "title": title,
+            "category": category,
+            "description": description
+        }, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        });
+    }
+
+    updateEvent(idEvent: number, zip: number, address: string, city: string, start: Date, title: string, category: number, description: string | null) {
+        return axios.put(this.baseUrl + "v1/event" + idEvent, {
+
+        }, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        });
+    }
+
+    cancelEvent(idEvent: number) {
+        return axios.put(this.baseUrl + "v1/event/cancel/" + idEvent, null, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        });
+    }
+
+    uncancelEvent(idEvent: number) {
+        return axios.put(this.baseUrl + "v1/event/uncancel/" + idEvent, null, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        });
+    }
+
+    imageEvent(idEvent: number, picture: File) {
+        return axios.post(this.baseUrl + "v1/event/image/" + idEvent, picture, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "multipart/form-data"
+            }
+        });
+    }
+
+    // ############################################## PARTICIANTS ##############################################
+
+    getAllParticipants(idEvent: number) {
+        return axios.get(this.baseUrl + "v1/" + idEvent + "/participants/", {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        });
+    }
+
+    addParticipant(idEvent: number, idParticipant: number) {
+        return axios.post(this.baseUrl + "v1/" + idEvent + "/participants/" + idParticipant, null, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        });
+    }
+
+    removeParticipant(idEvent: number, idParticipant: number) {
+        return axios.delete(this.baseUrl + "v1/" + idEvent + "/participants/" + idParticipant, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        });
+    }
+
+
 
 }
 

@@ -21,7 +21,7 @@
   
 <script setup lang="ts">
 import Button from "../Button.vue";
-import { defineProps, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import type { IUser } from "../../types/User";
 import type { IButton } from "../../types/Button";
 import UtilsApi from "../../utils/UtilsApi";

@@ -53,15 +53,15 @@ onMounted(async () => {
     const user = UtilsAuth.getCurrentUser();
 
     if (user) {
-        const idFoyer = user.idFoyer;
+        const idUser = user.id;
 
-        if (idFoyer) {
-            await UtilsApi.getUsersByFoyer(idFoyer)
+        if (idUser) {
+            await UtilsApi.getAffinities(idUser)
                 .then((response) => {
                     users.value = response.data.data;
                     
-                    // Enlève l'utilisateur courant de la liste
-                    removeUser(user.id);
+                    console.log(response);
+                    
                 })
                 .catch((err) => {
                     console.log(err);
@@ -69,13 +69,5 @@ onMounted(async () => {
         }
     }
 });
-
-const removeUser = (id: number) => {
-    const index = users.value.findIndex((user) => user.id === id);
-
-    if (index !== -1) {
-        users.value.splice(index, 1);
-    }
-}
 
 </script>
