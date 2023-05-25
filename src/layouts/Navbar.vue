@@ -44,7 +44,7 @@ const tabs = ref<ITab[]>([
 onMounted(async () => {
     await router.isReady();
 
-    const meta = currentRoute.meta;
+    const meta = currentRoute.meta;    
 
     if (meta.hideNavbar) {
         hide();
@@ -58,12 +58,25 @@ function getStatusClass(to: string) {
 }
 
 function hide() {
+    console.log("hide");
+    
     isVisible.value = false;
 }
 
 function show() {
+    console.log("show");
     isVisible.value = true;
 }
+
+router.beforeEach((to, from) => {
+    const meta = to.meta;
+
+    if (meta.hideNavbar) {
+        hide();
+    } else {
+        show();
+    }
+});
 
 // ########################################### Evenements ###########################################
 const emit = defineEmits(["@open-search"]);

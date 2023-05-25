@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen w-screen">
+    <div class="h-screen w-screen margins">
         <RegisterCode ref="registerCode" @@send-code="handleCode" v-if="currentStep == 1" :data="props" />
         <RegisterCredentials ref="registerCredentials" @@send-credentials="handleCredentials" v-if="currentStep == 2" />
         <RegisterPicture v-if="currentStep == 3" />

@@ -9,7 +9,7 @@
     <Search ref="searchComponent" :app="{ setFixed, removeFixed }" />
 
     <div ref="content">
-      <router-view class="bg-white margins"></router-view>
+      <router-view></router-view>
     </div>
 
     <Navbar ref="navbar" @@open-search="handleSearch" />

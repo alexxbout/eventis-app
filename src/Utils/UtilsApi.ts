@@ -297,6 +297,15 @@ class UtilsApi {
         });
     }
 
+    getFoyerById(idFoyer: number){
+        return axios.get(this.baseUrl + "v1/foyer/" + idFoyer, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        });
+    }
+
     addFoyer(siret: number, city: string, zip: number, address: string) {
 
         return axios.post(this.baseUrl + "v1/foyer/", {
@@ -341,6 +350,18 @@ class UtilsApi {
         });
     }
 
+    /**
+     * @description Update an event
+     * @warning NO NULLABLE PARAMS INSTEAD OF description
+     * @param idEvent => Id of the event
+     * @param zip => Zip (2 num) of the event place
+     * @param address => Adress of the event
+     * @param city => City of the event
+     * @param start => Time of the begening of the event 
+     * @param category => Category of the event
+     * @param description => LArge infos of the events
+     * @method POST
+     */
     addEvent(idFoyer: number, zip: number, address: string, city: string, start: Date, title: string, category: number, description: string | null) {
         return axios.post(this.baseUrl + "v1/event/", {
             "idFoyer": idFoyer,
@@ -358,9 +379,21 @@ class UtilsApi {
             }
         });
     }
-
+ 
+    /**
+     * @description Update an event
+     * @warning ALL NULLABLE PARAMS MUST BE NULL IF NO CHANGES TO APPLY 
+     * @param idEvent => Id of the event
+     * @param zip => Zip (2 num) of the event place
+     * @param address => Adress of the event
+     * @param city => City of the event
+     * @param start => Time of the begening of the event 
+     * @param category => Category of the event
+     * @param description => LArge infos of the events
+     * @method PUT
+     */
     updateEvent(idEvent: number, zip: number, address: string, city: string, start: Date, title: string, category: number, description: string | null) {
-        return axios.put(this.baseUrl + "v1/event" + idEvent, {
+        return axios.put(this.baseUrl + "v1/event/" + idEvent, {
 
         }, {
             headers: {
@@ -370,6 +403,11 @@ class UtilsApi {
         });
     }
 
+    /**
+     * @description Pass the event to canceled
+     * @param idEvent => id of the Event
+     * @method PUT
+     */
     cancelEvent(idEvent: number) {
         return axios.put(this.baseUrl + "v1/event/cancel/" + idEvent, null, {
             headers: {
@@ -379,6 +417,12 @@ class UtilsApi {
         });
     }
 
+    /**
+     * @description Add an image to an event
+     * @param idEvent => id of the Event
+     * @param picture => Picture to add in the Event
+     * @method POST
+     */
     uncancelEvent(idEvent: number) {
         return axios.put(this.baseUrl + "v1/event/uncancel/" + idEvent, null, {
             headers: {
@@ -388,6 +432,12 @@ class UtilsApi {
         });
     }
 
+    /**
+     * @description Add an image to an event
+     * @param idEvent => id of the Event
+     * @param picture => Picture to add in the Event
+     * @method POST
+     */
     imageEvent(idEvent: number, picture: File) {
         return axios.post(this.baseUrl + "v1/event/image/" + idEvent, picture, {
             headers: {
@@ -398,9 +448,14 @@ class UtilsApi {
     }
 
     // ############################################## PARTICIANTS ##############################################
-
+    
+    /**
+     * @description Get all the participants of an event
+     * @param idEvent => id of the Event
+     * @method GET
+     */
     getAllParticipants(idEvent: number) {
-        return axios.get(this.baseUrl + "v1/" + idEvent + "/participants/", {
+        return axios.get(this.baseUrl + "v1/event/" + idEvent + "/participant", {
             headers: {
                 "Authorization": "Bearer " + AuthService.getToken(),
                 "Content-Type": "application/json"
@@ -408,8 +463,14 @@ class UtilsApi {
         });
     }
 
+    /**
+     * @description Add a user to an event
+     * @param idEvent => id of the Event
+     * @param idParticipant => id of the user to add
+     * @method POST
+     */
     addParticipant(idEvent: number, idParticipant: number) {
-        return axios.post(this.baseUrl + "v1/" + idEvent + "/participants/" + idParticipant, null, {
+        return axios.post(this.baseUrl + "v1/event/" + idEvent + "/participant/" + idParticipant, null, {
             headers: {
                 "Authorization": "Bearer " + AuthService.getToken(),
                 "Content-Type": "application/json"
@@ -417,8 +478,14 @@ class UtilsApi {
         });
     }
 
+    /**
+     * @description Remove a user from an event
+     * @param idEvent => id of the Event
+     * @param idParticipant => id of the user to remove
+     * @method DELETE
+     */
     removeParticipant(idEvent: number, idParticipant: number) {
-        return axios.delete(this.baseUrl + "v1/" + idEvent + "/participants/" + idParticipant, {
+        return axios.delete(this.baseUrl + "v1/event/" + idEvent + "/participant/" + idParticipant, {
             headers: {
                 "Authorization": "Bearer " + AuthService.getToken(),
                 "Content-Type": "application/json"
@@ -426,8 +493,20 @@ class UtilsApi {
         });
     }
 
-
-
+    /**
+     * @description Check if user is participating
+     * @param idUser1 => id of the current user
+     * @param idEvent => id of the Event
+     * @method POST
+     */
+    isParticipating(idUser1: number, idEvent: number) {
+        return axios.get(this.baseUrl + "v1/event/" + idEvent + "/participant/" + idUser1, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        });
+    }
 }
 
 export default new UtilsApi();

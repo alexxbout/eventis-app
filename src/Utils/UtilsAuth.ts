@@ -26,27 +26,27 @@ class UtilsAuth {
         return currentDate < expirationDate;
     }
 
-    getToken(): string | null {
+    getToken(): string | undefined {
         try {
             const item = JSON.parse(localStorage.getItem("item") || "{}");
             return item.token;
         } catch (error) {
             console.error("Erreur lors de la récupération du token", error);
-            return null;
+            return undefined;
         }
     }
 
-    getAuthHeader(): object | null {
+    getAuthHeader(): object | undefined {
         const token = this.getToken();
 
         if (token) {
             return { Authorization: "Bearer " + token };
         } else {
-            return null;
+            return undefined;
         }
     }
 
-    getCurrentUser(): IUser | null {
+    getCurrentUser(): IUser | undefined {
         try {
             const item = JSON.parse(localStorage.getItem("item") || "{}");
 
@@ -54,7 +54,7 @@ class UtilsAuth {
         }
         catch (error) {
             console.error("Erreur lors de la récupération de l'utilisateur", error);
-            return null;
+            return undefined;
         }
     }
 

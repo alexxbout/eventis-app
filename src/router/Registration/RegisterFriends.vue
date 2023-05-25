@@ -58,7 +58,7 @@ onMounted(async () => {
         if (idUser) {
             await UtilsApi.getAffinities(idUser)
                 .then((response) => {
-                    users.value = response.data.data;
+                    users.value = response.data.data as IUser[];
                     
                     console.log(response);
                     

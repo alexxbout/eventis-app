@@ -1,34 +1,27 @@
 <template>
     <!-- Card wrapper -->
-    <div :style="{ height: (topCardSize + bottomCardSize) + 'px' }" class="w-full" @click="openEvent">
+    <div class="h-max w-full" @click="openEvent">
 
         <!-- Card -->
-        <div :style="{ height: (topCardSize + bottomCardSize) + 'px' }" class="relative w-full shadow-card overflow-hidden rounded-2xl bg-white overscroll-contain">
+        <div class="h-max relative w-full shadow-card overflow-hidden rounded-2xl bg-white overscroll-contain">
 
             <!-- Image -->
-            <div :style="{ backgroundImage: 'url(' + data.image + ')', height: topCardSize + 'px' }" class="w-full bg-no-repeat bg-cover bg-center">
-            </div>
+            <div :style="{ backgroundImage: 'url(http://localhost:8080/image/events/' + props.data.pic + ')' }" class="h-[350px] w-full bg-no-repeat bg-cover bg-center"></div>
 
             <!-- Info -->
-            <div :style="{ height: bottomCardSize + 'px' }" class="w-full flex flex-col p-5">
-                <span :class="{ 'text-custom-gray': !data.ended, 'text-custom-red': data.ended }" class="uppercase font-semibold text-sm">
-                    {{ data.ended ? "Évènement terminé" : "Évènement en cours" }}
-                </span>
+            <div class="h-max w-full flex flex-col justify-center p-5 gap-y-[5px]">
+                <span class="text-[24px] font-semibold text-black">{{ data.title }}</span>
 
-                <span class="text-2xl font-semibold text-black">{{ data.title }}</span>
-
-                <span class="text-custom-gray text-sm font-light">{{ data.subtitle }}</span>
+                <span class="text-custom-gray text-[14px] font-light">{{ data.city }}</span>
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import type { IEvent } from "../../types/interfaces";
+import type { IEvent } from "../../types/Event";
 import { ref, PropType } from "vue";
 import { useRouter } from "vue-router";
-
-const router = useRouter();
 
 const props = defineProps({
     data: {
@@ -37,14 +30,10 @@ const props = defineProps({
     }
 });
 
-const topCardSize = ref(350);
-const bottomCardSize = ref(115);
+const router = useRouter();
 
 function openEvent() {
-    router.push({ name: "eventDetail", params: { id: 1 } });
-
-    console.log("Open event");
-    
+    router.push({ name: "eventDetail", params: { id: props.data.id } });
 }
 
 </script>

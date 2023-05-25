@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col items-center justify-around w-screen h-screen">
+    <div class="flex flex-col items-center justify-around w-screen h-screen margins">
 
         <!-- Login modal -->
         <div v-show="showModal" class="fixed bottom-0 flex flex-col w-screen h-screen">

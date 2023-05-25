@@ -6,15 +6,7 @@
   
 <script setup lang="ts">
 import type { IButton } from "../types/Button";
-import {
-    PropType,
-    computed,
-    onMounted,
-    ref,
-    defineProps,
-    defineEmits,
-    defineExpose,
-} from "vue";
+import { PropType, computed, onMounted, ref } from "vue";
 
 const COLORS = {
     BLUE: "#166CF7",
@@ -86,10 +78,10 @@ const getColorStyle = (type: "PRIMARY" | "SECONDARY", color: "BLUE" | "GREEN" | 
 };
 
 // ############################################## Events ##############################################
-const emits = defineEmits(["trigger"]);
+const emits = defineEmits(["@trigger"]);
 
 const handleClick = () => {
-    emits("trigger");
+    emits("@trigger");
 };
 
 // ############################################## Expose ##############################################
@@ -97,10 +89,18 @@ const update = (newProps: IButton) => {
     buttonProps.value = newProps;
 };
 
+const updateText = (newText: string) => {
+    buttonProps.value.text = newText;
+};
+
 onMounted(() => {
     update(props.data);
 });
 
-defineExpose({ update });
+defineExpose(
+    {
+        update,
+        updateText
+    });
 </script>
   

@@ -1,42 +1,59 @@
 <template>
-    <div class="relative flex flex-col mb-20 gap-y-10">
+    <div class="relative flex flex-col mb-20 gap-y-10 margins">
 
-        <div class="flex flex-col gap-y-2">
-            <span class="text-sm font-semibold uppercase text-custom-gray">{{ date }}</span>
+        <div class="w-full flex flex-col gap-y-2">
+            <div class="flex gap-x-[15px] items-center justify-center w-max">
+                <i class="bi bi-house text-3xl"></i>
+                <span class="header">Évènements</span>
+            </div>
 
-            <span class="header">Évènements</span>
+            <!-- Dep button -->
+            <div></div>
         </div>
 
-        <EventCard v-for="event in events" :data="event" />
+        <EventCard v-for="event in events" :id="event.id" :data="event" />
     </div>
 </template>
 
 <script setup lang="ts">
-import type { IEvent } from "../../types/interfaces";
+import type { IEvent } from "../../types/Event";
 import EventCard from "../../components/event/EventCard.vue"
-import { ref } from "vue"
+import { onMounted, ref } from "vue"
+import UtilsApi from "../../utils/UtilsApi";
+import { IUser } from "../../types/User";
+import UtilsAuth from "../../utils/UtilsAuth";
 
 // ########################################### Variables ###########################################  
-const date = ref(new Date().toLocaleDateString("fr-FR", {
-    weekday: "long",
-    day: "numeric",
-    month: "long"
-}));
+const events = ref<IEvent[]>([]);
 
-// TODO: Remplacer par une requête API
-const events = ref<IEvent[]>([
-    {
-        title: "Jardin de Versailles",
-        subtitle: "Versailles",
-        ended: false,
-        image: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80",
+onMounted(async () => {
+    const user = UtilsAuth.getCurrentUser();
 
-        description: [
-            "Le jardin de Versailles, également appelé jardin du château de Versailles ou, au pluriel, les jardins de Versailles ou les jardins du château de Versailles, est situé à l'ouest du château de Versailles.",
-            "Conçu par André Le Nôtre pour Louis XIV, il fut aménagé entre 1661 et 1700. Il s'étend sur 800 hectares, dont 93 sont occupés par les jardins à la française. Il est bordé au sud par l'avenue de Paris, à l'ouest par le Grand Canal, au nord par la place d'Armes et à l'est par le château. Il est classé au patrimoine mondial de l'UNESCO depuis 1979.",
-            "Ce jardin est l'un des plus célèbres au monde, et le plus vaste de l'époque moderne. Il est l'archétype du jardin à la française, qui a exercé une influence considérable dans la plupart des pays européens et au-delà. Il est aujourd'hui l'un des lieux les plus visités de France, avec 7,5 millions de visiteurs en 2010."
-        ]
+    if (user) {
+        // Récupérer le zip du foyer de l'utilisateur
+        let zip: string = "";
+
+        if (user.idFoyer) {
+            // Api pour récup le zip en fonction de l'id du foyer
+            await UtilsApi.getFoyerById(user.idFoyer).then((response) => {
+                zip = response.data.data.zip;
+            });
+
+            // Get two first numbers of zip
+            zip = zip.substring(0, 2);
+
+            const zipInt = parseInt(zip);
+
+            // Récupérer les évènements en fonction du zip
+            await UtilsApi.getEventsByZip(zipInt).then((response) => {
+                events.value = response.data.data;
+
+                console.log(response.data.data);
+                
+            });
+        }
     }
-]);
+
+});
 
 </script>

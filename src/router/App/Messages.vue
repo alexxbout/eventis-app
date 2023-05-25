@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col mb-20 gap-y-8">
+    <div class="flex flex-col mb-20 gap-y-8 margins">
         <span class="header">Messages</span>
 
         <ConversationCard v-for="conv in conversations" :data="conv" />
