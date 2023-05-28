@@ -1,5 +1,5 @@
 <template>
-    <div ref="container" @scroll="handleScroll" @touchmove="handleScroll" @wheel="handleScroll" class="min-h-screen h-full w-screen p-[inherit]">
+    <div ref="container" @scroll="handleScroll" @touchmove="handleScroll" @touchstart="handleScroll" @wheel="handleScroll" class="w-screen min-h-screen">
 
         <div @click="handleClose">
             <i ref="btnClose" class="fixed text-3xl text-white transition-colors bi bi-x-circle-fill top-5 right-5"></i>
@@ -8,14 +8,14 @@
         <div class="fixed bottom-0 w-full h-20 bg-white flex p-[15px] gap-x-[15px] shadow-eventCard">
             <Button @@trigger="handleParticipate" ref="btnParticipate" class="w-full" :isLoading="true" />
 
-            <Button @@trigger="handleModal" ref="btnParticipants" class="w-max" :isLoading="true" />
+            <Button @@trigger="handleModal" ref="btnParticipants" class="w-max" :isLoading="true" :icon="{ side: 'LEFT', name: ICONS.USERS }" />
         </div>
 
         <!-- Header -->
         <div class="w-full h-max">
             <!-- Picture -->
             <div ref="header" class="w-full h-max">
-                <div v-if="event?.pic" :style="{ backgroundImage: 'url(http://localhost:8080/image/events/' + event.pic + ')' }" class="h-[285px] w-full bg-no-repeat bg-cover bg-center"></div>
+                <div v-if="event?.pic" :style="{ backgroundImage: 'url(' + UtilsApi.getImage('events', event.pic) + ')' }" class="h-[285px] w-full bg-no-repeat bg-cover bg-center"></div>
                 <div v-else class="h-[285px] w-full"></div>
             </div>
 
@@ -44,6 +44,8 @@ import { useRoute, useRouter } from "vue-router";
 
 import type { IEvent } from "../../types/Event";
 import type { IButton } from "../../types/Button";
+
+import { ICONS } from "../../types/Button";
 
 import UtilsApi from "../../utils/UtilsApi";
 import UtilsAuth from "../../utils/UtilsAuth";

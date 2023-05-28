@@ -1,7 +1,7 @@
 <template>
-    <div ref="container" v-show="visible" class="fixed bottom-0 flex flex-col justify-end w-screen h-screen backdrop-blur-md bg-gray-600/10">
+    <div ref="container" v-show="visible" class="fixed bottom-0 flex flex-col justify-end w-screen h-screen opacity-0 backdrop-blur-lg bg-gray-600/10">
 
-        <div class="modal bg-white w-full max-h-[50%] h-max rounded-t-[35px] justify-between flex flex-col p-12 gap-y-10">
+        <div ref="modal" class="modal bg-white w-full max-h-[50%] h-max rounded-t-[35px] justify-between flex flex-col p-10 gap-y-10">
             <!-- Header -->
             <div class="flex items-center justify-between w-full h-max">
                 <span class="header-xs">Participants</span>
@@ -11,14 +11,16 @@
 
             <!-- Users -->
             <div class="flex flex-col w-full overflow-y-auto overflow-hidden max-h-[1/2] h-max gap-y-5">
-                <UserCard v-for="participant in props.data" :key="participant.id" :data="participant.user" :style="{shape: EUserCardStyle.FRIEND_PROFILE}" />
+                <UserCard v-for="participant in props.data" :key="participant.id" :data="participant.user" :style="{ shape: EUserCardStyle.FRIEND_PROFILE }" />
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, onMounted } from "vue";
+import gsap from "gsap";
+
+import { PropType, ref, onMounted, onUnmounted } from "vue";
 
 import { EUserCardStyle } from "../../types/UserCardStyle";
 import type { IParticipant } from "../../types/Participants";
@@ -37,28 +39,78 @@ const props = defineProps({
 const visible = ref(false);
 
 const container = ref<HTMLElement | null>(null);
+const modal = ref<HTMLElement | null>(null);
+
+// ############################################### EVENTS ###############################################
+
+const emits = defineEmits<{
+    (event: "@@update", status: boolean): void
+}>();
 
 // ############################################## FUNCTIONS ##############################################
 
 onMounted(() => {
     if (container.value) {
-        container.value.addEventListener("click", (event) => {
-            if (visible.value) {
-                if (event.target === container.value) {
-                    hide();
-                }
-            }
-        });
+        container.value.addEventListener("click", handleClickOutside);
     }
 });
 
+onUnmounted(() => {
+    if (container.value) {
+        container.value.removeEventListener("click", handleClickOutside);
+    }
+});
+
+const handleClickOutside = (event: MouseEvent) => {
+    if (visible.value) {
+        if (container.value) {
+            if (event.target === container.value) {
+                hide();
+            }
+        }
+    }
+}
 
 const hide = () => {
-    visible.value = false;
+    let tl = gsap.timeline();
+
+    tl.fromTo(modal.value, {
+        translateY: 0,
+    }, {
+        translateY: "100%",
+        duration: 0.3,
+        ease: "power2.out"
+    }).then(() => {
+        visible.value = false;
+
+        emits("@@update", false);
+    });
+
+    tl.to(container.value, {
+        opacity: 0,
+        duration: 0.3,
+        ease: "power2.out"
+    }, "<0.1");
 }
 
 const show = () => {
     visible.value = true;
+
+    emits("@@update", true);
+    
+    gsap.to(container.value, {
+        opacity: 1,
+        duration: 0.3,
+        ease: "power2.out"
+    });
+
+    gsap.fromTo(modal.value, {
+        translateY: "100%",
+    }, {
+        translateY: 0,
+        duration: 0.3,
+        ease: "power2.out"
+    });
 }
 
 defineExpose({

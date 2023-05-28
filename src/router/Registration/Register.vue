@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen w-screen margins">
+    <div class="w-screen h-screen margins">
         <RegisterCode ref="registerCode" @@send-code="handleCode" v-if="currentStep == 1" :data="props" />
         <RegisterCredentials ref="registerCredentials" @@send-credentials="handleCredentials" v-if="currentStep == 2" />
         <RegisterPicture v-if="currentStep == 3" />
@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import type { IRegistration } from "../../types/interfaces";
+import type { IRegistration } from "../../types/Register";
 import type { IUser } from "../../types/User";
 
 import UtilsApi from "../../utils/UtilsApi";

@@ -1,12 +1,12 @@
 <template>
     <!-- Search -->
-    <div v-show="opened" class="fixed h-screen bg-gray-200/60 backdrop-blur w-screen z-20 bottom-0">
-        <div class="h-1/4 w-full" @click="close"></div>
+    <div v-show="opened" class="fixed bottom-0 z-20 w-screen h-screen bg-gray-200/60 backdrop-blur">
+        <div class="w-full h-1/4" @click="close"></div>
 
         <div id="search_header" class="h-3/4 w-full rounded-t-[35px] bg-white overscroll-contain shadow-card">
-            <div class="h-max overflow-y-auto flex flex-col gap-y-5 p-8">
+            <div class="flex flex-col p-8 overflow-y-auto h-max gap-y-5">
                 <div>
-                    <span class="text-black text-3xl font-semibold">Recherche</span>
+                    <span class="text-3xl font-semibold text-black">Recherche</span>
                 </div>
 
                 <div class="relative">
@@ -21,9 +21,11 @@
 </template>
 
 <script setup lang="ts">
-import type { IApp } from "../types/interfaces";
+import type { IApp } from "../types/App";
 
-import { ref, PropType, onMounted } from "vue";
+import { ref, PropType } from "vue";
+
+// ########################################### VARIABLES ###########################################
 
 const props = defineProps({
     app: {
@@ -32,10 +34,10 @@ const props = defineProps({
     }
 });
 
-// ########################################### Variables ###########################################
 const opened = ref(false);
 
-// ########################################### Fonctions ###########################################
+// ########################################### FUNCTIONS ###########################################
+
 const close = () => {
     opened.value = false;
     props.app.removeFixed();

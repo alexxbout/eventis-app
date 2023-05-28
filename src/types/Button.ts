@@ -6,3 +6,15 @@ export interface IButton {
 
     borderRadius?: "BASE" | "FULL";
 }
+
+export interface IButtonIcon {
+    side: "LEFT" | "RIGHT";
+    name: string;
+}
+
+// const for icons
+export const ICONS = {
+    ARROW_LEFT: "bi bi-arrow-left-short",
+    ARROW_RIGHT: "bi bi-arrow-right-short",
+    USERS: "bi bi-people-fill"
+};

@@ -1,28 +1,38 @@
 <template>
-    <button ref="el" @click="handleClick" :style="style" class="text-[14px] flex items-center justify-center font-semibold text-center text-white disabled:bg-gray-600">
+    <button ref="el" @click="handleClick" :style="style" class="text-[14px] flex items-center gap-x-2 justify-center font-semibold text-center text-white disabled:bg-gray-600">
+        <i v-if="props.icon" :class="props.icon.name + ' ' + (props.icon.side == 'RIGHT' ? 'order-last' : '')"></i>
+
         {{ buttonProps.text }}
     </button>
 </template>
   
 <script setup lang="ts">
-import type { IButton } from "../types/Button";
 import { PropType, StyleValue, computed, onMounted, ref } from "vue";
+
+import type { IButton } from "../types/Button";
+import type { IButtonIcon } from "../types/Button";
+
+// ############################################### VARIABLES ###############################################
 
 const props = defineProps({
     data: {
         type: Object as PropType<IButton>,
         default: <IButton>{
-            text        : "",
-            size        : "BASE",
-            type        : "PRIMARY",
-            color       : "GRAY",
+            text: "",
+            size: "BASE",
+            type: "PRIMARY",
+            color: "GRAY",
             borderRadius: "BASE"
         },
+    },
+    icon: {
+        type: Object as PropType<IButtonIcon>,
+        default: null
     },
     isLoading: {
         type: Boolean,
         default: false
-    },
+    }
 });
 
 const COLORS = {
@@ -33,6 +43,11 @@ const COLORS = {
     WHITE      : "#FFF",
     TRANSPARENT: "transparent",
 };
+
+const OPACITY = {
+    NORMAL: "FF",
+    MEDIUM: "99"
+}
 
 const isLoading = ref<boolean>(props.isLoading);
 
@@ -50,7 +65,8 @@ const style = computed<StyleValue>(() => {
     return Object.assign({}, sizeStyle, borderRadiusStyle, colorStyle);
 });
 
-// ############################################## Functions ##############################################
+// ############################################## FUNCTIONS ##############################################
+
 const getSizeStyle = (size: "BASE" | "XS") => {
     return size == "XS" ? { "padding": "8px 17px" } : { "padding": "13px 20px" };
 };
@@ -72,38 +88,40 @@ const getColorStyle = (type: "PRIMARY" | "SECONDARY", color: "BLUE" | "GREEN" | 
     if (type === "SECONDARY") {
         switch (color) {
             case "RED":
-                return { "background-color": COLORS.TRANSPARENT, "border-color": COLORS.RED, color: COLORS.RED, "border-width": "2px" };
+                return { "background-color": COLORS.TRANSPARENT, "border-color": COLORS.RED + OPACITY.MEDIUM, color: COLORS.RED, "border-width": "2px" };
             case "GRAY":
-                return { "background-color": COLORS.TRANSPARENT, "border-color": COLORS.GRAY, color: COLORS.GRAY, "border-width": "2px" };
+                return { "background-color": COLORS.TRANSPARENT, "border-color": COLORS.GRAY + OPACITY.MEDIUM, color: COLORS.GRAY, "border-width": "2px" };
             case "BLUE":
             default:
-                return { "background-color": COLORS.TRANSPARENT, "border-color": COLORS.BLUE, color: COLORS.BLUE, "border-width": "2px" };
+                return { "background-color": COLORS.TRANSPARENT, "border-color": COLORS.BLUE + OPACITY.MEDIUM, color: COLORS.BLUE, "border-width": "2px" };
         }
-    }
-
-    switch (color) {
-        case "GREEN":
-            return { "background-color": COLORS.GREEN };
-        case "RED":
-            return { "background-color": COLORS.RED };
-        case "WHITE":
-            return { "background-color": COLORS.WHITE };
-        case "GRAY":
-            return { "background-color": COLORS.GRAY };
-        case "BLUE":
-        default:
-            return { "background-color": COLORS.BLUE };
+    } else {
+        switch (color) {
+            case "GREEN":
+                return { "background-color": COLORS.GREEN };
+            case "RED":
+                return { "background-color": COLORS.RED };
+            case "WHITE":
+                return { "background-color": COLORS.WHITE };
+            case "GRAY":
+                return { "background-color": COLORS.GRAY };
+            case "BLUE":
+            default:
+                return { "background-color": COLORS.BLUE };
+        }
     }
 };
 
-// ############################################## Events ##############################################
+// ############################################## EVENTS ##############################################
+
 const emits = defineEmits(["@trigger"]);
 
 const handleClick = () => {
     emits("@trigger");
 };
 
-// ############################################## Expose ##############################################
+// ############################################## EXPOSE ##############################################
+
 const update = (newProps: IButton) => {
     buttonProps.value = newProps;
 };

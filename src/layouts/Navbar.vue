@@ -1,6 +1,6 @@
 <template>
-    <div ref="navbar" v-if="isVisible" class="fixed z-10 flex items-center justify-center w-screen opacity-100 bottom-4">
-        <div class="gap-12 py-4 px-5 w-full mx-5 shadow-navbar rounded-[20px] grid grid-cols-5 text-xs bg-white">
+    <div ref="navbar" v-if="isVisible" class="fixed z-10 flex items-center justify-center w-screen opacity-100 bottom-1">
+        <div class="grid w-full grid-cols-5 py-4 mx-5 text-xs gap-x-10 rounded-3xl px-7 bg-white/90 backdrop-blur-lg shadow-navbar">
 
             <div v-for="tab in tabs">
                 <div v-if="tab.custom" @click="openSearch">
@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ITab } from "../types/interfaces";
+import type { ITab } from "../types/Tab";
 
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
