@@ -1,7 +1,7 @@
 <template>
-    <form @submit.prevent="handleSubmit" ref="form" class="w-full h-full justify-around flex flex-col">
+    <form @submit.prevent="handleSubmit" ref="form" class="flex flex-col justify-around w-full h-full">
         <!-- Inputs -->
-        <div class="gap-y-20 flex flex-col">
+        <div class="flex flex-col gap-y-20">
             <span class="header">Création de votre compte</span>
             <div class="flex flex-col gap-y-7">
                 <div>
@@ -18,7 +18,7 @@
                     <label for="">Mot de passe</label>
                     <input v-model="passwordInput" @input="handleInput" type="password" class="input" placeholder=" " pattern="^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,100}$" required>
 
-                    <div class="flex w-full justify-between pt-2">
+                    <div class="flex justify-between w-full pt-2">
                         <div class="flex flex-col">
                             <div :class="reqUppercase ? 'text-custom-green' : 'text-gray-400'" class="flex gap-x-2">
                                 <i class="bi bi-check-circle-fill"></i>
@@ -53,10 +53,10 @@
         </div>
 
         <!-- Suivant -->
-        <div class="w-full flex items-center justify-end">
+        <div class="flex items-center justify-end w-full">
             <button :disabled="!readyToSubmit" type="submit" class="btn-primary">
                 <span>Suivant</span>
-                <i class="bi bi-arrow-right-short text-xl"></i>
+                <i class="text-xl bi bi-arrow-right-short"></i>
             </button>
         </div>
     </form>

@@ -1,9 +1,9 @@
 <template>
     <div class="relative flex flex-col mb-20 gap-y-10 margins">
 
-        <div class="w-full flex flex-col gap-y-2">
+        <div class="flex flex-col w-full gap-y-2">
             <div class="flex gap-x-[15px] items-center justify-center w-max">
-                <i class="bi bi-house text-3xl"></i>
+                <i class="text-3xl bi bi-house"></i>
                 <span class="header">Évènements</span>
             </div>
 
@@ -16,20 +16,27 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue"
+import { onMounted, ref } from "vue";
 
-import EventCard from "../../components/event/EventCard.vue"
+import { useRouter } from "vue-router";
+
+import EventCard from "../../components/event/EventCard.vue";
 
 import type { IEvent } from "../../types/Event";
-import type { IUser } from "../../types/User";
 
 import UtilsApi from "../../utils/UtilsApi";
 import UtilsAuth from "../../utils/UtilsAuth";
 
-// ########################################### Variables ###########################################  
+// ########################################### VARIABLES ###########################################
+
 const events = ref<IEvent[]>([]);
 
+const router = useRouter();
+
+// ########################################### FUNCTIONS ###########################################
+
 onMounted(async () => {
+    // Data
     const user = UtilsAuth.getCurrentUser();
 
     if (user) {
@@ -37,18 +44,13 @@ onMounted(async () => {
         let zip: string = "";
 
         if (user.idFoyer) {
-            // Api pour récup le zip en fonction de l'id du foyer
             const foyerRequest = await UtilsApi.getFoyerById(user.idFoyer);
 
             if (foyerRequest) {
-                zip = foyerRequest.zip;
-
-                // Get two first numbers of zip
-                zip = zip.substring(0, 2);
+                zip = foyerRequest.zip.substring(0, 2);
 
                 const zipInt = parseInt(zip);
 
-                // Récupérer les évènements en fonction du zip
                 const eventsRequest = await UtilsApi.getEventsByZip(zipInt);
 
                 if (eventsRequest) {
@@ -57,6 +59,29 @@ onMounted(async () => {
             }
         }
     }
+
+    // Scroll to section with id of last route param
+    await router.isReady();
+
+    router.afterEach((to, from, next) => {
+        if (from.name === "eventDetail") {
+
+            const params = from.params;
+
+            if (params.id) {
+                const id = params.id as string;
+
+                // Timeout required to allow page to render before scrolling
+                setTimeout(() => {
+                    const element = document.getElementById(id);
+
+                    if (element) {
+                        element.scrollIntoView({ behavior: "smooth" });
+                    }
+                }, 200);
+            }
+        }
+    });
 
 });
 

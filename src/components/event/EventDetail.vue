@@ -1,8 +1,8 @@
 <template>
-    <div class="min-h-screen h-full w-screen p-[inherit]">
+    <div ref="container" @scroll="handleScroll" @touchmove="handleScroll" @wheel="handleScroll" class="min-h-screen h-full w-screen p-[inherit]">
 
         <div @click="handleClose">
-            <i class="bi bi-x-circle-fill text-3xl fixed top-5 right-5 text-black"></i>
+            <i ref="btnClose" class="fixed text-3xl text-white transition-colors bi bi-x-circle-fill top-5 right-5"></i>
         </div>
 
         <div class="fixed bottom-0 w-full h-20 bg-white flex p-[15px] gap-x-[15px] shadow-eventCard">
@@ -12,10 +12,12 @@
         </div>
 
         <!-- Header -->
-        <div class="h-max w-full">
+        <div class="w-full h-max">
             <!-- Picture -->
-            <div v-if="event?.pic" :style="{ backgroundImage: 'url(http://localhost:8080/image/events/' + event.pic + ')' }" class="h-[285px] w-full bg-no-repeat bg-cover bg-center"></div>
-            <div v-else class="h-[285px] w-full"></div>
+            <div ref="header" class="w-full h-max">
+                <div v-if="event?.pic" :style="{ backgroundImage: 'url(http://localhost:8080/image/events/' + event.pic + ')' }" class="h-[285px] w-full bg-no-repeat bg-cover bg-center"></div>
+                <div v-else class="h-[285px] w-full"></div>
+            </div>
 
             <!-- Title -->
             <div class="h-max w-full flex flex-col justify-center p-5 gap-y-[5px] bg-white border-b">
@@ -28,7 +30,7 @@
         </div>
 
         <!-- Data -->
-        <div v-html="event?.description" class="h-max p-5 text-gray-500 pb-36"></div>
+        <div v-html="event?.description" class="p-5 text-gray-500 h-max pb-36"></div>
     </div>
 
     <div v-if="event?.participants">
@@ -37,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import type { IEvent } from "../../types/Event";
@@ -53,30 +55,36 @@ import ModalParticipant from "../modal/ModalParticipant.vue";
 
 // Router
 const router = useRouter();
-const route  = useRoute();
+const route = useRoute();
 
 // Childs components refs
 const modalParticipant = ref<InstanceType<typeof ModalParticipant> | null>(null);
-const btnParticipate   = ref<InstanceType<typeof Button> | null>(null);
-const btnParticipants  = ref<InstanceType<typeof Button> | null>(null);
+const btnParticipate = ref<InstanceType<typeof Button> | null>(null);
+const btnParticipants = ref<InstanceType<typeof Button> | null>(null);
+
+const btnClose = ref<HTMLElement | null>(null);
+
+const header = ref<HTMLElement | null>(null);
+
+const container = ref<HTMLElement | null>(null);
 
 // Data
-const event           = ref<IEvent>();
+const event = ref<IEvent>();
 const isParticipating = ref(false);
-const user            = UtilsAuth.getCurrentUser();
+const user = UtilsAuth.getCurrentUser();
 
 const btnParticipateStyle: IButton = {
-    text : "Participer",
+    text: "Participer",
     color: "BLUE",
-    type : "PRIMARY",
-    size : "BASE"
+    type: "PRIMARY",
+    size: "BASE"
 }
 
 const btnCancelParticipateStyle: IButton = {
-    text : "Annuler la participation",
+    text: "Annuler la participation",
     color: "RED",
-    type : "SECONDARY",
-    size : "BASE"
+    type: "SECONDARY",
+    size: "BASE"
 }
 
 // ############################################### FUNCTIONS ###############################################
@@ -136,14 +144,26 @@ const formatDate = (date: string) => {
 
 // ############################################## HANDLERS ##############################################
 
+const handleScroll = () => {
+    if (header.value && btnClose.value) {
+        const headerHeight = header.value.offsetHeight;
+
+        if (window.scrollY > headerHeight) {
+            btnClose.value.style.color = "black";
+        } else {
+            btnClose.value.style.color = "white";
+        }
+    }
+}
+
 const handleModal = () => {
-    modalParticipant.value?.show();
+    if (event.value?.participants && event.value.participants.length > 0) {
+        modalParticipant.value?.show();
+    }
 }
 
 const handleClose = () => {
     router.push({ name: "events" });
-
-    // TODO : Ajouter l'information de l'id de l'event dans l'url pour pouvoir revenir à l'event
 }
 
 const handleParticipate = async () => {

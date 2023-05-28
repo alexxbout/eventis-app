@@ -21,10 +21,7 @@
         <div v-if="props.style.shape == EUserCardStyle.FRIEND_REQUEST" ref="container" class="h-[137px] w-full max-w-xs rounded-[18px] bg-[#FAFAFA] p-[13px] flex flex-col gap-y-[10px]">
             <!-- Picture + button -->
             <div class="flex items-center justify-between w-full gap-x-2">
-                <div v-if="props.data.pic" class="bg-no-repeat rounded-full w-[60px] h-[60px] bg-center bg-cover" :style="{ backgroundImage: 'url(' + UtilsApi.getImage('users', props.data.pic) + ')' }"></div>
-                <div v-else class="rounded-full w-[60px] h-[60px] bg-[#ECF3FD] flex items-center justify-center">
-                    <i class="text-2xl bi bi-person-fill"></i>
-                </div>
+                <UserProfilPicture :pic="props.data.pic" :size="{ size: EUserProfilPictureStyle.MEDIUM }" />
                 <Button ref="button" @@trigger="handleClick" :data="buttonType" />
             </div>
 
@@ -40,8 +37,8 @@
         <!-- RECTANGLE -->
         <div v-else="props.style.shape == EUserCardStyle.FRIEND_PROFILE" class="w-full h-max flex items-center justify-between gap-x-5 bg-[#FAFAFA] p-[13px] rounded-[18px]">
             <div class="flex items-center justify-center w-max gap-x-5">
-                <div v-if="props.data.pic" class="bg-no-repeat rounded-full w-[60px] h-[60px] bg-center bg-cover" :style="{ backgroundImage: 'url(' + UtilsApi.getImage('users', props.data.pic) + ')' }"></div>
-                <span>{{ props.data.firstname + ' ' + props.data.lastname }}</span>
+                <UserProfilPicture :pic="props.data.pic" :size="{ size: EUserProfilPictureStyle.SMALL }" />
+                <span class="text-base font-medium">{{ props.data.firstname + ' ' + props.data.lastname }}</span>
             </div>
 
             <Button class="w-max" :data="{ size: 'XS', color: 'BLUE', type: 'PRIMARY', text: 'Profil' }" />
@@ -61,6 +58,8 @@ import UtilsApi from "../../utils/UtilsApi";
 import UtilsAuth from "../../utils/UtilsAuth";
 
 import Button from "../Button.vue";
+import UserProfilPicture from "./UserProfilPicture.vue";
+import { EUserProfilPictureStyle } from "../../types/UserProfilPicture";
 
 // ########################################### VARIABLES ###########################################
 

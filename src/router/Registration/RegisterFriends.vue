@@ -13,7 +13,7 @@
             <span class="header">Restez connectés avec vos amis</span>
 
             <!-- UserCard -->
-            <div class="grid w-full h-full gap-3 overflow-hidden overflow-y-auto 2xs:grid-cols-1 xs:grid-cols-2">
+            <div class="grid w-full gap-3 overflow-hidden overflow-y-auto h-max 2xs:grid-cols-1 xs:grid-cols-2">
                 <UserCard v-for="user in users" :data="user" :style="{ shape: EUserCardStyle.FRIEND_REQUEST }" />
             </div>
         </div>
@@ -60,8 +60,6 @@ onMounted(async () => {
         const idUser = user.id;
 
         const request = await UtilsApi.getAffinities(idUser);
-
-        console.log(request);
 
         if (request) {
             users.value = request;
