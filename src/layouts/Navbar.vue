@@ -58,13 +58,10 @@ function getStatusClass(to: string) {
 }
 
 function hide() {
-    console.log("hide");
-    
     isVisible.value = false;
 }
 
 function show() {
-    console.log("show");
     isVisible.value = true;
 }
 

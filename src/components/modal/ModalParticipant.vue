@@ -6,25 +6,26 @@
         <div class="bg-white w-full h-max rounded-t-[35px] shadow-modal justify-between flex flex-col p-12 gap-y-10">
             <!-- Header -->
             <div class="w-full h-max flex justify-between items-center">
-                <span>Participants</span>
+                <span class="header-xs">Participants</span>
 
-                <i class="bi bi-x-circle-fill text-3xl text-black"></i>
+                <i @click="hide" class="bi bi-x-circle-fill text-3xl text-black"></i>
             </div>
 
             <!-- Users -->
             <div class="w-full h-max overflow-y-auto flex flex-col gap-y-5">
-                <UserCard v-for="participant in props.data" :key="participant.id" :data="participant.user" :style="EUserCardStyle.COMPACT" />
+                <UserCard v-for="participant in props.data" :key="participant.id" :data="participant.user" :style="{shape: EUserCardStyle.RECTANGLE}" />
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { PropType, ref } from "vue";
-import { IUser } from "../../types/User";
-import UserCard from "../user/UserCard.vue";
+import { PropType, ref, onMounted } from "vue";
+
 import { EUserCardStyle } from "../../types/UserCardStyle";
-import { IParticipant } from "../../types/Participants";
+import type { IParticipant } from "../../types/Participants";
+
+import UserCard from "../user/UserCard.vue";
 
 const props = defineProps({
     data: {

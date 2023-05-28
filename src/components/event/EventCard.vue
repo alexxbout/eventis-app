@@ -6,7 +6,8 @@
         <div class="h-max relative w-full shadow-card overflow-hidden rounded-2xl bg-white overscroll-contain">
 
             <!-- Image -->
-            <div :style="{ backgroundImage: 'url(http://localhost:8080/image/events/' + props.data.pic + ')' }" class="h-[350px] w-full bg-no-repeat bg-cover bg-center"></div>
+            <div v-if="props.data.pic" :style="{ backgroundImage: 'url(http://localhost:8080/image/events/' + props.data.pic + ')' }" class="h-[350px] w-full bg-no-repeat bg-cover bg-center"></div>
+            <div v-else class="h-[350px] w-full"></div>
 
             <!-- Info -->
             <div class="h-max w-full flex flex-col justify-center p-5 gap-y-[5px]">
@@ -19,9 +20,10 @@
 </template>
 
 <script setup lang="ts">
-import type { IEvent } from "../../types/Event";
-import { ref, PropType } from "vue";
+import { PropType } from "vue";
 import { useRouter } from "vue-router";
+
+import type { IEvent } from "../../types/Event";
 
 const props = defineProps({
     data: {

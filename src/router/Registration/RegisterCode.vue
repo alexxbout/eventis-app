@@ -54,11 +54,11 @@ const props = defineProps({
 
 const router = useRouter();
 
-const form   = ref<HTMLFormElement | null>();
+const form = ref<HTMLFormElement | null>();
 const inputs = ref<HTMLInputElement[]>([]);
 
-const codeLength    = ref(5);
-const loading       = ref(false);
+const codeLength = ref(5);
+const loading = ref(false);
 const readyToSubmit = ref(false);
 
 // ########################################### Evenements ###########################################
@@ -90,23 +90,21 @@ const handleSubmit = async () => {
     if (getFormValidity()) {
         loading.value = true;
 
-        const code = getCode();
+        const code = await ApiService.getCode(getCode());
 
-        await ApiService.getCode(code).then((response) => {
-            loading.value = false;
+        loading.value = false;
 
-            if (response.status === 200) {
-                emit("@sendCode", code);
+        if (code) {
+            emit("@sendCode", code);
 
-                setValidInputs();
+            setValidInputs();
 
-                setTimeout(() => {
-                    props.data.next();
-                }, 500);
-            } else {
-                setInvalidInputs();
-            }
-        });
+            setTimeout(() => {
+                props.data.next();
+            }, 500);
+        } else {
+            setInvalidInputs();
+        }
     }
 }
 

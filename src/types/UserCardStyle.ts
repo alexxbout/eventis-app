@@ -1,3 +1,7 @@
 export enum EUserCardStyle {
-    DEFAULT, COMPACT
+    SQUARE, RECTANGLE
+}
+
+export interface IUserCardStyle {
+    shape: EUserCardStyle
 }

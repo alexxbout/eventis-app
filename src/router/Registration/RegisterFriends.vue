@@ -14,7 +14,7 @@
 
             <!-- UserCard -->
             <div class="grid w-full h-full gap-3 overflow-hidden overflow-y-auto 2xs:grid-cols-1 xs:grid-cols-2 place-items-center">
-                <UserCard v-for="card in users" :data="card" :hideFriends="true" />
+                <UserCard v-for="card in users" :data="card" :style="{shape: EUserCardStyle.SQUARE}" />
             </div>
         </div>
 
@@ -37,6 +37,7 @@ import type { IUser } from "../../types/User";
 import { IRegistration } from "../../types/interfaces";
 import UtilsApi from "../../utils/UtilsApi";
 import UtilsAuth from "../../utils/UtilsAuth";
+import { EUserCardStyle } from "../../types/UserCardStyle";
 
 // ############################################## Variables ##############################################
 const props = defineProps({
@@ -56,16 +57,11 @@ onMounted(async () => {
         const idUser = user.id;
 
         if (idUser) {
-            await UtilsApi.getAffinities(idUser)
-                .then((response) => {
-                    users.value = response.data.data as IUser[];
-                    
-                    console.log(response);
-                    
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+            const request = await UtilsApi.getAffinities(idUser);
+
+            if (request) {
+                users.value = request as IUser[];
+            }
         }
     }
 });

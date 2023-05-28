@@ -21,6 +21,10 @@
         @apply font-bold text-3xl text-black;
     }
 
+    .header-xs {
+        @apply font-semibold text-2xl text-black;
+    }
+
     .margins {
         @apply px-5 py-10;
     }
@@ -61,4 +65,18 @@
 
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* Retire le halo bleu sur les liens sur mobile */
+}
+
+@keyframes shine {
+    to {
+        background-position-x: -200%;
+    }
+}
+
+.loading {
+    background-color: #eee;
+    background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+    background-size: 200% 100%;
+    animation: 1.5s shine linear infinite;
+    color: transparent;
 }

@@ -6,12 +6,12 @@ export interface IEvent {
     zip          : string;
     adress       : string;
     city         : string;
-    canceled     : string;
-    reason       : string;
+    canceled?    : string;
+    reason?      : string;
     start        : string;
     title        : string;
     idCategorie  : string;
     description  : string;
-    pic          : string;
+    pic?         : string;
     participants?: IParticipant[];
 }

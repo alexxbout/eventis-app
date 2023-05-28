@@ -43,9 +43,9 @@ const handleInput = () => {
 
     if (user) {
         if (fileInput.value?.files) {
-            UtilsApi.updateUserPicture(user.id, fileInput.value.files[0]).then((response) => {
-                console.log(response);
-            });
+            // UtilsApi.updateUserPicture(user.id, fileInput.value.files[0]).then((response) => {
+            //     console.log(response);
+            // });
         } else {
             console.error("No file found");
         }

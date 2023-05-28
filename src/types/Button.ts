@@ -1,5 +1,5 @@
 export interface IButton {
-    text: string;
+    text: any;
     type: "PRIMARY" | "SECONDARY";
     color: "BLUE" | "GREEN" | "RED" | "WHITE" | "GRAY";
     size: "BASE" | "XS";

@@ -60,22 +60,16 @@ const handleCredentials = (paramUser: IUser) => {
 const registerUser = async (user: IUser) => {
     if (code.value && user.password) {
 
-        await UtilsApi.registerUser(code.value, user.firstname, user.lastname, user.password).then((response) => {
-            if (response.status == 200) {
-                console.log("Account created");
+        const login = await UtilsApi.registerUser(code.value, user.firstname, user.lastname, user.password);
 
-                user.login = response.data.data.login;
-            }
-        });
+        if (login) {
+            user.login = login;
+        }
 
         if (user.login) {
-            UtilsAuth.login(user.login, user.password).then((response) => {
-                if (response.status == 200) {
-                    console.log("Logged in");
-
-                    next();
-                }
-            });
+            if (await UtilsAuth.login(user.login, user.password)) {
+                next();
+            }
         } else {
             console.error("Missing login to login user");
         }

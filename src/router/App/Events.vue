@@ -16,11 +16,14 @@
 </template>
 
 <script setup lang="ts">
-import type { IEvent } from "../../types/Event";
-import EventCard from "../../components/event/EventCard.vue"
 import { onMounted, ref } from "vue"
+
+import EventCard from "../../components/event/EventCard.vue"
+
+import type { IEvent } from "../../types/Event";
+import type { IUser } from "../../types/User";
+
 import UtilsApi from "../../utils/UtilsApi";
-import { IUser } from "../../types/User";
 import UtilsAuth from "../../utils/UtilsAuth";
 
 // ########################################### Variables ###########################################  
@@ -35,22 +38,23 @@ onMounted(async () => {
 
         if (user.idFoyer) {
             // Api pour récup le zip en fonction de l'id du foyer
-            await UtilsApi.getFoyerById(user.idFoyer).then((response) => {
-                zip = response.data.data.zip;
-            });
+            const foyerRequest = await UtilsApi.getFoyerById(user.idFoyer);
 
-            // Get two first numbers of zip
-            zip = zip.substring(0, 2);
+            if (foyerRequest) {
+                zip = foyerRequest.zip;
 
-            const zipInt = parseInt(zip);
+                // Get two first numbers of zip
+                zip = zip.substring(0, 2);
 
-            // Récupérer les évènements en fonction du zip
-            await UtilsApi.getEventsByZip(zipInt).then((response) => {
-                events.value = response.data.data;
+                const zipInt = parseInt(zip);
 
-                console.log(response.data.data);
-                
-            });
+                // Récupérer les évènements en fonction du zip
+                const eventsRequest = await UtilsApi.getEventsByZip(zipInt);
+
+                if (eventsRequest) {
+                    events.value = eventsRequest;
+                }
+            }
         }
     }
 

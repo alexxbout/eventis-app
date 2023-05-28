@@ -1,8 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import jwt_decode from "jwt-decode";
 import type { IUser } from "../types/User";
-
-const API_URL = "http://localhost:8080/api/";
+import { HTTPCodes } from "./HTTPCodes";
 
 class UtilsAuth {
     isLoggedIn(): boolean {
@@ -50,7 +49,7 @@ class UtilsAuth {
         try {
             const item = JSON.parse(localStorage.getItem("item") || "{}");
 
-            return item.user;
+            return item.user as IUser;
         }
         catch (error) {
             console.error("Erreur lors de la récupération de l'utilisateur", error);
@@ -58,19 +57,22 @@ class UtilsAuth {
         }
     }
 
-    login(login: string, password: string): Promise<any> {
-        return axios
-            .post(API_URL + "auth/login", {
-                login: login,
-                password: password
-            })
-            .then((response) => {
-                if (response.data.data.token) {
-                    localStorage.setItem("item", JSON.stringify(response.data.data));
-                }
+    async login(login: string, password: string): Promise<boolean> {
+        let data = false;
 
-                return response.data;
-            });
+        axios.post(import.meta.env.VITE_API_URL + "api/auth/login", {
+            login: login,
+            password: password
+        }).then((response) => {
+            if (response.status == HTTPCodes.OK && response.data.data.token) {
+                localStorage.setItem("item", JSON.stringify(response.data.data));
+                data = true;
+            }
+        }).catch((error) => {
+            console.error("Erreur lors de la connexion", error);
+        });
+
+        return data;
     }
 
     logout() {
