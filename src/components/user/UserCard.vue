@@ -1,32 +1,51 @@
 <template>
-    <!-- SQUARE -->
-    <div v-if="props.style.shape == EUserCardStyle.SQUARE" ref="container" class="h-[137px] w-full max-w-xs rounded-[18px] bg-[#FAFAFA] p-[13px] flex flex-col gap-y-[10px]">
-        <!-- Picture + button -->
-        <div class="flex items-center justify-between w-full gap-x-2">
-            <div v-if="props.data.pic" class="bg-no-repeat rounded-full w-[60px] h-[60px] bg-center bg-cover" :style="{ backgroundImage: 'url(http://localhost:8080/image/users/' + props.data.pic + ')' }"></div>
-            <div v-else class="rounded-full w-[60px] h-[60px] bg-[#ECF3FD] flex items-center justify-center">
-                <i class="text-2xl bi bi-person-fill"></i>
+    <!-- LOADING -->
+    <div v-if="loading">
+        <div class="loading h-[137px] w-full max-w-xs rounded-[18px] bg-[#FAFAFA] p-[13px] flex flex-col gap-y-[10px]">
+            <div class="flex items-center justify-between w-full gap-x-2">
+                <div class="rounded-full w-[60px] h-[60px] bg-white flex items-center justify-center aspect-square"></div>
+                <Button class="w-full" ref="button" />
             </div>
-            <Button ref="button" @click="handleClick" :data="buttonType" />
-        </div>
 
-        <!-- Name / Pseudo -->
-        <div class="font-bold text-[14px]">
-            <span>{{ props.data.firstname + ' ' + props.data.lastname }}</span>
-        </div>
+            <div class="w-2/3 h-5 bg-white rounded-md"></div>
 
-        <!-- Center of interests -->
-        <div></div>
+            <div class="flex items-center justify-center w-full h-5 gap-x-2">
+                <div class="w-full h-full bg-white rounded-md"></div>
+                <div class="w-full h-full bg-white rounded-md"></div>
+            </div>
+        </div>
     </div>
 
-    <!-- RECTANGLE -->
-    <div v-else="props.style.shape == EUserCardStyle.RECTANGLE" class="w-full h-max flex items-center justify-between gap-x-5 bg-[#FAFAFA] p-[13px] rounded-[18px]">
-        <div class="flex items-center justify-center w-max gap-x-5">
-            <div v-if="props.data.pic" class="bg-no-repeat rounded-full w-[60px] h-[60px] bg-center bg-cover" :style="{ backgroundImage: 'url(http://localhost:8080/image/users/' + props.data.pic + ')' }"></div>
-            <span>{{ props.data.firstname + ' ' + props.data.lastname }}</span>
+    <div v-else>
+        <!-- FRIEND_REQUEST -->
+        <div v-if="props.style.shape == EUserCardStyle.FRIEND_REQUEST" ref="container" class="h-[137px] w-full max-w-xs rounded-[18px] bg-[#FAFAFA] p-[13px] flex flex-col gap-y-[10px]">
+            <!-- Picture + button -->
+            <div class="flex items-center justify-between w-full gap-x-2">
+                <div v-if="props.data.pic" class="bg-no-repeat rounded-full w-[60px] h-[60px] bg-center bg-cover" :style="{ backgroundImage: 'url(' + UtilsApi.getImage('users', props.data.pic) + ')' }"></div>
+                <div v-else class="rounded-full w-[60px] h-[60px] bg-[#ECF3FD] flex items-center justify-center">
+                    <i class="text-2xl bi bi-person-fill"></i>
+                </div>
+                <Button ref="button" @@trigger="handleClick" :data="buttonType" />
+            </div>
+
+            <!-- Name / Pseudo -->
+            <div class="text-base font-semibold">
+                <span>{{ props.data.firstname + ' ' + props.data.lastname }}</span>
+            </div>
+
+            <!-- Center of interests -->
+            <div></div>
         </div>
 
-        <Button class="w-max" :data="{ size: 'XS', color: 'BLUE', type: 'PRIMARY', text: 'Profil' }" />
+        <!-- RECTANGLE -->
+        <div v-else="props.style.shape == EUserCardStyle.FRIEND_PROFILE" class="w-full h-max flex items-center justify-between gap-x-5 bg-[#FAFAFA] p-[13px] rounded-[18px]">
+            <div class="flex items-center justify-center w-max gap-x-5">
+                <div v-if="props.data.pic" class="bg-no-repeat rounded-full w-[60px] h-[60px] bg-center bg-cover" :style="{ backgroundImage: 'url(' + UtilsApi.getImage('users', props.data.pic) + ')' }"></div>
+                <span>{{ props.data.firstname + ' ' + props.data.lastname }}</span>
+            </div>
+
+            <Button class="w-max" :data="{ size: 'XS', color: 'BLUE', type: 'PRIMARY', text: 'Profil' }" />
+        </div>
     </div>
 </template>
   
@@ -43,6 +62,7 @@ import UtilsAuth from "../../utils/UtilsAuth";
 
 import Button from "../Button.vue";
 
+// ########################################### VARIABLES ###########################################
 
 const props = defineProps({
     data: {
@@ -87,34 +107,37 @@ const button = ref<InstanceType<typeof Button>>();
 const isFriend = ref(false);
 const isPending = ref(false);
 
+const loading = ref(true);
+
+// ########################################### FUNCTIONS ###########################################
+
 onMounted(async () => {
     switch (props.style.shape) {
-        case EUserCardStyle.SQUARE:
+        case EUserCardStyle.FRIEND_REQUEST:
             isFriend.value = await UtilsApi.isFriend(user!.id, props.data.id);
 
-            if (isFriend.value) {
+            if (!isFriend.value) {
                 isPending.value = await UtilsApi.isPending(user!.id, props.data.id);
 
                 if (isPending.value) {
                     buttonType.value = styles.REMOVE_FRIEND_REQUEST;
                     actionType.value = EActionType.REMOVE_FRIEND_REQUEST;
-
                     button.value?.update(styles.REMOVE_FRIEND_REQUEST);
                 } else {
-                    buttonType.value = styles.SHOW_USER_PROFIL;
-                    actionType.value = EActionType.SHOW_PROFIL;
-                    button.value?.update(styles.SHOW_USER_PROFIL);
+                    buttonType.value = styles.ASK_FRIEND;
+                    actionType.value = EActionType.SEND_FRIEND_REQUEST;
+                    button.value?.update(styles.ASK_FRIEND);
                 }
-            } else {
-                buttonType.value = styles.ASK_FRIEND;
-                actionType.value = EActionType.SEND_FRIEND_REQUEST;
-                button.value?.update(styles.ASK_FRIEND);
             }
             break;
 
-        case EUserCardStyle.RECTANGLE:
+        case EUserCardStyle.FRIEND_PROFILE:
     }
+
+    loading.value = false;
 });
+
+// ########################################### HANDLERS ###########################################
 
 const handleClick = async () => {
     switch (actionType.value) {

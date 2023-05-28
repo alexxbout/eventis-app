@@ -35,16 +35,17 @@
 </template>
 
 <script setup lang="ts">
+import { PropType, ref, } from "vue";
+import { useRouter } from "vue-router";
+
 import type { IRegistration } from "../../types/interfaces";
 
 import Spinner from "../../components/Spinner.vue";
 
 import ApiService from "../../utils/UtilsApi";
 
-import { useRouter } from "vue-router";
-import { PropType, ref, } from "vue";
+// ########################################### VARIABLES ###########################################
 
-// ########################################### Variables ###########################################
 const props = defineProps({
     data: {
         type: Object as PropType<IRegistration>,
@@ -61,29 +62,30 @@ const codeLength = ref(5);
 const loading = ref(false);
 const readyToSubmit = ref(false);
 
-// ########################################### Evenements ###########################################
+// ########################################### EVENTS ###########################################
+
 const emit = defineEmits(["@sendCode"]);
 
-// ########################################### Fonctions ###########################################
-const setValidInputs = () => {
-    inputs.value.forEach((input) => {
-        input.classList.add("valid-input");
-        input.classList.remove("invalid-input");
-    });
-}
+// ########################################### HANDLERS ###########################################
 
-const setInvalidInputs = () => {
-    inputs.value.forEach((input) => {
-        input.classList.remove("valid-input");
-        input.classList.add("invalid-input");
-    });
-}
+const handleInput = (event: Event) => {
+    // Update submit button state
+    readyToSubmit.value = getFormValidity();
 
-const setNeutreInputs = () => {
-    inputs.value.forEach((input) => {
-        input.classList.remove("valid-input");
-        input.classList.remove("invalid-input");
-    });
+    // Update inputs state
+    if (!getFormValidity()) {
+        setNeutreInputs();
+    }
+
+    // Focus next input if current input is not empty
+    const input = event.target as HTMLInputElement;
+    const inputIndex = inputs.value.indexOf(input);
+
+    if (input.value.length > 0) {
+        if (inputIndex < inputs.value.length - 1) {
+            inputs.value[inputIndex + 1].focus();
+        }
+    }
 }
 
 const handleSubmit = async () => {
@@ -108,6 +110,29 @@ const handleSubmit = async () => {
     }
 }
 
+// ########################################### FUNCTIONS ###########################################
+
+const setValidInputs = () => {
+    inputs.value.forEach((input) => {
+        input.classList.add("valid-input");
+        input.classList.remove("invalid-input");
+    });
+}
+
+const setInvalidInputs = () => {
+    inputs.value.forEach((input) => {
+        input.classList.remove("valid-input");
+        input.classList.add("invalid-input");
+    });
+}
+
+const setNeutreInputs = () => {
+    inputs.value.forEach((input) => {
+        input.classList.remove("valid-input");
+        input.classList.remove("invalid-input");
+    });
+}
+
 const getCode = (): string => {
     let code = "";
 
@@ -116,26 +141,6 @@ const getCode = (): string => {
     }
 
     return code;
-}
-
-const handleInput = (event: Event) => {
-    // Update submit button state
-    readyToSubmit.value = getFormValidity();
-
-    // Update inputs state
-    if (!getFormValidity()) {
-        setNeutreInputs();
-    }
-
-    // Focus next input if current input is not empty
-    const input = event.target as HTMLInputElement;
-    const inputIndex = inputs.value.indexOf(input);
-
-    if (input.value.length > 0) {
-        if (inputIndex < inputs.value.length - 1) {
-            inputs.value[inputIndex + 1].focus();
-        }
-    }
 }
 
 const getFormValidity = (): boolean => {

@@ -13,8 +13,8 @@
             <span class="header">Restez connectés avec vos amis</span>
 
             <!-- UserCard -->
-            <div class="grid w-full h-full gap-3 overflow-hidden overflow-y-auto 2xs:grid-cols-1 xs:grid-cols-2 place-items-center">
-                <UserCard v-for="card in users" :data="card" :style="{shape: EUserCardStyle.SQUARE}" />
+            <div class="grid w-full h-full gap-3 overflow-hidden overflow-y-auto 2xs:grid-cols-1 xs:grid-cols-2">
+                <UserCard v-for="user in users" :data="user" :style="{ shape: EUserCardStyle.FRIEND_REQUEST }" />
             </div>
         </div>
 
@@ -34,12 +34,14 @@ import { PropType, onMounted, ref } from "vue";
 import UserCard from "../../components/user/UserCard.vue";
 
 import type { IUser } from "../../types/User";
-import { IRegistration } from "../../types/interfaces";
-import UtilsApi from "../../utils/UtilsApi";
-import UtilsAuth from "../../utils/UtilsAuth";
+import type { IRegistration } from "../../types/interfaces";
 import { EUserCardStyle } from "../../types/UserCardStyle";
 
-// ############################################## Variables ##############################################
+import UtilsApi from "../../utils/UtilsApi";
+import UtilsAuth from "../../utils/UtilsAuth";
+
+// ############################################## VARIABLES ##############################################
+
 const props = defineProps({
     data: {
         type: Object as PropType<IRegistration>,
@@ -49,19 +51,20 @@ const props = defineProps({
 
 const users = ref<IUser[]>([]);
 
-// ############################################## Fonctions ##############################################
+// ############################################## FUNCTIONS ##############################################
+
 onMounted(async () => {
     const user = UtilsAuth.getCurrentUser();
 
     if (user) {
         const idUser = user.id;
 
-        if (idUser) {
-            const request = await UtilsApi.getAffinities(idUser);
+        const request = await UtilsApi.getAffinities(idUser);
 
-            if (request) {
-                users.value = request as IUser[];
-            }
+        console.log(request);
+
+        if (request) {
+            users.value = request;
         }
     }
 });

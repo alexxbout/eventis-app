@@ -30,11 +30,15 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
+
 import UtilsAuth from "../../utils/UtilsAuth";
-import UtilsApi from "../../utils/UtilsApi";
+
+// ########################################### VARIABLES ###########################################
 
 const fileInput = ref<HTMLInputElement | null>(null);
+
+// ########################################### HANDLERS ###########################################
 
 const handleInput = () => {
     console.log("Input changed");

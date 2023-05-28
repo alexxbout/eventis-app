@@ -3,12 +3,13 @@
         <RegisterCode ref="registerCode" @@send-code="handleCode" v-if="currentStep == 1" :data="props" />
         <RegisterCredentials ref="registerCredentials" @@send-credentials="handleCredentials" v-if="currentStep == 2" />
         <RegisterPicture v-if="currentStep == 3" />
-
         <RegisterFriends v-if="currentStep == 4" :data="props" />
     </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
+
 import type { IRegistration } from "../../types/interfaces";
 import type { IUser } from "../../types/User";
 
@@ -20,21 +21,32 @@ import RegisterCredentials from "./RegisterCredentials.vue";
 import RegisterPicture from "./RegisterPicture.vue";
 import RegisterFriends from "./RegisterFriends.vue";
 
-import { ref } from "vue";
-import { AxiosResponse } from "axios";
+// ########################################### VARIABLES ###########################################
 
-// ########################################### Variables ###########################################
-const MAX_STEPS = 6;
+const MAX_STEPS           = 6;
 
-const registerCode = ref<InstanceType<typeof RegisterCode>>();
+const registerCode        = ref<InstanceType<typeof RegisterCode>>();
 const registerCredentials = ref<InstanceType<typeof RegisterCredentials>>();
 
-const currentStep = ref(4);
+const currentStep         = ref(4);
 
-const code = ref("");
-const user = ref<IUser | null>(null);
+const code                = ref("");
+const user                = ref<IUser | null>(null);
 
-// ########################################### Fonctions ###########################################
+// ########################################### HANDLERS ###########################################
+
+const handleCode = (paramCode: string) => {
+    code.value = paramCode;
+}
+
+const handleCredentials = (paramUser: IUser) => {
+    user.value = paramUser;
+
+    registerUser(user.value);
+}
+
+// ########################################### FUNCTIONS ###########################################
+
 const next = () => {
     if (currentStep.value < MAX_STEPS) {
         currentStep.value++;
@@ -45,16 +57,6 @@ const previous = () => {
     if (currentStep.value > 1) {
         currentStep.value--;
     }
-}
-
-const handleCode = (paramCode: string) => {
-    code.value = paramCode;
-}
-
-const handleCredentials = (paramUser: IUser) => {
-    user.value = paramUser;
-
-    registerUser(user.value);
 }
 
 const registerUser = async (user: IUser) => {

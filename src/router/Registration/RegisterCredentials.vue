@@ -63,31 +63,34 @@
 </template>
 
 <script setup lang="ts">
-/**
- * Cette classe va gérer la partie données personnelles de l'inscription
- * Elle va ensuite emmetre un évènement pour passer à la partie suivante
- * Il faut alors exposer les données personnelles dans le composant parent
- */
+import { ref} from "vue";
 
 import type { IUser } from "../../types/User";
-import { ref, PropType, onBeforeMount, onMounted } from "vue";
-import { useRoute } from "vue-router";
 
-// ########################################### Variables ###########################################
-const reqUppercase = ref(false);
-const reqLowercase = ref(false);
-const reqNumber = ref(false);
+// ########################################### VARIABLES ###########################################
+
+const reqUppercase   = ref(false);
+const reqLowercase   = ref(false);
+const reqNumber      = ref(false);
 const reqSpecialChar = ref(false);
-const reqCount = ref(false);
+const reqCount       = ref(false);
 
 const firstnameInput = ref("");
-const lastnameInput = ref("");
-const passwordInput = ref("");
-const readyToSubmit = ref(false);
-const form = ref<HTMLFormElement | null>(null);
+const lastnameInput  = ref("");
+const passwordInput  = ref("");
+const readyToSubmit  = ref(false);
+const form           = ref<HTMLFormElement | null>(null);
 
-// ########################################### Evenements ###########################################
+// ########################################### EVENTS ###########################################
+
 const emit = defineEmits(["@sendCredentials"]);
+
+// ########################################### HANDLERS ###########################################
+
+function handleInput() {
+    updateRequirements();
+    updateFormValidity();
+}
 
 const handleSubmit = () => {
     if (form.value?.checkValidity()) {
@@ -100,7 +103,8 @@ const handleSubmit = () => {
     }
 }
 
-// ########################################### Fonctions ###########################################
+// ########################################### FUNCTIONS ###########################################
+
 function getFormValidity(): boolean {
     if (form.value) {
         return form.value.checkValidity();
@@ -121,11 +125,6 @@ function updateRequirements() {
 
 function updateFormValidity() {
     readyToSubmit.value = getFormValidity();
-}
-
-function handleInput() {
-    updateRequirements();
-    updateFormValidity();
 }
 
 </script>

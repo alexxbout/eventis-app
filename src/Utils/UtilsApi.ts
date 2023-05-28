@@ -5,6 +5,7 @@ import { IParticipant } from "../types/Participants";
 import { HTTPCodes } from "./HTTPCodes";
 import { ICode } from "../types/Code";
 import { IFoyer } from "../types/Foyer";
+import { IUser } from "../types/User";
 
 /**
  * Service de gestion des appels à l'API
@@ -20,6 +21,12 @@ class UtilsApi {
         this.baseUrl = this.hostUrl + "api/";
 
         this.authorizationHeader = AuthService.getAuthHeader();
+    }
+
+    // ############################################## IMAGES ##############################################
+
+    getImage(ressource: string, file: string): string {
+        return this.hostUrl + "image/" + ressource + "/" + file;
     }
 
     // ############################################## CODE ##############################################
@@ -144,14 +151,24 @@ class UtilsApi {
     //     });
     // }
 
-    // getUserById(idUser: number) {
-    //     return axios.get(this.baseUrl + "v1/user/" + idUser, {
-    //         headers: {
-    //             "Authorization": "Bearer " + AuthService.getToken(),
-    //             "Content-Type": "application/json"
-    //         }
-    //     });
-    // }
+    async getUserById(idUser: number): Promise<IUser | null> {
+        let data: IUser | null = null;
+
+        await axios.get(this.baseUrl + "v1/user/" + idUser, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        }).then((response) => {
+            if (response.status === HTTPCodes.OK) {
+                data = response.data.data as IUser;
+            }
+        }).catch((error) => {
+            console.log(error, "Error while getting user by id");
+        });
+
+        return data;
+    }
 
     // addUser(firstname: string, lastname: string, password: string, idFoyer: number, idRole: number) {
     //     return axios.post(this.baseUrl + "v1/user/", {
@@ -211,8 +228,8 @@ class UtilsApi {
     //     });
     // }
 
-    async getAffinities(idUser: number): Promise<{ id: number, firstname: string, lastname: string }[] | null> {
-        let data: { id: number, firstname: string, lastname: string }[] | null = null;
+    async getAffinities(idUser: number): Promise<IUser[] | null> {
+        let data: IUser[] | null = null;
 
         await axios.get(this.baseUrl + "v1/user/" + idUser + "/affinities", {
             headers: {
@@ -221,13 +238,13 @@ class UtilsApi {
             }
         }).then((response) => {
             if (response.status === HTTPCodes.OK) {
-                data = response.data.data as { id: number, firstname: string, lastname: string }[];
+                data = response.data.data as IUser[];
             }
         }).catch((error) => {
             console.log(error, "Error while getting affinities");
         });
 
-        return data as { id: number, firstname: string, lastname: string }[] | null;
+        return data as IUser[] | null;
     }
 
     // ############################################## FRIEND ##############################################
@@ -286,7 +303,7 @@ class UtilsApi {
     async isPending(idUser1: number, idUser2: number): Promise<boolean> {
         let data = false;
 
-        await axios.post(this.baseUrl + "v1/user/" + idUser1 + "/friend/pending/" + idUser2, null, {
+        await axios.get(this.baseUrl + "v1/user/" + idUser1 + "/friend/pending/" + idUser2, {
             headers: {
                 "Authorization": "Bearer " + AuthService.getToken(),
                 "Content-Type": "application/json"

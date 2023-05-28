@@ -1,5 +1,5 @@
 export enum EUserCardStyle {
-    SQUARE, RECTANGLE
+    FRIEND_REQUEST, FRIEND_PROFILE
 }
 
 export interface IUserCardStyle {
