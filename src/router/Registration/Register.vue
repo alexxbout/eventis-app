@@ -1,14 +1,18 @@
 <template>
     <div class="w-screen h-screen margins">
-        <RegisterCode ref="registerCode" @@send-code="handleCode" v-if="currentStep == 1" :data="props" />
+        <RegisterCode ref="registerCode" @@send-code="handleCode" v-if="currentStep == 1" />
         <RegisterCredentials ref="registerCredentials" @@send-credentials="handleCredentials" v-if="currentStep == 2" />
         <RegisterPicture v-if="currentStep == 3" />
-        <RegisterFriends v-if="currentStep == 4" :data="props" />
+        <RegisterFriends v-if="currentStep == 4" />
+
+        <!-- <RegisterInterests /> -->
+
+        <RegisterCongrats v-if="currentStep == 5" />
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, provide } from "vue";
 
 import type { IRegistration } from "../../types/Register";
 import type { IUser } from "../../types/User";
@@ -20,18 +24,20 @@ import RegisterCode from "./RegisterCode.vue";
 import RegisterCredentials from "./RegisterCredentials.vue";
 import RegisterPicture from "./RegisterPicture.vue";
 import RegisterFriends from "./RegisterFriends.vue";
+import RegisterCongrats from "./RegisterCongrats.vue";
+import RegisterInterests from "./RegisterInterests.vue";
 
 // ########################################### VARIABLES ###########################################
 
-const MAX_STEPS           = 6;
+const MAX_STEPS = 6;
 
-const registerCode        = ref<InstanceType<typeof RegisterCode>>();
+const registerCode = ref<InstanceType<typeof RegisterCode>>();
 const registerCredentials = ref<InstanceType<typeof RegisterCredentials>>();
 
-const currentStep         = ref(4);
+const currentStep = ref(5);
 
-const code                = ref("");
-const user                = ref<IUser | null>(null);
+const code = ref("");
+const user = ref<IUser | null>(null);
 
 // ########################################### HANDLERS ###########################################
 
@@ -80,9 +86,10 @@ const registerUser = async (user: IUser) => {
     }
 }
 
-const props: IRegistration = {
-    next,
-    previous
-}
+provide("props",
+    <IRegistration>{
+        next,
+        previous
+    });
 
 </script>

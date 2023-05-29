@@ -2,7 +2,7 @@
     <div class="flex flex-col justify-around w-full h-full">
         <!-- Retour -->
         <div class="flex items-center w-full">
-            <div @click.prevent="props.data.previous" class="flex gap-x-[10px] bg-[#F2F2F7] rounded-full py-2 px-5 w-max text-[#3C3C43]/60">
+            <div @click.prevent="props.previous" class="flex gap-x-[10px] bg-[#F2F2F7] rounded-full py-2 px-5 w-max text-[#3C3C43]/60">
                 <i class="bi bi-chevron-left"></i>
                 <span>Retour</span>
             </div>
@@ -29,12 +29,12 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, onMounted, ref } from "vue";
+import { PropType, inject, onMounted, ref } from "vue";
 
 import UserCard from "../../components/user/UserCard.vue";
 
 import type { IUser } from "../../types/User";
-import type { IRegistration } from "../../types/interfaces";
+import type { IRegistration } from "../../types/Register";
 import { EUserCardStyle } from "../../types/UserCardStyle";
 
 import UtilsApi from "../../utils/UtilsApi";
@@ -42,14 +42,9 @@ import UtilsAuth from "../../utils/UtilsAuth";
 
 // ############################################## VARIABLES ##############################################
 
-const props = defineProps({
-    data: {
-        type: Object as PropType<IRegistration>,
-        required: true
-    }
-});
-
 const users = ref<IUser[]>([]);
+
+const props = inject("props") as IRegistration;
 
 // ############################################## FUNCTIONS ##############################################
 

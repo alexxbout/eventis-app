@@ -1,6 +1,6 @@
 <template>
     <button ref="el" @click="handleClick" :style="style" class="text-[14px] flex items-center gap-x-2 justify-center font-semibold text-center text-white disabled:bg-gray-600">
-        <i v-if="props.icon" :class="props.icon.name + ' ' + (props.icon.side == 'RIGHT' ? 'order-last' : '')"></i>
+        <i v-if="props.icon" :class="props.icon.name + ' ' + (props.icon.side == 'RIGHT' ? 'order-last' : '')" class="text-xl"></i>
 
         {{ buttonProps.text }}
     </button>

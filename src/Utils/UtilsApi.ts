@@ -125,14 +125,41 @@ class UtilsApi {
         return data;
     }
 
-    // updateUserPicture(id: number, picture: File) {
-    //     return axios.post(this.baseUrl + "v1/user/image/" + id, picture, {
-    //         headers: {
-    //             "Authorization": "Bearer " + AuthService.getToken(),
-    //             "Content-Type": "multipart/form-data"
-    //         }
-    //     });
-    // }
+    async updateUserPicture(id: number, picture: FormData): Promise<string | null> {
+        let data = null;
+
+        await axios.post(this.baseUrl + "v1/user/image/" + id, picture, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "multipart/form-data"
+            }
+        }).then((response) => {
+            if (response.status === HTTPCodes.OK) {
+                data = response.data.data.file as string;
+            }
+        }).catch((error) => {
+            console.log(error, "Error while updating user picture");
+        });
+
+        return data;
+    }
+
+    async removeUserPicture(id: number): Promise<boolean> {
+        let data = false;
+
+        await axios.delete(this.baseUrl + "v1/user/image/" + id, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        }).then((response) => {
+            data = response.status === HTTPCodes.OK;
+        }).catch((error) => {
+            console.log(error, "Error while removing user picture");
+        });
+
+        return data;
+    }
 
     // getUsersByFoyer(idFoyer: number) {
     //     return axios.get(this.baseUrl + "v1/user/foyer/" + idFoyer, {

@@ -26,7 +26,7 @@
 
         <!-- Suivant -->
         <div class="flex items-center justify-end w-full gap-x-5">
-            <button :disabled="!readyToSubmit" class="btn-primary w-1/2">
+            <button :disabled="!readyToSubmit" class="w-1/2 btn-primary">
                 <span>Suivant</span>
                 <i class="text-xl bi bi-arrow-right-short"></i>
             </button>
@@ -35,23 +35,16 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, } from "vue";
+import { PropType, inject, ref, } from "vue";
 import { useRouter } from "vue-router";
 
-import type { IRegistration } from "../../types/interfaces";
+import type { IRegistration } from "../../types/Register";
 
 import Spinner from "../../components/Spinner.vue";
 
 import ApiService from "../../utils/UtilsApi";
 
 // ########################################### VARIABLES ###########################################
-
-const props = defineProps({
-    data: {
-        type: Object as PropType<IRegistration>,
-        required: true
-    }
-});
 
 const router = useRouter();
 
@@ -61,6 +54,8 @@ const inputs = ref<HTMLInputElement[]>([]);
 const codeLength = ref(5);
 const loading = ref(false);
 const readyToSubmit = ref(false);
+
+const props = inject("props") as IRegistration;
 
 // ########################################### EVENTS ###########################################
 
@@ -102,7 +97,7 @@ const handleSubmit = async () => {
             setValidInputs();
 
             setTimeout(() => {
-                props.data.next();
+                props.next();
             }, 500);
         } else {
             setInvalidInputs();

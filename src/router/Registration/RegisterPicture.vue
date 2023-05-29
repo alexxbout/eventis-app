@@ -1,10 +1,10 @@
 <template>
-    <div class="w-full h-full justify-around flex flex-col">
+    <div class="flex flex-col justify-around w-full h-full">
 
-        <div class="w-full text-center flex flex-col items-center justify-center gap-y-10">
+        <div class="flex flex-col items-center justify-center w-full text-center gap-y-10">
             <span class="header">Ajouter votre photo</span>
 
-            <label class="p-16 rounded-full bg-[#ECF3FD] w-max" for="image">
+            <label v-if="!success" class="aspect-square flex items-center justify-center h-[140px] w-[140px] rounded-full bg-[#ECF3FD]" for="image">
                 <input ref="fileInput" @change="handleInput" type="file" class="hidden" id="image" name="image">
 
                 <svg class="fill-primary" width="40" height="38" viewBox="0 0 40 38" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -12,49 +12,82 @@
                 </svg>
             </label>
 
+            <div v-if="success" @click="handleRemovePicture" class="relative drop-shadow-2xl">
+                <UserProfilPicture :pic="pic" :size="{ size: EUserProfilPictureStyle.BIG }" />
+
+                <i class="absolute flex items-center justify-center w-12 h-1w-12 text-xl rounded-full bi bi-trash-fill -bottom-2 aspect-square -right-2 text-custom-red bg-[#F6F6F6]"></i>
+            </div>
         </div>
 
         <!-- Passer / Suivant -->
-        <div class="w-full flex items-center gap-x-5">
-            <button class="btn-secondary w-full">
-                <span>Passer</span>
-            </button>
-
-            <button class="btn-primary w-full">
-                <span>Suivant</span>
-                <i class="bi bi-arrow-right-short text-xl"></i>
-            </button>
+        <div class="flex items-center justify-end w-full gap-x-5">
+            <Button @@trigger="handleNext" class="w-1/2" :icon="{name: ICONS.ARROW_RIGHT, side: 'RIGHT'}" :data="{color: 'BLUE', size: 'BASE', type: 'PRIMARY', text: 'Suivant', borderRadius: 'FULL'}" />
         </div>
 
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, inject } from "vue";
+
+import UserProfilPicture from "../../components/user/UserProfilPicture.vue";
+import Button from "../../components/Button.vue";
+
+import { EUserProfilPictureStyle } from "../../types/UserProfilPicture";
 
 import UtilsAuth from "../../utils/UtilsAuth";
+import UtilsApi from "../../utils/UtilsApi";
+import { ICONS } from "../../types/Button";
+import { IRegistration } from "../../types/Register";
 
 // ########################################### VARIABLES ###########################################
 
 const fileInput = ref<HTMLInputElement | null>(null);
 
+const success = ref(false);
+
+const pic = ref("");
+
+const user = UtilsAuth.getCurrentUser();
+
+const props = inject("props") as IRegistration;
+
 // ########################################### HANDLERS ###########################################
 
-const handleInput = () => {
+const handleInput = async () => {
     console.log("Input changed");
-
-    const user = UtilsAuth.getCurrentUser();
 
     if (user) {
         if (fileInput.value?.files) {
-            // UtilsApi.updateUserPicture(user.id, fileInput.value.files[0]).then((response) => {
-            //     console.log(response);
-            // });
+            const formData = new FormData();
+            formData.append("image", fileInput.value.files[0]);
+
+            const file = await UtilsApi.updateUserPicture(user.id, formData);
+
+            if (file) {
+                pic.value = file;
+                success.value = true;
+            } else {
+                success.value = false;
+            }
         } else {
             console.error("No file found");
         }
     } else {
         console.error("No user found");
     }
+}
+
+const handleRemovePicture = async () => {
+    if (user && await UtilsApi.removeUserPicture(user.id)) {
+        pic.value = "";
+        success.value = false;
+    }
+}
+
+const handleNext = () => {
+    console.log("Next");
+
+    props.next();
 }
 </script>
