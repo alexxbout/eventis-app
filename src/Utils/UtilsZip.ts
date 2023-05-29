@@ -107,7 +107,6 @@ const departements: { [key: string]: string } = {
   "95": "Val-d'Oise"
 }
 
-
 const nearbyZips: { [key: string]: string[] } = {
   "01": ["69", "38", "71", "39", "74"],
   "02": ["59", "60", "80", "08", "51", "77"],

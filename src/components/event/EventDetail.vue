@@ -5,7 +5,7 @@
             <i ref="btnClose" class="fixed text-3xl text-white transition-colors bi bi-x-circle-fill top-5 right-5"></i>
         </div>
 
-        <div class="fixed bottom-0 w-full h-20 bg-white flex p-[15px] gap-x-[15px] shadow-eventCard">
+        <div v-if="!passed" class="fixed bottom-0 w-full h-20 bg-white flex p-[15px] gap-x-[15px] shadow-eventCard">
             <Button @@trigger="handleParticipate" ref="btnParticipate" class="w-full" :isLoading="true" />
 
             <Button @@trigger="handleModal" ref="btnParticipants" class="w-max" :isLoading="true" :icon="{ side: 'LEFT', name: ICONS.USERS }" />
@@ -89,6 +89,8 @@ const btnCancelParticipateStyle: IButton = {
     size: "BASE"
 }
 
+const passed = ref(false);
+
 // ############################################### FUNCTIONS ###############################################
 
 onMounted(async () => {
@@ -127,6 +129,9 @@ onMounted(async () => {
         } else {
             btnParticipate.value?.update(btnParticipateStyle);
         }
+
+        // Update passed
+        passed.value = new Date(event.value.start) < new Date();
 
         // Remove loading
         btnParticipate.value?.updateLoading(false);

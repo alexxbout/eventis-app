@@ -19,7 +19,7 @@
         <div class="relative w-full overflow-hidden bg-white h-max shadow-card rounded-2xl">
 
             <!-- Image -->
-            <div v-if="props.data.pic" :style="{ backgroundImage: 'url(' + UtilsApi.getImage('events', props.data.pic) + ')' }" class="h-[350px] w-full bg-no-repeat bg-cover bg-center"></div>
+            <div v-if="props.data.pic" :style="{ backgroundImage: 'url(' + UtilsApi.getImage('events', props.data.pic) + ')', filter: passed ? 'grayscale(1)' : '' }" class="h-[350px] w-full bg-no-repeat bg-cover bg-center"></div>
             <div v-else class="h-[350px] w-full"></div>
 
             <!-- Info -->
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref } from "vue";
+import { PropType, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
 import type { IEvent } from "../../types/Event";
@@ -48,11 +48,21 @@ const props = defineProps({
 
 const router = useRouter();
 
+const passed = ref<boolean>(false);
+
 // const isLoading = ref<boolean>(true);
 
 const openEvent = () => {
     router.push({ name: "eventDetail", params: { id: props.data.id } });
 }
+
+onMounted(() => {
+    const date = new Date(props.data.start);
+
+    if (date < new Date()) {
+        passed.value = true;
+    }
+});
 
 // const updateLoading = (newLoading: boolean) => {
 //     isLoading.value = newLoading;

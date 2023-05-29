@@ -116,8 +116,8 @@ const getColorStyle = (type: "PRIMARY" | "SECONDARY", color: "BLUE" | "GREEN" | 
 
 const emits = defineEmits(["@trigger"]);
 
-const handleClick = () => {
-    emits("@trigger");
+const handleClick = (event: Event) => {
+    emits("@trigger", event);
 };
 
 // ############################################## EXPOSE ##############################################
