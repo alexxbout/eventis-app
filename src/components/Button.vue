@@ -75,7 +75,7 @@ const getBorderRadiusStyle = (size: "BASE" | "XS", borderRadius?: "BASE" | "FULL
     if (size == "XS") {
         return { "border-radius": "9999px" };
     } else {
-        return borderRadius == "FULL" ? { "border-radius": "100%" } : { "border-radius": "14px" };
+        return borderRadius == "FULL" ? { "border-radius": "9999px" } : { "border-radius": "14px" };
     }
 };
 
