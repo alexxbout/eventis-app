@@ -21,7 +21,7 @@
 
             <!-- Title -->
             <div class="h-max w-full flex items-center p-5 gap-x-5 bg-white border-b">
-                <Emoji v-if="event?.code" :data="{ name: event.code, size: 'XL' }" />
+                <Emoji v-if="event?.emoji" :data="{ name: event.emoji, size: 'XL' }" />
 
                 <div class="gap-y-[5px] flex flex-col justify-center">
                     <span class="text-[20px] font-semibold text-black">{{ event?.title }}</span>

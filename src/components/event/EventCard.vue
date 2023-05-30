@@ -24,7 +24,7 @@
 
             <!-- Info -->
             <div class="h-max w-full flex items-center p-5 gap-x-5">
-                <Emoji v-if="props.data.code" :data="{ name: props.data.code, size: 'XL' }" />
+                <Emoji v-if="props.data.emoji" :data="{ name: props.data.emoji, size: 'XL' }" />
 
                 <div class="gap-y-[5px] flex flex-col justify-center">
                     <span class="text-[24px] font-semibold text-black">{{ data.title }}</span>

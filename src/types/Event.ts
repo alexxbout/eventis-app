@@ -15,6 +15,5 @@ export interface IEvent {
     pic?         : string;
     participants?: IParticipant[];
     name?        : string;
-    idEmoji?     : string;
-    code?        : string;
+    emoji?       : string;
 }
