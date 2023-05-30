@@ -6,6 +6,7 @@ import { HTTPCodes } from "./HTTPCodes";
 import { ICode } from "../types/Code";
 import { IFoyer } from "../types/Foyer";
 import { IUser } from "../types/User";
+import { INotification } from "../types/Notification";
 
 /**
  * Service de gestion des appels à l'API
@@ -178,7 +179,7 @@ class UtilsApi {
     //     });
     // }
 
-    async getUserById(idUser: number): Promise<IUser | null> {
+    async getUserById(idUser: number | string): Promise<IUser | null> {
         let data: IUser | null = null;
 
         await axios.get(this.baseUrl + "v1/user/" + idUser, {
@@ -688,8 +689,8 @@ class UtilsApi {
                 data = null;
             }
         }).catch((error) => {
-                console.error(error, "Error while getting participants of event");
-            });
+            console.error(error, "Error while getting participants of event");
+        });
 
         return data;
     }
@@ -746,6 +747,27 @@ class UtilsApi {
             }
         }).catch((error) => {
             console.error(error, "Error while getting participants of event");
+        });
+
+        return data;
+    }
+
+    // ############################################## NOTIFICATIONS ##############################################
+
+    async getNotifications(idUser: number): Promise<INotification | null> {
+        let data = null;
+
+        await axios.get(this.baseUrl + "v1/notifications/" + idUser, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        }).then((response) => {
+            if (response.status == HTTPCodes.OK) {
+                data = response.data.data as INotification;
+            }
+        }).catch((error) => {
+            console.error(error, "Error while getting notifications");
         });
 
         return data;
