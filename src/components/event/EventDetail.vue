@@ -20,12 +20,16 @@
             </div>
 
             <!-- Title -->
-            <div class="h-max w-full flex flex-col justify-center p-5 gap-y-[5px] bg-white border-b">
-                <span class="text-[20px] font-semibold text-black">{{ event?.title }}</span>
+            <div class="h-max w-full flex items-center p-5 gap-x-5 bg-white border-b">
+                <Emoji v-if="event?.code" :data="{ name: event.code, size: 'XL' }" />
 
-                <span class="text-black text-[14px] font-light">
-                    {{ event?.start != null && event?.city != null ? "Le " + formatDate(event.start) + " à " + event.city : "" }}
-                </span>
+                <div class="gap-y-[5px] flex flex-col justify-center">
+                    <span class="text-[20px] font-semibold text-black">{{ event?.title }}</span>
+
+                    <span class="text-black text-[14px] font-light">
+                        {{ event?.start != null && event?.city != null ? "Le " + formatDate(event.start) + " à " + event.city : "" }}
+                    </span>
+                </div>
             </div>
         </div>
 
@@ -52,6 +56,7 @@ import UtilsAuth from "../../utils/UtilsAuth";
 
 import Button from "../Button.vue";
 import ModalParticipant from "../modal/ModalParticipant.vue";
+import Emoji from "../Emoji.vue";
 
 // ############################################### VARIABLES ###############################################
 
