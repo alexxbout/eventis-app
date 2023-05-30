@@ -1,5 +1,5 @@
 <template>
-    <img class="" :style="getStyle" :src="'/src/assets/' + props.data.name + '.svg'" alt="Emoji">
+    <img class="" :style="getStyle()" :src="'/src/assets/emojis/' + props.data.name + '.svg'" alt="Emoji">
 </template>
 
 <script setup lang="ts">

@@ -23,10 +23,14 @@
             <div v-else class="h-[350px] w-full"></div>
 
             <!-- Info -->
-            <div class="h-max w-full flex flex-col justify-center p-5 gap-y-[5px]">
-                <span class="text-[24px] font-semibold text-black">{{ data.title }}</span>
+            <div class="h-max w-full flex items-center p-5 gap-x-5">
+                <Emoji v-if="props.data.code" :data="{ name: props.data.code, size: 'XL' }" />
 
-                <span class="text-custom-gray text-[14px] font-light">{{ data.city }}</span>
+                <div class="gap-y-[5px] flex flex-col justify-center">
+                    <span class="text-[24px] font-semibold text-black">{{ data.title }}</span>
+
+                    <span class="text-custom-gray text-[14px] font-light">{{ data.city }}</span>
+                </div>
             </div>
         </div>
     </div>
@@ -38,6 +42,7 @@ import { useRouter } from "vue-router";
 
 import type { IEvent } from "../../types/Event";
 import UtilsApi from "../../utils/UtilsApi";
+import Emoji from "../Emoji.vue";
 
 const props = defineProps({
     data: {
