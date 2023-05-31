@@ -39,10 +39,12 @@ import { PropType, inject, ref, } from "vue";
 import { useRouter } from "vue-router";
 
 import type { IRegistration } from "../../types/Register";
+import { ICONS } from "../../types/Button";
 
 import Spinner from "../../components/Spinner.vue";
 
 import ApiService from "../../utils/UtilsApi";
+import Button from "../../components/Button.vue";
 
 // ########################################### VARIABLES ###########################################
 

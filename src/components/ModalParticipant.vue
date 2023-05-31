@@ -22,10 +22,10 @@ import gsap from "gsap";
 
 import { PropType, ref, onMounted, onUnmounted } from "vue";
 
-import { EUserCardStyle } from "../../types/UserCardStyle";
-import type { IParticipant } from "../../types/Participants";
+import { EUserCardStyle } from "../types/UserCardStyle";
+import type { IParticipant } from "../types/Participants";
 
-import UserCard from "../user/UserCard.vue";
+import UserCard from "./UserCard.vue";
 
 // ############################################## VARIABLES ##############################################
 

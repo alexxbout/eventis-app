@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import { ref, inject } from "vue";
 
-import UserProfilPicture from "../../components/user/UserProfilPicture.vue";
+import UserProfilPicture from "../../components/UserProfilPicture.vue";
 import Button from "../../components/Button.vue";
 
 import { EUserProfilPictureStyle } from "../../types/UserProfilPicture";

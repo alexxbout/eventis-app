@@ -46,17 +46,17 @@
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import type { IEvent } from "../../types/Event";
-import type { IButton } from "../../types/Button";
+import type { IEvent } from "../types/Event";
+import type { IButton } from "../types/Button";
 
-import { ICONS } from "../../types/Button";
+import { ICONS } from "../types/Button";
 
-import UtilsApi from "../../utils/UtilsApi";
-import UtilsAuth from "../../utils/UtilsAuth";
+import UtilsApi from "../utils/UtilsApi";
+import UtilsAuth from "../utils/UtilsAuth";
 
-import Button from "../Button.vue";
-import ModalParticipant from "../modal/ModalParticipant.vue";
-import Emoji from "../Emoji.vue";
+import Button from "./Button.vue";
+import ModalParticipant from "./ModalParticipant.vue";
+import Emoji from "./Emoji.vue";
 
 // ############################################### VARIABLES ###############################################
 

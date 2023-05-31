@@ -54,19 +54,19 @@
 <script setup lang="ts">
 import { PropType, onMounted, ref } from "vue";
 
-import type { IUser } from "../../types/User";
-import type { IButton } from "../../types/Button";
-import type { IUserCardStyle } from "../../types/UserCardStyle";
-import { EUserCardStyle } from "../../types/UserCardStyle";
+import type { IUser } from "../types/User";
+import type { IButton } from "../types/Button";
+import type { IUserCardStyle } from "../types/UserCardStyle";
+import { EUserCardStyle } from "../types/UserCardStyle";
 
-import UtilsApi from "../../utils/UtilsApi";
-import UtilsAuth from "../../utils/UtilsAuth";
+import UtilsApi from "../utils/UtilsApi";
+import UtilsAuth from "../utils/UtilsAuth";
 
-import Button from "../Button.vue";
+import Button from "./Button.vue";
 import UserProfilPicture from "./UserProfilPicture.vue";
-import { EUserProfilPictureStyle } from "../../types/UserProfilPicture";
-import { IInterest } from "../../types/Interest";
-import Emoji from "../Emoji.vue";
+import { EUserProfilPictureStyle } from "../types/UserProfilPicture";
+import { IInterest } from "../types/Interest";
+import Emoji from "./Emoji.vue";
 
 // ########################################### VARIABLES ###########################################
 

@@ -24,7 +24,7 @@ import { onMounted, ref } from 'vue';
 import { INotification } from '../../types/Notification';
 import UtilsApi from '../../utils/UtilsApi';
 import UtilsAuth from '../../utils/UtilsAuth';
-import UserCard from '../../components/user/UserCard.vue';
+import UserCard from '../../components/UserCard.vue';
 import { IUser } from '../../types/User';
 import { EUserCardStyle } from '../../types/UserCardStyle';
 

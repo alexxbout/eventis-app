@@ -4,10 +4,8 @@
         <RegisterCredentials ref="registerCredentials" @@send-credentials="handleCredentials" v-if="currentStep == 2" />
         <RegisterPicture v-if="currentStep == 3" />
         <RegisterFriends v-if="currentStep == 4" />
-
-        <!-- <RegisterInterests /> -->
-
-        <RegisterCongrats v-if="currentStep == 5" />
+        <RegisterInterests v-if="currentStep == 5" />
+        <RegisterCongrats v-if="currentStep == 6" />
     </div>
 </template>
 
@@ -34,7 +32,7 @@ const MAX_STEPS = 6;
 const registerCode = ref<InstanceType<typeof RegisterCode>>();
 const registerCredentials = ref<InstanceType<typeof RegisterCredentials>>();
 
-const currentStep = ref(4);
+const currentStep = ref(5);
 
 const code = ref("");
 const user = ref<IUser | null>(null);

@@ -25,7 +25,7 @@ import { onMounted, ref } from "vue";
 
 import { useRouter } from "vue-router";
 
-import EventCard from "../../components/event/EventCard.vue";
+import EventCard from "../../components/EventCard.vue";
 
 import type { IEvent } from "../../types/Event";
 

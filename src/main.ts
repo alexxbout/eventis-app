@@ -7,7 +7,7 @@ import { routesGuard } from "./services/RouteGuard";
 import Home from "./router/app/Home.vue"
 import Register from "./router/registration/Register.vue"
 import Events from "./router/app/Events.vue"
-import EventDetail from "./components/event/EventDetail.vue"
+import EventDetail from "./components/EventDetail.vue"
 import Messages from "./router/app/Messages.vue"
 import Profil from "./router/app/Profile.vue"
 import Notifs from "./router/app/Notifs.vue"

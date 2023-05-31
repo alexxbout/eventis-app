@@ -16,9 +16,9 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 
-import type { IUserProfilPicture } from "../../types/UserProfilPicture";
-import { EUserProfilPictureStyle } from "../../types/UserProfilPicture";
-import UtilsApi from "../../utils/UtilsApi";
+import type { IUserProfilPicture } from "../types/UserProfilPicture";
+import { EUserProfilPictureStyle } from "../types/UserProfilPicture";
+import UtilsApi from "../utils/UtilsApi";
 
 const props = defineProps({
     pic: {

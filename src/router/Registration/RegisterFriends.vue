@@ -31,7 +31,7 @@
 <script setup lang="ts">
 import { PropType, inject, onMounted, ref } from "vue";
 
-import UserCard from "../../components/user/UserCard.vue";
+import UserCard from "../../components/UserCard.vue";
 
 import type { IUser } from "../../types/User";
 import type { IRegistration } from "../../types/Register";
