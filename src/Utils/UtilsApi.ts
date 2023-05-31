@@ -5,8 +5,10 @@ import { IParticipant } from "../types/Participants";
 import { HTTPCodes } from "./HTTPCodes";
 import { ICode } from "../types/Code";
 import { IFoyer } from "../types/Foyer";
-import { IUser } from "../types/User";
+
 import { INotification } from "../types/Notification";
+import { IInterest } from "../types/Interest";
+import { IUser } from "../types/User";
 
 /**
  * Service de gestion des appels à l'API
@@ -193,6 +195,25 @@ class UtilsApi {
             }
         }).catch((error) => {
             console.log(error, "Error while getting user by id");
+        });
+
+        return data;
+    }
+
+    async getUserInterest(idUser: number | string): Promise<IInterest[] | null> {
+        let data: IInterest[] | null = null;
+
+        await axios.get(this.baseUrl + "v1/user/" + idUser + "/interest", {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        }).then((response) => {
+            if (response.status === HTTPCodes.OK) {
+                data = response.data.data as IInterest[];
+            }
+        }).catch((error) => {
+            console.log(error, "Error while getting user iterests");
         });
 
         return data;

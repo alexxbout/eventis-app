@@ -18,7 +18,7 @@ const getStyle = (): StyleValue => {
         case "BASE":
             return { "width": "20px", "height": "20px" };
         case "XS":
-            return { "width": "14px", "height": "14px" };
+            return { "width": "18px", "height": "18px" };
         case "XL":
             return { "width": "50px", "height": "50px" };
     }

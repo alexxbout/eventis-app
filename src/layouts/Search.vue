@@ -1,9 +1,9 @@
 <template>
     <!-- Search -->
-    <div v-show="opened" class="fixed bottom-0 z-20 w-screen h-screen bg-gray-200/60 backdrop-blur">
+    <div v-show="opened" ref="container" class="fixed bottom-0 z-20 w-screen h-screen">
         <div class="w-full h-1/4" @click="close"></div>
 
-        <div id="search_header" class="h-3/4 w-full rounded-t-[35px] bg-white overscroll-contain shadow-card">
+        <div ref="search" id="search_header" class="h-3/4 w-full rounded-t-[35px] bg-white overscroll-contain">
             <div class="flex flex-col p-8 overflow-y-auto h-max gap-y-5">
                 <div>
                     <span class="text-3xl font-semibold text-black">Recherche</span>
@@ -21,9 +21,11 @@
 </template>
 
 <script setup lang="ts">
+import gsap from "gsap";
+
 import type { IApp } from "../types/App";
 
-import { ref, PropType } from "vue";
+import { ref, PropType, onMounted } from "vue";
 
 // ########################################### VARIABLES ###########################################
 
@@ -36,17 +38,29 @@ const props = defineProps({
 
 const opened = ref(false);
 
+const container = ref<HTMLElement | null>(null);
+const search = ref<HTMLElement | null>(null);
+
 // ########################################### FUNCTIONS ###########################################
 
 const close = () => {
-    opened.value = false;
-    props.app.removeFixed();
+    gsap.to(search.value, { duration: 0.7, translateY: "100%", ease: "power3.out" }).then(() => {
+        opened.value = false;
+        props.app.removeFixed();
+    });
 }
 
 const open = () => {
     opened.value = true;
     props.app.setFixed();
+
+    gsap.to(search.value, { duration: 0.7, translateY: "0%", ease: "power3.out" });
+
 }
+
+onMounted(() => {
+    gsap.to(search.value, { translateY: "100%" });
+});
 
 defineExpose({ open });
 </script>

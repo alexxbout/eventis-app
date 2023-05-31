@@ -18,7 +18,7 @@
 
     <div v-else>
         <!-- FRIEND_REQUEST -->
-        <div v-if="props.style.shape == EUserCardStyle.FRIEND_REQUEST" ref="container" class="h-[137px] w-full max-w-xs rounded-[18px] bg-[#FAFAFA] p-[13px] flex flex-col gap-y-[10px]">
+        <div v-if="props.style.shape == EUserCardStyle.FRIEND_REQUEST" ref="container" class="h-full w-full max-w-xs rounded-[18px] bg-[#FAFAFA] p-[13px] flex flex-col gap-y-[10px] overflow-hidden">
             <!-- Picture + button -->
             <div class="flex items-center justify-between w-full gap-x-2">
                 <UserProfilPicture :pic="props.data.pic" :size="{ size: EUserProfilPictureStyle.MEDIUM }" />
@@ -30,8 +30,13 @@
                 <span>{{ props.data.firstname + ' ' + props.data.lastname }}</span>
             </div>
 
-            <!-- Center of interests -->
-            <div></div>
+            <!-- Interests -->
+            <div class="flex gap-x-3">
+                <div v-for="interest in interests" class="flex gap-x-1 items-center text-[#A2A2A2] text-[13px] w-max break-normal">
+                    <Emoji :data="{ name: interest.emoji, size: 'XS' }" />
+                    <span class="whitespace-nowrap">{{ interest.name }}</span>
+                </div>
+            </div>
         </div>
 
         <!-- RECTANGLE -->
@@ -60,6 +65,8 @@ import UtilsAuth from "../../utils/UtilsAuth";
 import Button from "../Button.vue";
 import UserProfilPicture from "./UserProfilPicture.vue";
 import { EUserProfilPictureStyle } from "../../types/UserProfilPicture";
+import { IInterest } from "../../types/Interest";
+import Emoji from "../Emoji.vue";
 
 // ########################################### VARIABLES ###########################################
 
@@ -108,9 +115,12 @@ const isPending = ref(false);
 
 const loading = ref(true);
 
+const interests = ref<IInterest[]>([]);
+
 // ########################################### FUNCTIONS ###########################################
 
 onMounted(async () => {
+    // Friend request or show user profil
     switch (props.style.shape) {
         case EUserCardStyle.FRIEND_REQUEST:
             isFriend.value = await UtilsApi.isFriend(user!.id, props.data.id);
@@ -131,6 +141,17 @@ onMounted(async () => {
             break;
 
         case EUserCardStyle.FRIEND_PROFILE:
+    }
+
+    // Interest
+    const interestsData = await UtilsApi.getUserInterest(props.data.id);
+
+    if (interestsData) {
+        interests.value = interestsData;
+        interests.value = interests.value.slice(0, 2);
+
+        console.log(interests.value);
+
     }
 
     loading.value = false;

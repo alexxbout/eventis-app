@@ -5,7 +5,7 @@
             <div v-for="tab in tabs">
                 <div v-if="tab.custom" @click="openSearch">
                     <div class="flex items-center justify-center w-full">
-                        <div class="absolute w-[60px] h-[60px] bg-primary rounded-full -inset-y-5 flex items-center justify-center">
+                        <div class="absolute w-[60px] h-[60px] bg-primary rounded-full -inset-y-5 flex items-center justify-center hover:bg-blue-800 transition-colors">
                             <i class="text-[30px] text-white" :class="tab.svg"></i>
                         </div>
                     </div>
