@@ -12,18 +12,17 @@
                 </svg>
             </label>
 
-            <div v-if="success" @click="handleRemovePicture" class="relative drop-shadow-2xl">
+            <div v-if="success" class="relative drop-shadow-2xl">
                 <UserProfilPicture :pic="pic" :size="{ size: EUserProfilPictureStyle.BIG }" />
 
-                <i class="absolute flex items-center justify-center w-12 h-1w-12 text-xl rounded-full bi bi-trash-fill -bottom-2 aspect-square -right-2 text-custom-red bg-[#F6F6F6]"></i>
+                <i @click="handleRemovePicture" class="absolute flex items-center justify-center w-12 h-1w-12 text-xl rounded-full bi bi-trash-fill -bottom-2 aspect-square -right-2 text-custom-red bg-[#F6F6F6]"></i>
             </div>
         </div>
 
-        <!-- Passer / Suivant -->
+        <!-- Suivant -->
         <div class="flex items-center justify-end w-full gap-x-5">
-            <Button @@trigger="handleNext" class="w-1/2" :icon="{name: ICONS.ARROW_RIGHT, side: 'RIGHT'}" :data="{color: 'BLUE', size: 'BASE', type: 'PRIMARY', text: 'Suivant', borderRadius: 'FULL'}" />
+            <Button @@trigger="props.next()" class="w-1/2" :icon="{name: ICONS.ARROW_RIGHT, side: 'RIGHT'}" :data="{color: 'BLUE', size: 'BASE', type: 'PRIMARY', text: 'Suivant', borderRadius: 'FULL'}" />
         </div>
-
     </div>
 </template>
 
@@ -55,8 +54,6 @@ const props = inject("props") as IRegistration;
 // ########################################### HANDLERS ###########################################
 
 const handleInput = async () => {
-    console.log("Input changed");
-
     if (user) {
         if (fileInput.value?.files) {
             const formData = new FormData();
@@ -83,11 +80,5 @@ const handleRemovePicture = async () => {
         pic.value = "";
         success.value = false;
     }
-}
-
-const handleNext = () => {
-    console.log("Next");
-
-    props.next();
 }
 </script>

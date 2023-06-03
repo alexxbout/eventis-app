@@ -89,17 +89,17 @@ enum EActionType {
 }
 
 interface IInteractableButton {
-    DEFAULT: IButton;
-    SHOW_USER_PROFIL: IButton;
-    ASK_FRIEND: IButton;
+    DEFAULT              : IButton;
+    SHOW_USER_PROFIL     : IButton;
+    ASK_FRIEND           : IButton;
     REMOVE_FRIEND_REQUEST: IButton;
 }
 
 const styles: IInteractableButton = {
-    DEFAULT: { color: "BLUE", size: "XS", type: "PRIMARY", text: "" },
-    SHOW_USER_PROFIL: { color: "BLUE", size: "XS", type: "PRIMARY", text: "Profil" },
-    ASK_FRIEND: { color: "BLUE", size: "XS", type: "PRIMARY", text: "Ajouter" },
-    REMOVE_FRIEND_REQUEST: { color: "RED", size: "XS", type: "SECONDARY", text: "Annuler" },
+    DEFAULT              : { color: "BLUE", size: "XS", type: "PRIMARY", text: "" },
+    SHOW_USER_PROFIL     : { color: "BLUE", size: "XS", type: "PRIMARY", text: "Profil" },
+    ASK_FRIEND           : { color: "BLUE", size: "XS", type: "PRIMARY", text: "Ajouter" },
+    REMOVE_FRIEND_REQUEST: { color: "RED", size : "XS", type: "SECONDARY", text: "Annuler" },
 };
 
 const user = UtilsAuth.getCurrentUser();
@@ -144,14 +144,11 @@ onMounted(async () => {
     }
 
     // Interest
-    const interestsData = await UtilsApi.getUserInterest(props.data.id);
+    const interestsData = await UtilsApi.getUserInterests(props.data.id);
 
     if (interestsData) {
         interests.value = interestsData;
         interests.value = interests.value.slice(0, 2);
-
-        console.log(interests.value);
-
     }
 
     loading.value = false;

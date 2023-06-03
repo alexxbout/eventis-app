@@ -200,25 +200,6 @@ class UtilsApi {
         return data;
     }
 
-    async getUserInterest(idUser: number | string): Promise<IInterest[] | null> {
-        let data: IInterest[] | null = null;
-
-        await axios.get(this.baseUrl + "v1/user/" + idUser + "/interest", {
-            headers: {
-                "Authorization": "Bearer " + AuthService.getToken(),
-                "Content-Type": "application/json"
-            }
-        }).then((response) => {
-            if (response.status === HTTPCodes.OK) {
-                data = response.data.data as IInterest[];
-            }
-        }).catch((error) => {
-            console.log(error, "Error while getting user iterests");
-        });
-
-        return data;
-    }
-
     // addUser(firstname: string, lastname: string, password: string, idFoyer: number, idRole: number) {
     //     return axios.post(this.baseUrl + "v1/user/", {
     //         "firstname": firstname,
@@ -294,6 +275,80 @@ class UtilsApi {
         });
 
         return data as IUser[] | null;
+    }
+
+    // ############################################## INTEREST ##############################################
+
+    async getAllInterests(): Promise<IInterest[]> {
+        let data: IInterest[] = [];
+
+        await axios.get(this.baseUrl + "v1/interest/", {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        }).then((response) => {
+            if (response.status === HTTPCodes.OK) {
+                data = response.data.data as IInterest[];
+            }
+        }).catch((error) => {
+            console.log(error, "Error while getting all interests");
+        });
+
+        return data;
+    }
+
+    async getUserInterests(idUser: number | string): Promise<IInterest[]> {
+        let data: IInterest[] | null = [];
+
+        await axios.get(this.baseUrl + "v1/user/" + idUser + "/interest", {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        }).then((response) => {
+            if (response.status === HTTPCodes.OK) {
+                data = response.data.data as IInterest[];
+            }
+        }).catch((error) => {
+            console.log(error, "Error while getting user iterests");
+        });
+
+        return data;
+    }
+
+    async addUserInterest(idUser: number, idInterest: number): Promise<boolean> {
+        let data = false;
+
+        await axios.post(this.baseUrl + "v1/user/" + idUser + "/interest/" + idInterest, null, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        }).then((response) => {
+            data = response.status === HTTPCodes.CREATED;
+        }).catch((error) => {
+            console.log(error, "Error while adding user interest");
+        });
+
+        return data;
+    }
+
+    async deleteUserInterest(idUser: number, idInterest: number): Promise<boolean> {
+        let data = false;
+
+        await axios.delete(this.baseUrl + "v1/user/" + idUser + "/interest/" + idInterest, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        }).then((response) => {
+            data = response.status === HTTPCodes.OK;
+        }).catch((error) => {
+            console.log(error, "Error while deleting user interest");
+        });
+
+        return data;
     }
 
     // ############################################## FRIEND ##############################################

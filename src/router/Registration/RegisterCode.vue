@@ -7,9 +7,7 @@
                 <span>Retour</span>
             </div>
 
-            <div v-if="loading">
-                <Spinner />
-            </div>
+            <object v-if="loading" :data="'/src/assets/spinner.svg'" type="image/svg+xml"></object>
         </div>
 
         <!-- Code -->
@@ -40,8 +38,6 @@ import { useRouter } from "vue-router";
 
 import type { IRegistration } from "../../types/Register";
 import { ICONS } from "../../types/Button";
-
-import Spinner from "../../components/Spinner.vue";
 
 import ApiService from "../../utils/UtilsApi";
 import Button from "../../components/Button.vue";

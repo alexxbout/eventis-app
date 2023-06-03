@@ -20,10 +20,7 @@
 
         <!-- Suivant -->
         <div class="flex items-center justify-end w-full gap-x-5">
-            <button class="w-1/2 btn-primary">
-                <span>Suivant</span>
-                <i class="text-xl bi bi-arrow-right-short"></i>
-            </button>
+            <Button @@trigger="props.next()" class="w-1/2" :icon="{ name: ICONS.ARROW_RIGHT, side: 'RIGHT' }" :data="{ color: 'BLUE', size: 'BASE', type: 'PRIMARY', text: 'Suivant', borderRadius: 'FULL' }" />
         </div>
     </div>
 </template>
@@ -32,6 +29,7 @@
 import { PropType, inject, onMounted, ref } from "vue";
 
 import UserCard from "../../components/UserCard.vue";
+import Button from "../../components/Button.vue";
 
 import type { IUser } from "../../types/User";
 import type { IRegistration } from "../../types/Register";
@@ -39,12 +37,15 @@ import { EUserCardStyle } from "../../types/UserCardStyle";
 
 import UtilsApi from "../../utils/UtilsApi";
 import UtilsAuth from "../../utils/UtilsAuth";
+import { ICONS } from "../../types/Button";
 
 // ############################################## VARIABLES ##############################################
 
 const users = ref<IUser[]>([]);
 
 const props = inject("props") as IRegistration;
+
+const loading = ref(true);
 
 // ############################################## FUNCTIONS ##############################################
 
@@ -58,6 +59,8 @@ onMounted(async () => {
 
         if (request) {
             users.value = request;
+
+            loading.value = false;
         }
     }
 });

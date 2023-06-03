@@ -1,5 +1,5 @@
 <template>
-    <img class="" :style="getStyle()" :src="'/src/assets/emojis/' + props.data.name + '.svg'" alt="Emoji">
+    <object :style="getStyle()" :data="'/src/assets/emojis/' + props.data.name + '.svg'" type="image/svg+xml"></object>
 </template>
 
 <script setup lang="ts">
@@ -16,9 +16,9 @@ const props = defineProps({
 const getStyle = (): StyleValue => {
     switch (props.data.size) {
         case "BASE":
-            return { "width": "20px", "height": "20px" };
+            return { "width": "25px", "height": "25px" };
         case "XS":
-            return { "width": "18px", "height": "18px" };
+            return { "width": "18px", "height": "20px" };
         case "XL":
             return { "width": "50px", "height": "50px" };
     }

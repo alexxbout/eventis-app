@@ -67,6 +67,7 @@
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* Retire le halo bleu sur les liens sur mobile */
 }
 
+/* Skeleton loading styles */
 @keyframes shine {
     to {
         background-position-x: -200%;

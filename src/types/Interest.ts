@@ -4,5 +4,5 @@ export interface IInterest {
     id        : string;
     name      : string;
     emoji     : string;
-    color     : string;
+    color?    : string;
 }
