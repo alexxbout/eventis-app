@@ -14,7 +14,7 @@
 
         <!-- Demandes d'amis -->
         <div class="flex flex-col gap-y-[10px]">
-            <!-- <UserCard v-for="user in requesters" :data="user" :style="{ shape: EUserCardStyle.FRIEND_PROFILE }" /> -->
+            <UserCard v-for="user in requesters" :data="{action: 'SHOW_PROFIL', style: 'RECTANGLE', user: user}" />
         </div>
     </div>
 </template>
