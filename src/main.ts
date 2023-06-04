@@ -4,13 +4,14 @@ import App from "./App.vue"
 
 import { routesGuard } from "./services/RouteGuard";
 
-import Home from "./router/app/Home.vue"
-import Register from "./router/registration/Register.vue"
-import Events from "./router/app/Events.vue"
-import EventDetail from "./components/EventDetail.vue"
-import Messages from "./router/app/Messages.vue"
-import Profil from "./router/app/Profile.vue"
-import Notifs from "./router/app/Notifs.vue"
+import Home from "./router/app/Home.vue";
+import Register from "./router/registration/Register.vue";
+import Events from "./router/app/Events.vue";
+import EventDetail from "./components/EventDetail.vue";
+import Messages from "./router/app/Messages.vue";
+import Profil from "./router/app/Profile.vue";
+import Notifs from "./router/app/Notifs.vue";
+import NotFound from "./router/app/NotFound.vue";
 
 // Importation des méthodes pour créer le router
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
@@ -79,6 +80,15 @@ const routes: Array<RouteRecordRaw> = [
         component: Notifs,
         meta: {
             requiresAuth: true,
+        }
+    },
+    {
+        path: "/notfound",
+        name: "notfound",
+        component: NotFound,
+        meta: {
+            requiresAuth: false,
+            hideNavbar: true
         }
     }
 ];

@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, provide, onMounted } from "vue";
+import { ref, provide} from "vue";
 
 import type { IRegistration } from "../../types/Register";
 import type { IUser } from "../../types/User";
@@ -89,5 +89,4 @@ provide("props",
         next,
         previous
     });
-
 </script>

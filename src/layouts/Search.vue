@@ -1,14 +1,16 @@
 <template>
     <!-- Search -->
-    <div v-show="opened" ref="container" class="fixed bottom-0 z-20 w-screen h-screen">
+    <div v-show="opened" ref="container" class="fixed bottom-0 z-20 w-screen h-screen overflow-hidden">
         <div class="w-full h-1/4" @click="close"></div>
 
-        <div ref="search" id="search_header" class="h-3/4 w-full rounded-t-[35px] bg-white overscroll-contain">
-            <div class="flex flex-col p-8 overflow-y-auto h-max gap-y-5">
+        <div ref="search" class="h-3/4 w-full rounded-t-[35px] bg-white shadow-modal">
+            <div class="flex flex-col p-8 overflow-y-auto h-full gap-y-5">
+                <!-- Header -->
                 <div>
                     <span class="text-3xl font-semibold text-black">Recherche</span>
                 </div>
 
+                <!-- Input -->
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                         <i class="bi bi-search text-[#818181] text-lg"></i>
@@ -21,11 +23,13 @@
 </template>
 
 <script setup lang="ts">
-import gsap from "gsap";
+import { ref, PropType, onMounted } from "vue";
+import { gsap, Power4 } from "gsap";
 
 import type { IApp } from "../types/App";
+import type { IUser } from "../types/User";
 
-import { ref, PropType, onMounted } from "vue";
+import UtilsAuth from "../utils/UtilsAuth";
 
 // ########################################### VARIABLES ###########################################
 
@@ -37,30 +41,39 @@ const props = defineProps({
 });
 
 const opened = ref(false);
-
 const container = ref<HTMLElement | null>(null);
 const search = ref<HTMLElement | null>(null);
 
 // ########################################### FUNCTIONS ###########################################
 
+onMounted(async () => {
+    gsap.to(search.value, { translateY: "150%" });
+});
+
 const close = () => {
-    gsap.to(search.value, { duration: 0.7, translateY: "100%", ease: "power3.out" }).then(() => {
-        opened.value = false;
-        props.app.removeFixed();
-    });
-}
+    gsap.to(search.value,
+        {
+            duration: 0.7,
+            translateY: "150%",
+            ease: Power4.easeInOut
+        }).then(() => {
+            opened.value = false;
+            props.app.removeFixed();
+        });
+};
 
 const open = () => {
-    opened.value = true;
     props.app.setFixed();
 
-    gsap.to(search.value, { duration: 0.7, translateY: "0%", ease: "power3.out" });
+    opened.value = true;
 
-}
-
-onMounted(() => {
-    gsap.to(search.value, { translateY: "100%" });
-});
+    gsap.to(search.value,
+        {
+            duration: 0.7,
+            translateY: "0%",
+            ease: Power4.easeOut
+        });
+};
 
 defineExpose({ open });
 </script>

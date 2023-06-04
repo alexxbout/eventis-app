@@ -20,12 +20,14 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { INotification } from '../../types/Notification';
-import UtilsApi from '../../utils/UtilsApi';
-import UtilsAuth from '../../utils/UtilsAuth';
-import UserCard from '../../components/UserCard.vue';
-import { IUser } from '../../types/User';
+import { onMounted, ref } from "vue";
+
+import UtilsApi from "../../utils/UtilsApi";
+import UtilsAuth from "../../utils/UtilsAuth";
+import UserCard from "../../components/UserCard.vue";
+
+import type { INotification } from "../../types/Notification";
+import type { IUser } from "../../types/User";
 
 const notifications = ref<INotification | null>(null);
 
@@ -37,12 +39,8 @@ onMounted(async () => {
     if (user) {
         const data = await UtilsApi.getNotifications(user.id);
 
-        console.log(data);
-
         if (data) {
             notifications.value = data;
-
-            console.log(notifications.value);
 
             for (const notif of notifications.value.friend_request) {
                 if (notif.user) {

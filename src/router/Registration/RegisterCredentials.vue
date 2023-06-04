@@ -77,7 +77,8 @@ const lastnameInput  = ref("");
 const passwordInput  = ref("");
 const readyToSubmit  = ref(false);
 const formElement    = ref<HTMLFormElement | null>(null);
-const nextBtnStyle   = computed<IButton>(() => {
+
+const nextBtnStyle = computed<IButton>(() => {
     return {
         apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY' },
         text: 'Suivant',
@@ -111,15 +112,15 @@ const handleSubmit = () => {
 
 // ########################################### FUNCTIONS ###########################################
 
-function getFormValidity(): boolean {
+const getFormValidity = (): boolean => {
     return formElement.value ? formElement.value.checkValidity() : false;
 }
 
-function updateFormValidity() {
+const updateFormValidity = () => {
     readyToSubmit.value = getFormValidity();
 }
 
-function updateRequirements() {
+const updateRequirements = () => {
     const password = passwordInput.value;
 
     reqUppercase.value   = /[A-Z]/.test(password);

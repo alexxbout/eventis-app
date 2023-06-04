@@ -1,7 +1,7 @@
 <template>
-    <div ref="container" v-show="visible" class="fixed bottom-0 flex flex-col justify-end w-screen h-screen opacity-0 backdrop-blur-lg bg-gray-600/10">
+    <div ref="container" v-show="visible" class="fixed bottom-0 flex flex-col justify-end w-screen h-screen">
 
-        <div ref="modal" class="modal bg-white w-full max-h-[50%] h-max rounded-t-[35px] justify-between flex flex-col p-10 gap-y-10">
+        <div ref="modal" class="modal bg-white w-full max-h-[50%] h-max rounded-t-[35px] justify-between flex flex-col p-10 gap-y-10 shadow-modal">
             <!-- Header -->
             <div class="flex items-center justify-between w-full h-max">
                 <span class="header-xs">Participants</span>
@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import gsap from "gsap";
+import { gsap, Power4 } from "gsap";
 
 import { PropType, ref, onMounted, onUnmounted } from "vue";
 
@@ -36,7 +36,6 @@ const props = defineProps({
 });
 
 const visible = ref(false);
-
 const container = ref<HTMLElement | null>(null);
 const modal = ref<HTMLElement | null>(null);
 
@@ -64,50 +63,35 @@ const handleClickOutside = (event: MouseEvent) => {
             }
         }
     }
-}
+};
 
 const hide = () => {
-    let tl = gsap.timeline();
-
-    tl.fromTo(modal.value,
+    gsap.fromTo(modal.value,
         {
             translateY: 0,
         },
         {
-            translateY: "100%",
-            duration: 0.3,
-            ease: "power2.out"
+            translateY: "150%",
+            duration: 0.5,
+            ease: Power4.easeInOut
         }).then(() => {
             visible.value = false;
         });
-
-    tl.to(container.value,
-        {
-            opacity: 0,
-            duration: 0.3,
-            ease: "power2.out"
-        }, "<0.1");
-}
+};
 
 const show = () => {
     visible.value = true;
 
-    gsap.to(container.value,
-        {
-            opacity: 1,
-            duration: 0.3,
-            ease: "power2.out"
-        });
-
     gsap.fromTo(modal.value,
         {
-            translateY: "100%",
-        }, {
-        translateY: 0,
-        duration: 0.3,
-        ease: "power2.out"
-    });
-}
+            translateY: "150%",
+        },
+        {
+            translateY: 0,
+            duration: 0.5,
+            ease: Power4.easeOut
+        });
+};
 
 defineExpose({
     hide,

@@ -46,8 +46,7 @@ const readyToSubmit = ref(false);
 const nextBtnStyle  = computed<IButton>(() => {
     return {
         apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY' },
-        text: 'Suivant',
-        icon: {name: 'ARROW_RIGHT', side: 'RIGHT'},
+        text: 'Vérifier',
         type: 'submit',
         disabled: !readyToSubmit.value || loading.value
     }
@@ -84,10 +83,6 @@ const handleSubmit = () => {
         loading.value = true;
 
         setTimeout(async () => {
-            loading.value = false;
-
-
-
             const code = getCode();
 
             if (await ApiService.getCode(code)) {
@@ -100,6 +95,7 @@ const handleSubmit = () => {
                     props.next();
                 }, 1000);
             } else {
+                loading.value = false;
                 setInvalidInputs();
             }
         }, 2000);

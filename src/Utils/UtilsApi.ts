@@ -170,6 +170,25 @@ class UtilsApi {
     //     });
     // }
 
+    async getUsersByFoyer(idFoyer: number): Promise<IUser[] | null> {
+        let data: IUser[] | null = null;
+
+        await axios.get(this.baseUrl + "v1/user/foyer/" + idFoyer, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        }).then((response) => {
+            if (response.status === HTTPCodes.OK) {
+                data = response.data.data as IUser[];
+            }
+        }).catch((error) => {
+            console.log(error, "Error while getting users by foyer");
+        });
+
+        return data;
+    }
+
     // getAllUsers() {
     //     return axios.get(this.baseUrl + "v1/user/", {
     //         headers: {

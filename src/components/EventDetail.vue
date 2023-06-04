@@ -5,7 +5,7 @@
 
 
         <div v-if="!passed" class="fixed bottom-0 flex w-full h-20 p-4 bg-white border-t gap-x-3 ">
-            <Button @@click="handleParticipate" :data="btnParticipateStyle" class="w-full" />
+            <Button @@click="handleParticipate" :data="btnParticipateStyle" :delay="1000" class="w-full" />
 
             <Button @@click="handleModal" :data="btnParticipantsStyle" class="w-max" />
         </div>

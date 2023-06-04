@@ -8,11 +8,11 @@
             </div>
         </div>
 
-        <div v-for="data in customData" class="flex flex-col gap-y-10 w-full">
+        <div v-for="data in customData" class="flex flex-col w-full gap-y-10">
             <div :id="data.zip" class="flex items-center justify-center gap-x-4">
-                <div class="w-full h-px rounded-full bg-gray-400"></div>
-                <div class="text-gray-400 w-min text-center whitespace-nowrap">{{ UtilsZip.getDepartement(data.zip) }}</div>
-                <div class="w-full h-px rounded-full bg-gray-400"></div>
+                <div class="w-full h-px bg-gray-400 rounded-full"></div>
+                <div class="text-center text-gray-400 w-min whitespace-nowrap">{{ UtilsZip.getDepartement(data.zip) }}</div>
+                <div class="w-full h-px bg-gray-400 rounded-full"></div>
             </div>
 
             <EventCard v-for="event in data.events" :id="event.id" :data="event" />
@@ -36,45 +36,41 @@ import UtilsAuth from "../../utils/UtilsAuth";
 // ########################################### VARIABLES ###########################################
 
 const customData = ref<{ zip: string, events: IEvent[] }[]>([]);
-
 const nearbyZips = ref<string[]>([]);
-
+const user = UtilsAuth.getCurrentUser();
 const router = useRouter();
 
 // ########################################### FUNCTIONS ###########################################
 
 onMounted(async () => {
     // Data
-    const user = UtilsAuth.getCurrentUser();
 
-    if (user) {
-        // Get local zip
-        let localZip: string = "";
+    // Get local zip
+    let localZip: string = "";
 
-        if (user.idFoyer) {
-            const foyerRequest = await UtilsApi.getFoyerById(user.idFoyer);
+    if (user!.idFoyer) {
+        const foyerRequest = await UtilsApi.getFoyerById(user!.idFoyer);        
 
-            if (foyerRequest) {
-                localZip = foyerRequest.zip.substring(0, 2);
+        if (foyerRequest) {
+            localZip = foyerRequest.zip.substring(0, 2);
 
-                // Get events of local zip
-                const eventsRequest = await UtilsApi.getEventsByZip(parseInt(localZip));
+            // Get events of local zip
+            const eventsRequest = await UtilsApi.getEventsByZip(parseInt(localZip));
 
-                if (eventsRequest) {
-                    customData.value.push({ zip: localZip, events: eventsRequest });
-                }
+            if (eventsRequest) {
+                customData.value.push({ zip: localZip, events: eventsRequest });
+            }
 
-                // Get nearby zips
-                nearbyZips.value = UtilsZip.getNearbyZips(parseInt(localZip));
+            // Get nearby zips
+            nearbyZips.value = UtilsZip.getNearbyZips(parseInt(localZip));
 
-                // Get events of nearby zips
-                if (nearbyZips.value.length > 0) {
-                    for (const zip of nearbyZips.value) {
-                        const eventsRequest = await UtilsApi.getEventsByZip(parseInt(zip));
+            // Get events of nearby zips
+            if (nearbyZips.value.length > 0) {
+                for (const zip of nearbyZips.value) {
+                    const eventsRequest = await UtilsApi.getEventsByZip(parseInt(zip));
 
-                        if (eventsRequest) {
-                            customData.value.push({ zip: zip, events: eventsRequest });
-                        }
+                    if (eventsRequest) {
+                        customData.value.push({ zip: zip, events: eventsRequest });
                     }
                 }
             }
