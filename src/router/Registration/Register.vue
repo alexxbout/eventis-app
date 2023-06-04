@@ -32,7 +32,7 @@ const MAX_STEPS = 6;
 const registerCode = ref<InstanceType<typeof RegisterCode>>();
 const registerCredentials = ref<InstanceType<typeof RegisterCredentials>>();
 
-const currentStep = ref(5);
+const currentStep = ref(1);
 
 const code = ref("");
 const user = ref<IUser | null>(null);
