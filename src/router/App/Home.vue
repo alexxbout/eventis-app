@@ -6,7 +6,7 @@
 
             <div @click="showModal = !showModal" class="w-full h-full"></div>
 
-            <form @submit.prevent="handleLogin" class="bg-white w-full h-max rounded-t-[35px] shadow-modal justify-between flex flex-col p-12 gap-y-10">
+            <form @submit.prevent="handleLogin" class="bg-white w-full h-max rounded-t-[35px] shadow-modal justify-between flex flex-col p-12 gap-y-20">
                 <div class="flex flex-col gap-y-7">
                     <div>
                         <label for="">Identifiant</label>
@@ -16,12 +16,10 @@
                     <div>
                         <label for="">Mot de passe</label>
                         <input v-model="passwordField" type="password" placeholder=" " class="input" required>
-
-                        <button class="pt-5 font-semibold text-primary">J'ai reçu un code d'invitation</button>
                     </div>
                 </div>
 
-                <button type="submit" class="bg-primary rounded-[14px] text-white font-semibold text-base w-full h-[45px]">Se connecter</button>
+                <Button class="w-full" :data="{ apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY' }, text: 'Se connecter', type: 'submit' }" />
             </form>
         </div>
 
@@ -37,8 +35,8 @@
             </div>
 
             <div class="flex items-center w-full gap-5">
-                <button @click="openRegistration" class="bg-white border border-primary rounded-[14px] text-primary font-semibold text-base w-full h-[60px]">Rejoindre</button>
-                <button @click="showModal = true" class="bg-primary rounded-[14px] text-white font-semibold text-base w-full h-[60px]">Se connecter</button>
+                <Button class="w-full" @click="openRegistration" :data="{ apparence: { color: 'BLUE', size: 'BASE', type: 'SECONDARY', rounded: 'FULL' }, text: 'Rejoindre' }" />
+                <Button class="w-full" @click="openLogin" :data="{ apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY', rounded: 'FULL' }, text: 'Se connecter' }" />
             </div>
         </div>
 
@@ -49,6 +47,7 @@
 import UtilsAuth from "../../utils/UtilsAuth";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
+import Button from "../../components/Button.vue";
 
 const router = useRouter();
 
@@ -57,15 +56,27 @@ const passwordField = ref("");
 
 const showModal = ref(false);
 
-function openRegistration() {
-    router.push("/register");
+const openRegistration = () => {
+    if (UtilsAuth.isLoggedIn()) {
+        router.push({ name: "events" });
+    } else {
+        router.push({ name: "register" });
+    }
 }
 
-async function handleLogin() {
+const openLogin = () => {
+    if (UtilsAuth.isLoggedIn()) {
+        router.push({ name: "events" });
+    } else {
+        showModal.value = true;
+    }
+}
+
+const handleLogin = async () => {
     await UtilsAuth.login(loginField.value, passwordField.value);
 
     if (UtilsAuth.isLoggedIn()) {
-        router.push({ name: "events"});
+        router.push({ name: "events" });
     }
 }
 

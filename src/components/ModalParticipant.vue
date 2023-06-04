@@ -11,7 +11,7 @@
 
             <!-- Users -->
             <div class="flex flex-col w-full overflow-y-auto overflow-hidden max-h-[1/2] h-max gap-y-5">
-                <UserCard v-for="participant in props.data" :key="participant.id" :data="participant.user" :style="{ shape: EUserCardStyle.FRIEND_PROFILE }" />
+                <UserCard v-for="participant in props.data" :key="participant.id" :data="{ user: participant.user, action: 'SHOW_PROFIL', style: 'RECTANGLE' }" />
             </div>
         </div>
     </div>
@@ -22,7 +22,6 @@ import gsap from "gsap";
 
 import { PropType, ref, onMounted, onUnmounted } from "vue";
 
-import { EUserCardStyle } from "../types/UserCardStyle";
 import type { IParticipant } from "../types/Participants";
 
 import UserCard from "./UserCard.vue";
@@ -42,10 +41,6 @@ const container = ref<HTMLElement | null>(null);
 const modal = ref<HTMLElement | null>(null);
 
 // ############################################### EVENTS ###############################################
-
-const emits = defineEmits<{
-    (event: "@@update", status: boolean): void
-}>();
 
 // ############################################## FUNCTIONS ##############################################
 
@@ -74,39 +69,40 @@ const handleClickOutside = (event: MouseEvent) => {
 const hide = () => {
     let tl = gsap.timeline();
 
-    tl.fromTo(modal.value, {
-        translateY: 0,
-    }, {
-        translateY: "100%",
-        duration: 0.3,
-        ease: "power2.out"
-    }).then(() => {
-        visible.value = false;
+    tl.fromTo(modal.value,
+        {
+            translateY: 0,
+        },
+        {
+            translateY: "100%",
+            duration: 0.3,
+            ease: "power2.out"
+        }).then(() => {
+            visible.value = false;
+        });
 
-        emits("@@update", false);
-    });
-
-    tl.to(container.value, {
-        opacity: 0,
-        duration: 0.3,
-        ease: "power2.out"
-    }, "<0.1");
+    tl.to(container.value,
+        {
+            opacity: 0,
+            duration: 0.3,
+            ease: "power2.out"
+        }, "<0.1");
 }
 
 const show = () => {
     visible.value = true;
 
-    emits("@@update", true);
-    
-    gsap.to(container.value, {
-        opacity: 1,
-        duration: 0.3,
-        ease: "power2.out"
-    });
+    gsap.to(container.value,
+        {
+            opacity: 1,
+            duration: 0.3,
+            ease: "power2.out"
+        });
 
-    gsap.fromTo(modal.value, {
-        translateY: "100%",
-    }, {
+    gsap.fromTo(modal.value,
+        {
+            translateY: "100%",
+        }, {
         translateY: 0,
         duration: 0.3,
         ease: "power2.out"

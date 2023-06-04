@@ -8,13 +8,13 @@
             </div>
         </div>
 
-        <div class="w-full h-max flex flex-col">
-            <span class="font-medium text-xl">Demandes d’amis</span>
+        <div class="flex flex-col w-full h-max">
+            <span class="text-xl font-medium">Demandes d’amis</span>
         </div>
 
         <!-- Demandes d'amis -->
         <div class="flex flex-col gap-y-[10px]">
-            <UserCard v-for="user in requesters" :data="user" :style="{ shape: EUserCardStyle.FRIEND_PROFILE }" />
+            <!-- <UserCard v-for="user in requesters" :data="user" :style="{ shape: EUserCardStyle.FRIEND_PROFILE }" /> -->
         </div>
     </div>
 </template>
@@ -26,7 +26,6 @@ import UtilsApi from '../../utils/UtilsApi';
 import UtilsAuth from '../../utils/UtilsAuth';
 import UserCard from '../../components/UserCard.vue';
 import { IUser } from '../../types/User';
-import { EUserCardStyle } from '../../types/UserCardStyle';
 
 const notifications = ref<INotification | null>(null);
 

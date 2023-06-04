@@ -1,17 +1,4 @@
 <template>
-    <!-- Loading -->
-    <!-- <div v-if="isLoading" class="w-full h-max">
-        <div class="relative w-full overflow-hidden h-max shadow-card rounded-2xl">
-            <div class="h-[350px] w-full loading"></div>
-
-            <div class="h-max w-full flex flex-col justify-center p-5 gap-y-[5px] bg-white">
-                <div class="loading w-2/3 rounded-md h-1/3 text-transparent text-[24px] font-semibold">Loading</div>
-
-                <div class="loading w-1/3 rounded-md h-2/3 text-transparent text-[14px] font-light">Loading</div>
-            </div>
-        </div>
-    </div> -->
-
     <!-- Card wrapper -->
     <div class="w-full h-max" @click="openEvent">
 
@@ -23,8 +10,8 @@
             <div v-else class="h-[350px] w-full"></div>
 
             <!-- Info -->
-            <div class="h-max w-full flex items-center p-5 gap-x-5">
-                <Emoji v-if="props.data.emoji" :data="{ name: props.data.emoji, size: 'XL' }" />
+            <div class="flex items-center w-full p-5 h-max gap-x-4">
+                <Emoji v-if="props.data.emoji" :data="{ name: props.data.emoji, size: 'EVENT' }" />
 
                 <div class="gap-y-[5px] flex flex-col justify-center">
                     <span class="text-[24px] font-semibold text-black">{{ data.title }}</span>
@@ -41,7 +28,9 @@ import { PropType, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
 import type { IEvent } from "../types/Event";
+
 import UtilsApi from "../utils/UtilsApi";
+
 import Emoji from "./Emoji.vue";
 
 const props = defineProps({
@@ -55,11 +44,9 @@ const router = useRouter();
 
 const passed = ref<boolean>(false);
 
-// const isLoading = ref<boolean>(true);
-
 const openEvent = () => {
     router.push({ name: "eventDetail", params: { id: props.data.id } });
-}
+};
 
 onMounted(() => {
     const date = new Date(props.data.start);
@@ -68,14 +55,4 @@ onMounted(() => {
         passed.value = true;
     }
 });
-
-// const updateLoading = (newLoading: boolean) => {
-//     isLoading.value = newLoading;
-
-//     console.log(isLoading.value);
-// }
-
-// defineExpose({
-//     updateLoading
-// });
 </script>

@@ -18,7 +18,7 @@
     }
 
     .header {
-        @apply text-3xl font-bold text-black;
+        @apply text-3xl font-semibold text-black;
     }
 
     .header-xs {
@@ -44,19 +44,6 @@
 
     .invalid-input {
         @apply outline-custom-red text-custom-red outline-2 ring-2 ring-custom-red;
-    }
-
-    /* Buttons */
-    .btn-primary {
-        @apply flex items-center justify-center px-10 py-3 font-semibold text-white rounded-full disabled:bg-gray-600 gap-x-2 bg-primary;
-    }
-
-    .btn-primary-xs {
-        @apply flex items-center justify-center px-5 py-2 font-semibold text-white rounded-full disabled:bg-gray-600 gap-x-2 bg-primary;
-    }
-
-    .btn-secondary {
-        @apply flex items-center justify-center px-10 py-3 font-semibold bg-white border-2 rounded-full disabled:bg-gray-600 gap-x-2 border-primary text-primary;
     }
 }
 

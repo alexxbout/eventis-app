@@ -1,14 +1,13 @@
 <template>
-    <div ref="container" @scroll="handleScroll" @touchmove="handleScroll" @touchstart="handleScroll" @wheel="handleScroll" class="w-screen min-h-screen">
+    <div ref="container" class="w-screen min-h-screen">
 
-        <div @click="handleClose">
-            <i ref="btnClose" class="fixed text-3xl text-white transition-colors bi bi-x-circle-fill top-5 right-5"></i>
-        </div>
+        <i @click="handleClose" class="fixed text-3xl text-black top-5 right-5 bi bi-x-circle-fill"></i>
 
-        <div v-if="!passed" class="fixed bottom-0 w-full h-20 bg-white flex p-[15px] gap-x-[15px] shadow-eventCard">
-            <Button @@trigger="handleParticipate" ref="btnParticipate" class="w-full" :isLoading="true" />
 
-            <Button @@trigger="handleModal" ref="btnParticipants" class="w-max" :isLoading="true" :icon="{ side: 'LEFT', name: ICONS.USERS }" />
+        <div v-if="!passed" class="fixed bottom-0 flex w-full h-20 p-4 bg-white border-t gap-x-3 ">
+            <Button @@click="handleParticipate" :data="btnParticipateStyle" class="w-full" />
+
+            <Button @@click="handleModal" :data="btnParticipantsStyle" class="w-max" />
         </div>
 
         <!-- Header -->
@@ -20,8 +19,8 @@
             </div>
 
             <!-- Title -->
-            <div class="h-max w-full flex items-center p-5 gap-x-5 bg-white border-b">
-                <Emoji v-if="event?.emoji" :data="{ name: event.emoji, size: 'XL' }" />
+            <div class="flex items-center w-full p-5 bg-white border-b h-max gap-x-5">
+                <Emoji v-if="event?.emoji" :data="{ name: event.emoji, size: 'EVENT' }" />
 
                 <div class="gap-y-[5px] flex flex-col justify-center">
                     <span class="text-[20px] font-semibold text-black">{{ event?.title }}</span>
@@ -43,13 +42,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import type { IEvent } from "../types/Event";
 import type { IButton } from "../types/Button";
-
-import { ICONS } from "../types/Button";
 
 import UtilsApi from "../utils/UtilsApi";
 import UtilsAuth from "../utils/UtilsAuth";
@@ -60,41 +57,40 @@ import Emoji from "./Emoji.vue";
 
 // ############################################### VARIABLES ###############################################
 
-// Router
-const router = useRouter();
-const route = useRoute();
-
-// Childs components refs
+const router           = useRouter();
+const route            = useRoute();
+const user             = UtilsAuth.getCurrentUser();
 const modalParticipant = ref<InstanceType<typeof ModalParticipant> | null>(null);
-const btnParticipate = ref<InstanceType<typeof Button> | null>(null);
-const btnParticipants = ref<InstanceType<typeof Button> | null>(null);
+const header           = ref<HTMLElement | null>(null);
+const event            = ref<IEvent>();
+const passed           = ref(false);
+const isParticipating  = ref(false);
 
-const btnClose = ref<HTMLElement | null>(null);
+const btnParticipantsStyle = computed<IButton>(() => {
+    return {
+        apparence: {
+            color: "BLUE",
+            type: "SECONDARY",
+            size: "BASE"
+        },
+        icon: {
+            name: "USERS",
+            side: "LEFT"
+        },
+        text: event.value?.participants?.length
+    }
+});
 
-const header = ref<HTMLElement | null>(null);
-
-const container = ref<HTMLElement | null>(null);
-
-// Data
-const event = ref<IEvent>();
-const isParticipating = ref(false);
-const user = UtilsAuth.getCurrentUser();
-
-const btnParticipateStyle: IButton = {
-    text: "Participer",
-    color: "BLUE",
-    type: "PRIMARY",
-    size: "BASE"
-}
-
-const btnCancelParticipateStyle: IButton = {
-    text: "Annuler la participation",
-    color: "RED",
-    type: "SECONDARY",
-    size: "BASE"
-}
-
-const passed = ref(false);
+const btnParticipateStyle = computed<IButton>(() => {
+    return {
+        apparence: {
+            color: isParticipating.value ? "RED" : "BLUE",
+            type: isParticipating.value ? "SECONDARY" : "PRIMARY",
+            size: "BASE"
+        },
+        text: isParticipating.value ? "Annuler la participation" : "Participer"
+    }
+});
 
 // ############################################### FUNCTIONS ###############################################
 
@@ -123,24 +119,11 @@ onMounted(async () => {
         // Update participants
         event.value.participants = participants;
 
-        // Update participants button
-        btnParticipants.value?.update({ text: participants.length, color: "BLUE", type: "SECONDARY", size: "BASE" });
-
         // Update participate button
         isParticipating.value = await UtilsApi.isParticipating(idEvent, idUser);
 
-        if (isParticipating.value) {
-            btnParticipate.value?.update(btnCancelParticipateStyle);
-        } else {
-            btnParticipate.value?.update(btnParticipateStyle);
-        }
-
         // Update passed
         passed.value = new Date(event.value.start) < new Date();
-
-        // Remove loading
-        btnParticipate.value?.updateLoading(false);
-        btnParticipants.value?.updateLoading(false);
     } else {
         router.push({ name: "events" });
     }
@@ -156,18 +139,6 @@ const formatDate = (date: string) => {
 
 // ############################################## HANDLERS ##############################################
 
-const handleScroll = () => {
-    if (header.value && btnClose.value) {
-        const headerHeight = header.value.offsetHeight;
-
-        if (window.scrollY > headerHeight) {
-            btnClose.value.style.color = "black";
-        } else {
-            btnClose.value.style.color = "white";
-        }
-    }
-}
-
 const handleModal = () => {
     if (event.value?.participants && event.value.participants.length > 0) {
         modalParticipant.value?.show();
@@ -179,29 +150,17 @@ const handleClose = () => {
 }
 
 const handleParticipate = async () => {
-    let nbParticipants = 0;
-
     const idEvent = parseInt(route.params.id as string);
 
     // Update participate status
     if (isParticipating.value) {
-        nbParticipants = await UtilsApi.removeParticipant(idEvent, user!.id);
-
-        if (nbParticipants != -1) isParticipating.value = false;
+        if (await UtilsApi.removeParticipant(idEvent, user!.id) != -1) {
+            isParticipating.value = false;
+        }
     } else {
-        nbParticipants = await UtilsApi.addParticipant(idEvent, user!.id);
-
-        if (nbParticipants != -1) isParticipating.value = true;
-    }
-
-    // Update participants count button
-    btnParticipants.value?.updateText(nbParticipants);
-
-    // Update participate button
-    if (isParticipating.value) {
-        btnParticipate.value?.update(btnCancelParticipateStyle);
-    } else {
-        btnParticipate.value?.update(btnParticipateStyle);
+        if (await UtilsApi.addParticipant(idEvent, user!.id) != -1) {
+            isParticipating.value = true;
+        }
     }
 
     // Update participants list

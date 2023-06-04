@@ -6,13 +6,14 @@
 
         <div class="w-2/3 h-full bg-white rounded-full"></div>
 
-        <div class="flex items-center justify-center h-full w-full gap-x-2">
+        <div class="flex items-center justify-center w-full h-full gap-x-2">
             <div class="w-full h-full bg-white rounded-full"></div>
             <div class="w-full h-full bg-white rounded-full"></div>
         </div>
     </div>
 
     <UserCardSquare v-if="!loading && props.data.style == 'SQUARE'" @@click="handleClick" :data="{ user: props.data.user, interests: userInterests }" :button="btnStyle" />
+    <UserCardRectangle v-else-if="!loading && props.data.style == 'RECTANGLE'" @@click="handleClick" :data="{ user: props.data.user }" :button="btnStyle" />
 </template>
   
 <script setup lang="ts">
@@ -26,6 +27,7 @@ import UtilsApi from "../utils/UtilsApi";
 import UtilsAuth from "../utils/UtilsAuth";
 
 import UserCardSquare from "./UserCardSquare.vue";
+import UserCardRectangle from "./UserCardRectangle.vue";
 
 // ########################################### VARIABLES ###########################################
 
@@ -40,10 +42,11 @@ const props = defineProps({
     }
 });
 
-const user = UtilsAuth.getCurrentUser();
-const isPending = ref(false);
-const loading = ref(true);
+const user          = UtilsAuth.getCurrentUser();
+const isPending     = ref(false);
+const loading       = ref(true);
 const userInterests = ref<IInterest[]>([]);
+
 const btnStyle = ref<IButton>({
     apparence: {
         color: "BLUE",

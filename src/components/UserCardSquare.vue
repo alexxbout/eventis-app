@@ -13,9 +13,9 @@
 
         <!-- Interests -->
         <div class="flex gap-x-3 h-max">
-            <div v-if="props.data.interests.length == 0" class="font-medium text-sm text-transparent">No data</div>
-            <div v-else v-for="interest in props.data.interests" class="flex gap-x-1 items-center justify-center text-gray-400 font-medium text-sm w-max">
-                <Emoji :data="{ name: interest.emoji, size: 'XS' }" />
+            <div v-if="props.data.interests.length == 0" class="text-sm font-medium text-transparent">No data</div>
+            <div v-else v-for="interest in props.data.interests" class="flex items-center justify-center text-sm font-medium text-gray-400 gap-x-1 w-max">
+                <Emoji :data="{ name: interest.emoji, size: 'INTEREST' }" />
                 <span class="whitespace-nowrap">{{ interest.name }}</span>
             </div>
         </div>

@@ -15,7 +15,7 @@
             </div>
 
             <div class="flex w-full justify-evenly gap-x-[10px]">
-                <input v-for="index in codeLength" :key="index" :id="index.toString()" ref="inputs" @keypress="handleInput" @input="handleInput" type="text" maxlength="1" minlength="1" class="bg-[#F3F6FC] font-medium text-xl border-gray-200 text-center border-2 rounded-[14px] p-[10] h-[72px] w-[62px] appearance-none focus:outline-primary focus:outline-2 outline-none outline-offset-0" required>
+                <input v-for="index in codeLength" :key="index" :id="index.toString()" ref="inputs" @keypress="handleInput" @input="handleInput" type="text" autocorrect="off" autocapitalize="none" maxlength="1" minlength="1" class="bg-[#F3F6FC] font-medium text-xl border-gray-200 text-center border-2 rounded-[14px] p-[10] h-[72px] w-[62px] appearance-none focus:outline-primary focus:outline-2 outline-none outline-offset-0" required>
             </div>
         </div>
 
@@ -49,7 +49,7 @@ const nextBtnStyle  = computed<IButton>(() => {
         text: 'Suivant',
         icon: {name: 'ARROW_RIGHT', side: 'RIGHT'},
         type: 'submit',
-        disabled: !readyToSubmit.value
+        disabled: !readyToSubmit.value || loading.value
     }
 });
 
@@ -85,6 +85,8 @@ const handleSubmit = () => {
 
         setTimeout(async () => {
             loading.value = false;
+
+
 
             const code = getCode();
 

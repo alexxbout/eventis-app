@@ -1,7 +1,7 @@
 <template>
     <button @click="handleClick" :type="props.data.type" :style="style" :disabled="props.data.disabled" class="flex items-center justify-center text-sm font-semibold text-center text-white gap-x-2">
 
-        <i v-if="props.data.icon" :class="getIconByName(props.data.icon.name) + ' ' + (props.data.icon.side == 'RIGHT' ? 'order-last' : 'order-first')" class="text-2xl"></i>
+        <i v-if="props.data.icon" :style="{ 'order': (props.data.icon.side == 'RIGHT' ? '9999' : '-9999'), 'font-size': '16px'}" :class="getIconByName(props.data.icon.name)"></i>
 
         <span>{{ props.data.text }}</span>
     </button>
@@ -65,7 +65,7 @@ const locked = ref(false);
 // ############################################## FUNCTIONS ##############################################
 
 const getSize = (size: "BASE" | "XS"): StyleValue => {
-    return size == "XS" ? { "height": "33px", "padding": "0px 15px" } : { "height": "50px", "padding": "0px 25px" };
+    return size == "XS" ? { "height": "33px", "padding": "0px 15px" } : { "height": "50px", "padding": "0px 18px" };
 };
 
 const getBorderRadius = (size: "BASE" | "XS", borderRadius?: "BASE" | "FULL"): StyleValue => {
