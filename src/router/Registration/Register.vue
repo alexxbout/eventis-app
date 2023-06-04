@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, provide } from "vue";
+import { ref, provide, onMounted } from "vue";
 
 import type { IRegistration } from "../../types/Register";
 import type { IUser } from "../../types/User";
@@ -32,7 +32,7 @@ const MAX_STEPS = 6;
 const registerCode = ref<InstanceType<typeof RegisterCode>>();
 const registerCredentials = ref<InstanceType<typeof RegisterCredentials>>();
 
-const currentStep = ref(5);
+const currentStep = ref(4);
 
 const code = ref("");
 const user = ref<IUser | null>(null);

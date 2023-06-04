@@ -34,14 +34,12 @@ class UtilsApi {
 
     // ############################################## CODE ##############################################
 
-    async getCode(code: string): Promise<ICode | null> {
-        let data = null;
+    async getCode(code: string): Promise<boolean> {
+        let data = false;
 
         await axios.get(this.baseUrl + "auth/code/" + code)
             .then((response) => {
-                if (response.status === HTTPCodes.OK) {
-                    data = response.data.data as ICode;
-                }
+                data = response.status === HTTPCodes.OK;
             }).catch((error) => {
                 console.log(error, "Error while getting code");
             });
@@ -118,8 +116,11 @@ class UtilsApi {
             "lastname": lastname,
             "password": password
         }).then((response) => {
-            if (response.status === HTTPCodes.OK) {
+            if (response.status === HTTPCodes.CREATED) {
                 data = response.data.data.login as string;
+
+                console.log(data);
+                
             }
         }).catch((error) => {
             console.log(error, "Error while registering user");

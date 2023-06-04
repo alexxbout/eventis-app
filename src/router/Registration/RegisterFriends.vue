@@ -14,38 +14,38 @@
 
             <!-- UserCard -->
             <div class="grid w-full gap-3 overflow-hidden overflow-y-auto h-max 2xs:grid-cols-1 xs:grid-cols-2">
-                <UserCard v-for="user in users" :data="user" :style="{ shape: EUserCardStyle.FRIEND_REQUEST }" />
+                <UserCard v-for="user in users" :data="{ user: user, style: 'SQUARE', action: 'FRIEND_REQUEST' }" />
             </div>
         </div>
 
         <!-- Suivant -->
-        <div class="flex items-center justify-end w-full gap-x-5">
-            <Button @@trigger="props.next()" class="w-1/2" :icon="{ name: ICONS.ARROW_RIGHT, side: 'RIGHT' }" :data="{ color: 'BLUE', size: 'BASE', type: 'PRIMARY', text: 'Suivant', borderRadius: 'FULL' }" />
-        </div>
+        <Button @@click="props.next()" :data="nextBtnStyle" />
     </div>
 </template>
 
 <script setup lang="ts">
-import { PropType, inject, onMounted, ref } from "vue";
+import { inject, onMounted, ref } from "vue";
 
 import UserCard from "../../components/UserCard.vue";
 import Button from "../../components/Button.vue";
 
 import type { IUser } from "../../types/User";
 import type { IRegistration } from "../../types/Register";
-import { EUserCardStyle } from "../../types/UserCardStyle";
+import type { IButton } from "../../types/Button";
 
 import UtilsApi from "../../utils/UtilsApi";
 import UtilsAuth from "../../utils/UtilsAuth";
-import { ICONS } from "../../types/Button";
 
 // ############################################## VARIABLES ##############################################
 
-const users = ref<IUser[]>([]);
-
 const props = inject("props") as IRegistration;
-
+const users = ref<IUser[]>([]);
 const loading = ref(true);
+const nextBtnStyle = ref<IButton>({
+    apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY' },
+    text: 'Suivant',
+    icon: { name: 'ARROW_RIGHT', side: 'RIGHT' },
+});
 
 // ############################################## FUNCTIONS ##############################################
 

@@ -1,16 +1,17 @@
 <template>
-    <button ref="el" @click="handleClick" :style="style" class="text-[14px] flex items-center gap-x-2 justify-center font-semibold text-center text-white disabled:bg-gray-600">
-        <i v-if="props.icon" :class="props.icon.name + ' ' + (props.icon.side == 'RIGHT' ? 'order-last' : '')" class="text-xl"></i>
+    <button @click="handleClick" :type="props.data.type" :style="style" :disabled="props.data.disabled" class="flex items-center justify-center text-sm font-semibold text-center text-white gap-x-2">
 
-        {{ buttonProps.text }}
+        <i v-if="props.data.icon" :class="getIconByName(props.data.icon.name) + ' ' + (props.data.icon.side == 'RIGHT' ? 'order-last' : 'order-first')" class="text-2xl"></i>
+
+        <span>{{ props.data.text }}</span>
     </button>
 </template>
   
 <script setup lang="ts">
-import { PropType, StyleValue, computed, onMounted, ref } from "vue";
+import { PropType, StyleValue, computed, ref } from "vue";
 
 import type { IButton } from "../types/Button";
-import type { IButtonIcon } from "../types/Button";
+import { getIconByName } from "../types/Button";
 
 // ############################################### VARIABLES ###############################################
 
@@ -18,22 +19,24 @@ const props = defineProps({
     data: {
         type: Object as PropType<IButton>,
         default: <IButton>{
-            text: "",
-            size: "BASE",
-            type: "PRIMARY",
-            color: "GRAY",
-            borderRadius: "BASE"
-        },
+            apparence: {
+                type: "PRIMARY",
+                color: "BLUE",
+                size: "BASE",
+            },
+            type: "button"
+        }
     },
-    icon: {
-        type: Object as PropType<IButtonIcon>,
-        default: null
-    },
-    isLoading: {
-        type: Boolean,
-        default: false
+    delay: {
+        type: Number,
+        default: 0
     }
 });
+
+const TYPES = {
+    PRIMARY  : "PRIMARY",
+    SECONDARY: "SECONDARY",
+};
 
 const COLORS = {
     BLUE       : "#166CF7",
@@ -45,111 +48,72 @@ const COLORS = {
 };
 
 const OPACITY = {
-    NORMAL: "FF",
-    MEDIUM: "99"
-}
+    LIGHT: "99"
+};
 
-const isLoading = ref<boolean>(props.isLoading);
-
-// Save the props in a reactive variable to update the component when the props change
-const buttonProps = ref<IButton>(props.data);
-
-const el = ref<HTMLButtonElement | null>(null);
-
-// Create a computed variable to get the style of the button when the props change
 const style = computed<StyleValue>(() => {
-    const sizeStyle = getSizeStyle(buttonProps.value.size);
-    const borderRadiusStyle = getBorderRadiusStyle(buttonProps.value.size, buttonProps.value.borderRadius);
-    const colorStyle = getColorStyle(buttonProps.value.type, buttonProps.value.color);
+    const size = props.data.apparence.size;
+    const type = props.data.apparence.type;
+    const color = props.data.apparence.color;
+    const rounded = props.data.apparence.rounded;
 
-    return Object.assign({}, sizeStyle, borderRadiusStyle, colorStyle);
+    return Object.assign({}, getSize(size), getBorderRadius(size, rounded), getColors(type, color));
 });
+
+const locked = ref(false);
 
 // ############################################## FUNCTIONS ##############################################
 
-const getSizeStyle = (size: "BASE" | "XS") => {
-    return size == "XS" ? { "padding": "8px 17px" } : { "padding": "13px 20px" };
+const getSize = (size: "BASE" | "XS"): StyleValue => {
+    return size == "XS" ? { "height": "33px", "padding": "0px 15px" } : { "height": "50px", "padding": "0px 25px" };
 };
 
-const getBorderRadiusStyle = (size: "BASE" | "XS", borderRadius?: "BASE" | "FULL"): StyleValue => {
-    if (size == "XS") {
-        return { "border-radius": "9999px" };
-    } else {
-        return borderRadius == "FULL" ? { "border-radius": "9999px" } : { "border-radius": "14px" };
+const getBorderRadius = (size: "BASE" | "XS", borderRadius?: "BASE" | "FULL"): StyleValue => {
+    switch (size) {
+        case "XS":
+            return { "border-radius": "9999px" };
+        case "BASE":
+        default:
+            return borderRadius == "FULL" ? { "border-radius": "9999px" } : { "border-radius": "14px" };
     }
 };
 
-const getColorStyle = (type: "PRIMARY" | "SECONDARY", color: "BLUE" | "GREEN" | "RED" | "WHITE" | "GRAY") => {
-    if (isLoading.value && el.value) {
-        el.value.classList.add("loading");
-        return;
-    }
+const getColors = (type: keyof typeof TYPES, color: keyof typeof COLORS): StyleValue => {
+  if (props.data.disabled) {
+    return { "background-color": COLORS.GRAY, color: COLORS.WHITE };
+  }
 
-    if (type === "SECONDARY") {
-        switch (color) {
-            case "RED":
-                return { "background-color": COLORS.TRANSPARENT, "border-color": COLORS.RED + OPACITY.MEDIUM, color: COLORS.RED, "border-width": "2px" };
-            case "GRAY":
-                return { "background-color": COLORS.TRANSPARENT, "border-color": COLORS.GRAY + OPACITY.MEDIUM, color: COLORS.GRAY, "border-width": "2px" };
-            case "BLUE":
-            default:
-                return { "background-color": COLORS.TRANSPARENT, "border-color": COLORS.BLUE + OPACITY.MEDIUM, color: COLORS.BLUE, "border-width": "2px" };
-        }
-    } else {
-        switch (color) {
-            case "GREEN":
-                return { "background-color": COLORS.GREEN };
-            case "RED":
-                return { "background-color": COLORS.RED };
-            case "WHITE":
-                return { "background-color": COLORS.WHITE };
-            case "GRAY":
-                return { "background-color": COLORS.GRAY };
-            case "BLUE":
-            default:
-                return { "background-color": COLORS.BLUE };
-        }
-    }
+  const buttonStyles: { [key: string]: StyleValue } = {
+    PRIMARY: { "background-color": COLORS[color] },
+    SECONDARY: {
+      "background-color": COLORS.TRANSPARENT,
+      "border-color"    : COLORS[color] + OPACITY.LIGHT,
+      "color"           : COLORS[color],
+      "border-width"    : "2px",
+    },
+  };
+
+  return buttonStyles[type as keyof typeof buttonStyles] || buttonStyles.PRIMARY;
 };
 
 // ############################################## EVENTS ##############################################
 
-const emits = defineEmits(["@trigger"]);
+const emits = defineEmits(["@click"]);
 
 const handleClick = (event: Event) => {
-    emits("@trigger", event);
-};
+    if (props.data.disabled || locked.value) {
+        return;
+    }
 
-// ############################################## EXPOSE ##############################################
+    if (props.delay > 0) {
+        locked.value = true;
+        emits("@click", event);
 
-const update = (newProps: IButton) => {
-    buttonProps.value = newProps;
-};
-
-const updateText = (newText: any) => {
-    buttonProps.value.text = newText;
-};
-
-const updateLoading = (newLoading: boolean) => {
-    isLoading.value = newLoading;
-
-    if (el.value) {
-        if (newLoading) {
-            el.value.classList.add("loading");
-        } else {
-            el.value.classList.remove("loading");
-        }
+        setTimeout(() => {
+            locked.value = false;
+        }, props.delay);
+    } else {
+        emits("@click", event);
     }
 };
-
-onMounted(() => {
-    update(props.data);
-});
-
-defineExpose(
-    {
-        update,
-        updateText,
-        updateLoading
-    });
 </script>

@@ -1,21 +1,28 @@
+import { ButtonHTMLAttributes } from "vue";
+
 export interface IButton {
-    text: any;
-    type: "PRIMARY" | "SECONDARY";
-    color: "BLUE" | "GREEN" | "RED" | "WHITE" | "GRAY";
-    size: "BASE" | "XS";
-
-    borderRadius?: "BASE" | "FULL";
-}
-
-export interface IButtonIcon {
-    side: "LEFT" | "RIGHT";
-    name: string;
-}
-
-// const for icons
-export const ICONS = {
-    ARROW_LEFT     : "bi bi-arrow-left-short",
-    ARROW_RIGHT    : "bi bi-arrow-right-short",
-    USERS          : "bi bi-people-fill",
-    LOCATION       : "bi bi-geo-alt-fill"
+    apparence: {
+        type         : "PRIMARY" | "SECONDARY";
+        color        : "BLUE" | "GREEN" | "RED" | "WHITE" | "GRAY";
+        size         : "BASE" | "XS";
+        rounded?     : "BASE" | "FULL";
+    };
+    icon?: {
+        side: "LEFT" | "RIGHT";
+        name: "ARROW_LEFT" | "ARROW_RIGHT" | "USERS" | "LOCATION"
+    };
+    type?: ButtonHTMLAttributes["type"];
+    text?: any;
+    disabled?: boolean;
 };
+
+export const ICONS: {[key: string]: string} = {
+    ARROW_LEFT : "bi-arrow-left-short",
+    ARROW_RIGHT: "bi-arrow-right-short",
+    USERS      : "bi-people-fill",
+    LOCATION   : "bi-geo-alt-fill"
+};
+
+export const getIconByName = (name: string): string => {
+    return ICONS[name];
+}

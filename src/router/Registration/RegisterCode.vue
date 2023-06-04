@@ -1,5 +1,5 @@
 <template>
-    <form ref="form" @submit.prevent="handleSubmit" class="flex flex-col justify-around w-full h-full">
+    <form ref="formElement" @submit.prevent="handleSubmit" class="flex flex-col justify-around w-full h-full">
         <!-- Retour -->
         <div class="flex items-center justify-between w-full">
             <div @click.prevent="router.push({ name: 'home' })" class="flex gap-x-[10px] bg-[#F2F2F7] rounded-full py-2 px-5 w-max text-[#3C3C43]/60">
@@ -7,7 +7,7 @@
                 <span>Retour</span>
             </div>
 
-            <object v-if="loading" :data="'/src/assets/spinner.svg'" type="image/svg+xml"></object>
+            <object v-show="loading" class="w-10 h-10" :data="'/src/assets/spinner.svg'" type="image/svg+xml"></object>
         </div>
 
         <!-- Code -->
@@ -23,37 +23,38 @@
         </div>
 
         <!-- Suivant -->
-        <div class="flex items-center justify-end w-full gap-x-5">
-            <button :disabled="!readyToSubmit" class="w-1/2 btn-primary">
-                <span>Suivant</span>
-                <i class="text-xl bi bi-arrow-right-short"></i>
-            </button>
-        </div>
+        <Button :data="nextBtnStyle" />
     </form>
 </template>
 
 <script setup lang="ts">
-import { PropType, inject, ref, } from "vue";
+import { PropType, computed, inject, ref, } from "vue";
 import { useRouter } from "vue-router";
 
 import type { IRegistration } from "../../types/Register";
-import { ICONS } from "../../types/Button";
+import type { IButton } from "../../types/Button";
 
 import ApiService from "../../utils/UtilsApi";
 import Button from "../../components/Button.vue";
 
 // ########################################### VARIABLES ###########################################
 
-const router = useRouter();
-
-const form = ref<HTMLFormElement | null>();
-const inputs = ref<HTMLInputElement[]>([]);
-
-const codeLength = ref(5);
-const loading = ref(false);
+const props         = inject("props") as IRegistration;
+const router        = useRouter();
+const formElement   = ref<HTMLFormElement | null>();
+const inputs        = ref<HTMLInputElement[]>([]);
+const codeLength    = ref(5);
+const loading       = ref(false);
 const readyToSubmit = ref(false);
-
-const props = inject("props") as IRegistration;
+const nextBtnStyle  = computed<IButton>(() => {
+    return {
+        apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY' },
+        text: 'Suivant',
+        icon: {name: 'ARROW_RIGHT', side: 'RIGHT'},
+        type: 'submit',
+        disabled: !readyToSubmit.value
+    }
+});
 
 // ########################################### EVENTS ###########################################
 
@@ -81,25 +82,28 @@ const handleInput = (event: Event) => {
     }
 }
 
-const handleSubmit = async () => {
-    if (getFormValidity()) {
+const handleSubmit = () => {
+    if (!loading.value && getFormValidity()) {
         loading.value = true;
 
-        const code = await ApiService.getCode(getCode());
+        setTimeout(async () => {
+            loading.value = false;
 
-        loading.value = false;
+            const code = getCode();
 
-        if (code) {
-            emit("@sendCode", code);
+            if (await ApiService.getCode(code)) {
+                emit("@sendCode", code);
 
-            setValidInputs();
+                setValidInputs();
 
-            setTimeout(() => {
-                props.next();
-            }, 500);
-        } else {
-            setInvalidInputs();
-        }
+                setTimeout(() => {
+                    loading.value = false;
+                    props.next();
+                }, 1000);
+            } else {
+                setInvalidInputs();
+            }
+        }, 2000);
     }
 }
 
@@ -137,8 +141,8 @@ const getCode = (): string => {
 }
 
 const getFormValidity = (): boolean => {
-    if (form.value) {
-        return form.value.checkValidity();
+    if (formElement.value) {
+        return formElement.value.checkValidity();
     }
 
     return false;

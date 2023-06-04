@@ -60,7 +60,7 @@ class UtilsAuth {
     async login(login: string, password: string): Promise<boolean> {
         let data = false;
 
-        axios.post(import.meta.env.VITE_API_URL + "api/auth/login", {
+        await axios.post(import.meta.env.VITE_API_URL + "api/auth/login", {
             login: login,
             password: password
         }).then((response) => {

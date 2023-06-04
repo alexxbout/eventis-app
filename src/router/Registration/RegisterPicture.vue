@@ -12,7 +12,7 @@
                 </svg>
             </label>
 
-            <div v-if="success" class="relative drop-shadow-2xl">
+            <div v-if="success" class="relative">
                 <UserProfilPicture :pic="pic" :size="{ size: EUserProfilPictureStyle.BIG }" />
 
                 <i @click="handleRemovePicture" class="absolute flex items-center justify-center w-12 h-1w-12 text-xl rounded-full bi bi-trash-fill -bottom-2 aspect-square -right-2 text-custom-red bg-[#F6F6F6]"></i>
@@ -20,9 +20,7 @@
         </div>
 
         <!-- Suivant -->
-        <div class="flex items-center justify-end w-full gap-x-5">
-            <Button @@trigger="props.next()" class="w-1/2" :icon="{name: ICONS.ARROW_RIGHT, side: 'RIGHT'}" :data="{color: 'BLUE', size: 'BASE', type: 'PRIMARY', text: 'Suivant', borderRadius: 'FULL'}" />
-        </div>
+        <Button @@click="props.next()" :data="nextBtnStyle" />
     </div>
 </template>
 
@@ -36,47 +34,44 @@ import { EUserProfilPictureStyle } from "../../types/UserProfilPicture";
 
 import UtilsAuth from "../../utils/UtilsAuth";
 import UtilsApi from "../../utils/UtilsApi";
-import { ICONS } from "../../types/Button";
+import { IButton, ICONS } from "../../types/Button";
 import { IRegistration } from "../../types/Register";
 
 // ########################################### VARIABLES ###########################################
 
-const fileInput = ref<HTMLInputElement | null>(null);
-
-const success = ref(false);
-
-const pic = ref("");
-
-const user = UtilsAuth.getCurrentUser();
-
-const props = inject("props") as IRegistration;
+const props        = inject("props") as IRegistration;
+const fileInput    = ref<HTMLInputElement | null>(null);
+const success      = ref(false);
+const pic          = ref("");
+const user         = UtilsAuth.getCurrentUser();
+const nextBtnStyle = ref<IButton>({
+    apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY' },
+    text: 'Suivant',
+    icon: { name: 'ARROW_RIGHT', side: 'RIGHT' },
+});
 
 // ########################################### HANDLERS ###########################################
 
 const handleInput = async () => {
-    if (user) {
-        if (fileInput.value?.files) {
-            const formData = new FormData();
-            formData.append("image", fileInput.value.files[0]);
+    if (fileInput.value?.files) {
+        const formData = new FormData();
+        formData.append("image", fileInput.value.files[0]);
 
-            const file = await UtilsApi.updateUserPicture(user.id, formData);
+        const file = await UtilsApi.updateUserPicture(user!.id, formData);
 
-            if (file) {
-                pic.value = file;
-                success.value = true;
-            } else {
-                success.value = false;
-            }
+        if (file) {
+            pic.value = file;
+            success.value = true;
         } else {
-            console.error("No file found");
+            success.value = false;
         }
     } else {
-        console.error("No user found");
+        console.error("No file found");
     }
 }
 
 const handleRemovePicture = async () => {
-    if (user && await UtilsApi.removeUserPicture(user.id)) {
+    if (await UtilsApi.removeUserPicture(user!.id)) {
         pic.value = "";
         success.value = false;
     }

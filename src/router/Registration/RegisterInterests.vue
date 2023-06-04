@@ -16,14 +16,14 @@
             </div>
 
             <!-- UserCard -->
-            <div class="grid w-full gap-3 overflow-hidden overflow-y-auto h-max grid-cols-1">
-                <InterestCard v-for="data in interests" ref="cards" @@click="handleClick" :data="data.interests" :selected="data.selected" :disabled="data.disabled" />
+            <div class="grid w-full grid-cols-1 gap-3 overflow-hidden overflow-y-auto h-max">
+                <InterestCard v-for="data in interests" @@click="handleClick" :data="data.interests" :selected="data.selected" :disabled="data.disabled" />
             </div>
         </div>
 
         <!-- Suivant -->
         <div class="flex items-center justify-end w-full gap-x-5">
-            <Button @@trigger="props.next()" class="w-1/2" :icon="{ name: ICONS.ARROW_RIGHT, side: 'RIGHT' }" :data="{ color: 'BLUE', size: 'BASE', type: 'PRIMARY', text: 'Suivant', borderRadius: 'FULL' }" />
+            <Button class="w-1/2" @@click="props.next()" :data="{ apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY' }, text: 'Suivant', icon: {name: 'ARROW_RIGHT', side: 'RIGHT'} }" />
         </div>
     </div>
 </template>
@@ -37,8 +37,6 @@ import Button from "../../components/Button.vue";
 import type { IRegistration } from "../../types/Register";
 import type { IInterest } from "../../types/Interest";
 
-import { ICONS } from "../../types/Button";
-
 import UtilsAuth from "../../utils/UtilsAuth";
 import UtilsApi from "../../utils/UtilsApi";
 
@@ -50,9 +48,6 @@ const MAX_INTERESTS = 3;
 
 // Save all interests
 const interests = ref<{ interests: IInterest, selected: boolean, disabled?: boolean }[]>([]);
-
-// Get interest cards
-const cards = ref<InstanceType<typeof InterestCard>[] | null>(null);
 
 const user = UtilsAuth.getCurrentUser();
 

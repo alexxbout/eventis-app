@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="handleSubmit" ref="form" class="flex flex-col justify-around w-full h-full">
+    <form @submit.prevent="handleSubmit" ref="formElement" class="flex flex-col justify-around w-full h-full">
         <!-- Inputs -->
         <div class="flex flex-col gap-y-20">
             <span class="header">Création de votre compte</span>
@@ -53,19 +53,17 @@
         </div>
 
         <!-- Suivant -->
-        <div class="flex items-center justify-end w-full">
-            <button :disabled="!readyToSubmit" type="submit" class="btn-primary">
-                <span>Suivant</span>
-                <i class="text-xl bi bi-arrow-right-short"></i>
-            </button>
-        </div>
+        <Button :data="nextBtnStyle" />
     </form>
 </template>
 
 <script setup lang="ts">
-import { ref} from "vue";
+import { computed, ref } from "vue";
 
 import type { IUser } from "../../types/User";
+import type { IButton } from "../../types/Button";
+
+import Button from "../../components/Button.vue";
 
 // ########################################### VARIABLES ###########################################
 
@@ -74,12 +72,20 @@ const reqLowercase   = ref(false);
 const reqNumber      = ref(false);
 const reqSpecialChar = ref(false);
 const reqCount       = ref(false);
-
 const firstnameInput = ref("");
 const lastnameInput  = ref("");
 const passwordInput  = ref("");
 const readyToSubmit  = ref(false);
-const form           = ref<HTMLFormElement | null>(null);
+const formElement    = ref<HTMLFormElement | null>(null);
+const nextBtnStyle   = computed<IButton>(() => {
+    return {
+        apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY' },
+        text: 'Suivant',
+        icon: { name: 'ARROW_RIGHT', side: 'RIGHT' },
+        type: 'submit',
+        disabled: !readyToSubmit.value
+    }
+});
 
 // ########################################### EVENTS ###########################################
 
@@ -93,7 +99,7 @@ function handleInput() {
 }
 
 const handleSubmit = () => {
-    if (form.value?.checkValidity()) {
+    if (getFormValidity()) {
         emit("@sendCredentials",
             <IUser>{
                 firstname: firstnameInput.value,
@@ -106,25 +112,21 @@ const handleSubmit = () => {
 // ########################################### FUNCTIONS ###########################################
 
 function getFormValidity(): boolean {
-    if (form.value) {
-        return form.value.checkValidity();
-    }
+    return formElement.value ? formElement.value.checkValidity() : false;
+}
 
-    return false;
+function updateFormValidity() {
+    readyToSubmit.value = getFormValidity();
 }
 
 function updateRequirements() {
     const password = passwordInput.value;
 
-    reqUppercase.value = /[A-Z]/.test(password);
-    reqLowercase.value = /[a-z]/.test(password);
-    reqNumber.value = /[0-9]/.test(password);
+    reqUppercase.value   = /[A-Z]/.test(password);
+    reqLowercase.value   = /[a-z]/.test(password);
+    reqNumber.value      = /[0-9]/.test(password);
     reqSpecialChar.value = /[^A-Za-z0-9]/.test(password);
-    reqCount.value = password.length >= 8;
-}
-
-function updateFormValidity() {
-    readyToSubmit.value = getFormValidity();
+    reqCount.value       = password.length >= 8;
 }
 
 </script>
