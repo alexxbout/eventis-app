@@ -1,6 +1,5 @@
 <template>
     <div class="flex flex-col justify-around w-full h-full">
-
         <div class="flex flex-col items-center justify-center w-full text-center gap-y-10">
             <span class="header">Ajouter votre photo</span>
 
@@ -13,7 +12,7 @@
             </label>
 
             <div v-if="success" class="relative">
-                <UserProfilPicture :pic="pic" :size="{ size: EUserProfilPictureStyle.BIG }" />
+                <UserProfilPicture :data="{pic: pic, style: 'BIG'}" />
 
                 <i @click="handleRemovePicture" class="absolute flex items-center justify-center w-12 h-1w-12 text-xl rounded-full bi bi-trash-fill -bottom-2 aspect-square -right-2 text-custom-red bg-[#F6F6F6]"></i>
             </div>
@@ -29,8 +28,6 @@ import { ref, inject } from "vue";
 
 import UserProfilPicture from "../../components/UserProfilPicture.vue";
 import Button from "../../components/Button.vue";
-
-import { EUserProfilPictureStyle } from "../../types/UserProfilPicture";
 
 import UtilsAuth from "../../utils/UtilsAuth";
 import UtilsApi from "../../utils/UtilsApi";
@@ -66,7 +63,7 @@ const handleInput = async () => {
             success.value = false;
         }
     } else {
-        console.error("No file found");
+        console.error("File not found");
     }
 }
 

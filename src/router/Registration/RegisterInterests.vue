@@ -2,10 +2,7 @@
     <div class="flex flex-col justify-around w-full h-full">
         <!-- Retour -->
         <div class="flex items-center w-full">
-            <div @click.prevent="props.previous" class="flex gap-x-[10px] bg-[#F2F2F7] rounded-full py-2 px-5 w-max text-[#3C3C43]/60">
-                <i class="bi bi-chevron-left"></i>
-                <span>Retour</span>
-            </div>
+            <i @click.prevent="props.previous()" class="bi bi-arrow-left-short bg-[#F2F2F7] text-center flex items-center justify-center text-3xl text-[#3C3C43]/60 w-12 h-12 aspect-square rounded-full"></i>
         </div>
 
         <!-- Friends -->
@@ -17,14 +14,12 @@
 
             <!-- UserCard -->
             <div class="grid w-full grid-cols-1 gap-3 overflow-hidden overflow-y-auto h-max">
-                <InterestCard v-for="data in interests" @@click="handleClick" :data="data.interests" :selected="data.selected" :disabled="data.disabled" />
+                <InterestCard v-for="data in interests" ref="cards" @@click="handleClick" :data="data.interests" :selected="data.selected" :disabled="data.disabled" />
             </div>
         </div>
 
         <!-- Suivant -->
-        <div class="flex items-center justify-end w-full gap-x-5">
-            <Button class="w-1/2" @@click="props.next()" :data="{ apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY' }, text: 'Suivant', icon: {name: 'ARROW_RIGHT', side: 'RIGHT'} }" />
-        </div>
+        <Button class="w-full" @@click="props.next()" :data="{ apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY' }, text: 'Suivant', icon: { name: 'ARROW_RIGHT', side: 'RIGHT' } }" />
     </div>
 </template>
 
@@ -42,14 +37,13 @@ import UtilsApi from "../../utils/UtilsApi";
 
 // ############################################## VARIABLES ##############################################
 
-const props = inject("props") as IRegistration;
-
 const MAX_INTERESTS = 3;
 
-// Save all interests
+const props = inject("props") as IRegistration;
 const interests = ref<{ interests: IInterest, selected: boolean, disabled?: boolean }[]>([]);
-
 const user = UtilsAuth.getCurrentUser();
+
+const cards = ref<InstanceType<typeof InterestCard>[]>([]);
 
 // ############################################## FUNCTIONS ##############################################
 

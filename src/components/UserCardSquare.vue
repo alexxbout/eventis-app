@@ -2,7 +2,7 @@
     <div ref="container" class="h-max w-full max-w-xs rounded-[18px] bg-[#FAFAFA] p-[13px] flex flex-col gap-y-[10px] overflow-hidden">
         <!-- Picture + button -->
         <div class="flex items-center justify-between w-full gap-x-2">
-            <UserProfilPicture :pic="props.data.user.pic" :size="{ size: EUserProfilPictureStyle.MEDIUM }" />
+            <UserProfilPicture :data="{ pic: props.data.user.pic, style: 'MEDIUM'}" />
             <Button @@click="handleClick" :data="props.button" :delay="1200" />
         </div>
 
@@ -23,7 +23,7 @@
 </template>
   
 <script setup lang="ts">
-import { PropType, onMounted, ref } from "vue";
+import { PropType } from "vue";
 
 import type { IUser } from "../types/User";
 import type { IButton } from "../types/Button";
@@ -31,7 +31,6 @@ import type { IInterest } from "../types/Interest";
 
 import Button from "./Button.vue";
 import UserProfilPicture from "./UserProfilPicture.vue";
-import { EUserProfilPictureStyle } from "../types/UserProfilPicture";
 import Emoji from "./Emoji.vue";
 
 // ########################################### VARIABLES ###########################################

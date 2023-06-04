@@ -2,14 +2,11 @@
     <div class="flex flex-col justify-around w-full h-full">
         <!-- Retour -->
         <div class="flex items-center w-full">
-            <div @click.prevent="props.previous" class="flex gap-x-[10px] bg-[#F2F2F7] rounded-full py-2 px-5 w-max text-[#3C3C43]/60">
-                <i class="bi bi-chevron-left"></i>
-                <span>Retour</span>
-            </div>
+            <i @click.prevent="props.previous()" class="bi bi-arrow-left-short bg-[#F2F2F7] text-center flex items-center justify-center text-3xl text-[#3C3C43]/60 w-12 h-12 aspect-square rounded-full"></i>
         </div>
 
         <!-- Friends -->
-        <div class="flex flex-col h-3/5 gap-y-14">
+        <div class="flex flex-col h-4/6 gap-y-14">
             <span class="header">Restez connectés avec vos amis</span>
 
             <!-- UserCard -->

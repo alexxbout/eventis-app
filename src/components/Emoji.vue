@@ -4,23 +4,34 @@
 
 <script setup lang="ts">
 import { PropType, StyleValue } from "vue";
-import type { IEmoji } from "../types/Emoji";
 
 const props = defineProps({
     data: {
-        type: Object as PropType<IEmoji>,
+        type: Object as PropType<{
+            name: string;
+            size: "DEFAULT" | "INTEREST" | "PROFILE" | "EVENT" | "BIG";
+        }>,
         required: true
     }
 });
 
 const getStyle = (): StyleValue => {
     switch (props.data.size) {
-        case "BASE":
-            return { "width": "25px", "height": "25px" };
-        case "XS":
+        case "INTEREST":
             return { "width": "18px", "height": "20px" };
-        case "XL":
+
+        case "PROFILE":
+            return { "width": "26px", "height": "26px" };
+
+        case "EVENT":
             return { "width": "50px", "height": "50px" };
+
+        case "BIG":
+            return { "width": "250px", "height": "250px" };
+
+        case "DEFAULT":
+        default:
+            return { "width": "25px", "height": "25px" };
     }
 }
 

@@ -118,9 +118,6 @@ class UtilsApi {
         }).then((response) => {
             if (response.status === HTTPCodes.CREATED) {
                 data = response.data.data.login as string;
-
-                console.log(data);
-                
             }
         }).catch((error) => {
             console.log(error, "Error while registering user");
@@ -283,7 +280,7 @@ class UtilsApi {
     async getAllInterests(): Promise<IInterest[]> {
         let data: IInterest[] = [];
 
-        await axios.get(this.baseUrl + "v1/interest/", {
+        await axios.get(this.baseUrl + "v1/interest", {
             headers: {
                 "Authorization": "Bearer " + AuthService.getToken(),
                 "Content-Type": "application/json"

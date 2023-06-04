@@ -1,5 +1,18 @@
 <template>
-    <UserCardSquare @@click="handleClick" v-if="props.data.style == 'SQUARE'" :data="{ user: props.data.user, interests: userInterests}" :button="btnStyle" />
+    <div v-if="loading && props.data.style == 'SQUARE'" class="loading h-[137px] w-full max-w-xs rounded-[18px] bg-[#FAFAFA] p-[13px] flex flex-col gap-y-[10px]">
+        <div class="flex items-center justify-between w-full gap-x-2">
+            <div class="rounded-full w-[60px] h-[60px] bg-white flex items-center justify-center aspect-square"></div>
+        </div>
+
+        <div class="w-2/3 h-full bg-white rounded-full"></div>
+
+        <div class="flex items-center justify-center h-full w-full gap-x-2">
+            <div class="w-full h-full bg-white rounded-full"></div>
+            <div class="w-full h-full bg-white rounded-full"></div>
+        </div>
+    </div>
+
+    <UserCardSquare v-if="!loading && props.data.style == 'SQUARE'" @@click="handleClick" :data="{ user: props.data.user, interests: userInterests }" :button="btnStyle" />
 </template>
   
 <script setup lang="ts">
@@ -29,7 +42,7 @@ const props = defineProps({
 
 const user = UtilsAuth.getCurrentUser();
 const isPending = ref(false);
-// const loading = ref(true);
+const loading = ref(true);
 const userInterests = ref<IInterest[]>([]);
 const btnStyle = ref<IButton>({
     apparence: {
@@ -58,7 +71,7 @@ onMounted(async () => {
         await loadInterests();
     }
 
-    // loading.value = false;
+    loading.value = false;
 });
 
 const loadFriendRequest = async () => {

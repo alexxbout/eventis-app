@@ -1,6 +1,6 @@
 <template>
-    <div v-if="props.pic" class="bg-center bg-no-repeat bg-cover rounded-full aspect-square" :style="{
-            backgroundImage: 'url(' + UtilsApi.getImage('users', props.pic) + ')',
+    <div v-if="props.data.pic" class="bg-center bg-no-repeat bg-cover rounded-full aspect-square" :style="{
+            backgroundImage: 'url(' + UtilsApi.getImage('users', props.data.pic) + ')',
             width: getSize(),
             height: getSize()
         }"></div>
@@ -16,30 +16,27 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 
-import type { IUserProfilPicture } from "../types/UserProfilPicture";
-import { EUserProfilPictureStyle } from "../types/UserProfilPicture";
 import UtilsApi from "../utils/UtilsApi";
 
 const props = defineProps({
-    pic: {
-        type: String
-    },
-    size: {
-        type: Object as PropType<IUserProfilPicture>,
-        required: false,
-        default: EUserProfilPictureStyle.MEDIUM
+    data: {
+        type: Object as PropType<{
+            pic?: string,
+            style: "SMALL" | "MEDIUM" | "LARGE" | "BIG"
+        }>,
+        required: true
     }
 });
 
 const getSize = (): string => {
-    switch (props.size.size) {
-        case EUserProfilPictureStyle.SMALL: // UserCard inline
+    switch (props.data.style) {
+        case "SMALL": // UserCard inline
             return "45px";
-        case EUserProfilPictureStyle.MEDIUM: // UserCard default
+        case "MEDIUM": // UserCard default
             return "60px";
-        case EUserProfilPictureStyle.LARGE: // Profil / Settings
+        case "LARGE": // Profil / Settings
             return "90px";
-        case EUserProfilPictureStyle.BIG: // Add picture / Profil of another user
+        case "BIG": // Add picture / Profil of another user
             return "140px";
     }
 };

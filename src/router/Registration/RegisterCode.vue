@@ -2,10 +2,7 @@
     <form ref="formElement" @submit.prevent="handleSubmit" class="flex flex-col justify-around w-full h-full">
         <!-- Retour -->
         <div class="flex items-center justify-between w-full">
-            <div @click.prevent="router.push({ name: 'home' })" class="flex gap-x-[10px] bg-[#F2F2F7] rounded-full py-2 px-5 w-max text-[#3C3C43]/60">
-                <i class="bi bi-chevron-left"></i>
-                <span>Retour</span>
-            </div>
+            <i @click.prevent="router.push({ name: 'home' })" class="bi bi-arrow-left-short bg-[#F2F2F7] text-center flex items-center justify-center text-3xl text-[#3C3C43]/60 w-12 h-12 aspect-square rounded-full"></i>
 
             <object v-show="loading" class="w-10 h-10" :data="'/src/assets/spinner.svg'" type="image/svg+xml"></object>
         </div>
