@@ -440,8 +440,8 @@ class UtilsApi {
         return data;
     }
 
-    async getAllFriends(idUser: number): Promise<{ idUser1: number, idUser2: number, since: string }[]> {
-        let data: { idUser1: number, idUser2: number, since: string }[] = [];
+    async getAllFriends(idUser: number): Promise<IUser[]> {
+        let data: IUser[] = [];
 
         await axios.get(this.baseUrl + "v1/user/" + idUser + "/friend", {
             headers: {
@@ -450,7 +450,7 @@ class UtilsApi {
             }
         }).then((response) => {
             if (response.status === HTTPCodes.OK) {
-                data = response.data.data as { idUser1: number, idUser2: number, since: string }[];
+                data = response.data.data as IUser[];
             }
         }).catch((error) => {
             console.log(error, "Error while getting all friends");

@@ -10,4 +10,5 @@ export interface IUser {
     pic?       : string;
     lastLogin? : string;
     lastLogout?: string;
+    bio?       : string;
 }
