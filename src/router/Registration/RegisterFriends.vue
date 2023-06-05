@@ -35,9 +35,10 @@ import UtilsAuth from "../../utils/UtilsAuth";
 
 // ############################################## VARIABLES ##############################################
 
-const props = inject("props") as IRegistration;
-const users = ref<IUser[]>([]);
+const props   = inject("props") as IRegistration;
+const users   = ref<IUser[]>([]);
 const loading = ref(true);
+
 const nextBtnStyle = ref<IButton>({
     apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY' },
     text: 'Suivant',

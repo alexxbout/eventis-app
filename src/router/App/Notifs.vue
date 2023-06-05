@@ -29,11 +29,13 @@ import UserCard from "../../components/UserCard.vue";
 import type { INotification } from "../../types/Notification";
 import type { IUser } from "../../types/User";
 
+// ########################################### VARIABLES ###########################################
+
 const notifications = ref<INotification | null>(null);
+const user          = UtilsAuth.getCurrentUser();
+const requesters    = ref<IUser[]>([]);
 
-const user = UtilsAuth.getCurrentUser();
-
-const requesters = ref<IUser[]>([]);
+// ########################################### FUNCTIONS ###########################################
 
 onMounted(async () => {
     if (user) {

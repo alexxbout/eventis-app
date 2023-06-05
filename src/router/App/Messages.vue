@@ -7,10 +7,11 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
+
 import type { IConversationCard } from "../../types/ConversationCard";
 
 import ConversationCard from "../../components/ConversationCard.vue";
-import { ref } from "vue";
 
 const conversations = ref<IConversationCard[]>([
     {

@@ -31,8 +31,9 @@ import Button from "../../components/Button.vue";
 
 import UtilsAuth from "../../utils/UtilsAuth";
 import UtilsApi from "../../utils/UtilsApi";
-import { IButton, ICONS } from "../../types/Button";
-import { IRegistration } from "../../types/Register";
+
+import type { IButton, } from "../../types/Button";
+import type { IRegistration } from "../../types/Register";
 
 // ########################################### VARIABLES ###########################################
 
@@ -41,6 +42,7 @@ const fileInput    = ref<HTMLInputElement | null>(null);
 const success      = ref(false);
 const pic          = ref("");
 const user         = UtilsAuth.getCurrentUser();
+
 const nextBtnStyle = ref<IButton>({
     apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY' },
     text: 'Suivant',

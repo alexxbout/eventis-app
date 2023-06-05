@@ -865,6 +865,27 @@ class UtilsApi {
 
         return data;
     }
-}
 
+
+    // ############################################## SEARCH ##############################################
+
+    async search(value: string): Promise<IUser[] | null> {
+        let data = null;
+
+        await axios.get(this.baseUrl + "v1/search/" + value, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        }).then((response) => {
+            if (response.status == HTTPCodes.OK) {
+                data = response.data.data as IUser[];
+            }
+        }).catch((error) => {
+            console.error(error, "Error while searching");
+        });
+
+        return data;
+    }
+}
 export default new UtilsApi();

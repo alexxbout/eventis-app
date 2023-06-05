@@ -22,7 +22,6 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-
 import { useRouter } from "vue-router";
 
 import EventCard from "../../components/EventCard.vue";
@@ -37,8 +36,8 @@ import UtilsAuth from "../../utils/UtilsAuth";
 
 const customData = ref<{ zip: string, events: IEvent[] }[]>([]);
 const nearbyZips = ref<string[]>([]);
-const user = UtilsAuth.getCurrentUser();
-const router = useRouter();
+const user       = UtilsAuth.getCurrentUser();
+const router     = useRouter();
 
 // ########################################### FUNCTIONS ###########################################
 

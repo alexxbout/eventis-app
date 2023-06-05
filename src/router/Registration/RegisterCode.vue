@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, computed, inject, ref, } from "vue";
+import { computed, inject, ref, } from "vue";
 import { useRouter } from "vue-router";
 
 import type { IRegistration } from "../../types/Register";

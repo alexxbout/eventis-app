@@ -60,6 +60,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
 
 import Button from "../../components/Button.vue";
 import UserProfilPicture from "../../components/UserProfilPicture.vue";
@@ -67,24 +68,23 @@ import InterestCardProfil from "../../components/InterestCardProfil.vue";
 
 import type { IInterest } from "../../types/Interest";
 import type { IUser } from "../../types/User";
+import type { IButton } from "../../types/Button";
 
 import UtilsAuth from "../../utils/UtilsAuth";
 import UtilsApi from "../../utils/UtilsApi";
-import { useRoute } from "vue-router";
-import { IButton } from "../../types/Button";
+
+// ########################################### VARIABLES ###########################################
 
 const MAX_FRIENDS = 5;
 const MAX_INTERESTS = 3;
-const user = ref<IUser>(UtilsAuth.getCurrentUser()!);
-const route = useRoute();
 
-const friends = ref<IUser[]>([]);
-const interests = ref<IInterest[]>([]);
-
+const user          = ref<IUser>(UtilsAuth.getCurrentUser()!);
+const route         = useRoute();
+const friends       = ref<IUser[]>([]);
+const interests     = ref<IInterest[]>([]);
 const isCurrentUser = ref(false);
-
-const isFriend = ref(false);
-const isPending = ref(false);
+const isFriend      = ref(false);
+const isPending     = ref(false);
 
 const btnFriendStyle = computed<IButton>(() => {
     return {
@@ -97,6 +97,8 @@ const btnFriendStyle = computed<IButton>(() => {
         text: isFriend.value ? "Gérer amitié" : (isPending.value ? "Retirer demande" : "Demander en ami"),
     };
 });
+
+// ########################################### FUNCTIONS ###########################################
 
 onMounted(async () => {
     // Check if current id is the same as the user id

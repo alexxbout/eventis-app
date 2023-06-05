@@ -81,6 +81,28 @@ onMounted(async () => {
     }
 });
 
+const getSelectedCount = () => {
+    return interests.value.filter((interest) => interest.selected).length;
+};
+
+const enableOthers = () => {
+    // Enable all cards
+    interests.value.forEach((interest) => {
+        interest.disabled = false;
+    });
+};
+
+const disableNonSelected = () => {
+    // Disable all non selected cards
+    interests.value.forEach((interest) => {
+        if (!interest.selected) {
+            interest.disabled = true;
+        }
+    });
+};
+
+// ############################################## HANDLERS ##############################################
+
 const handleClick = async (id: number) => {
     // Find the interest with the id in the array
     const interest = interests.value.find((interest) => parseInt(interest.interests.id) == id);
@@ -115,26 +137,6 @@ const handleRemove = (id: number) => {
             enableOthers();
         }
     }
-};
-
-const getSelectedCount = () => {
-    return interests.value.filter((interest) => interest.selected).length;
-};
-
-const enableOthers = () => {
-    // Enable all cards
-    interests.value.forEach((interest) => {
-        interest.disabled = false;
-    });
-};
-
-const disableNonSelected = () => {
-    // Disable all non selected cards
-    interests.value.forEach((interest) => {
-        if (!interest.selected) {
-            interest.disabled = true;
-        }
-    });
 };
 
 </script>

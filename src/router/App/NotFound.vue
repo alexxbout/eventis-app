@@ -17,14 +17,15 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import { useRouter } from "vue-router";
+
 import Emoji from "../../components/Emoji.vue";
 import Button from "../../components/Button.vue";
-import { ref } from "vue";
+
+// ########################################### VARIABLES ###########################################
 
 const router = useRouter();
-
 const emojis = ["ufo", "island", "robot", "beach"];
-
-const emoji = ref(emojis[Math.floor(Math.random() * emojis.length)]);
+const emoji  = ref(emojis[Math.floor(Math.random() * emojis.length)]);
 </script>

@@ -25,11 +25,11 @@ import type { ITab } from "../types/Tab";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-// ########################################### Variables ###########################################  
-const navbar = ref<HTMLElement | null>(null);
-const isVisible = ref(true);
+// ########################################### VARIABLES ###########################################
 
-const router = useRouter();
+const navbar       = ref<HTMLElement | null>(null);
+const isVisible    = ref(true);
+const router       = useRouter();
 const currentRoute = useRoute();
 
 const tabs = ref<ITab[]>([
@@ -40,11 +40,22 @@ const tabs = ref<ITab[]>([
     { name: "Notifs", path: "/notifs", svg: "bi bi-bell-fill" }
 ]);
 
-// ########################################### Fonctions ###########################################
+// ########################################### FUNCTIONS ###########################################
+
 onMounted(async () => {
     await router.isReady();
 
-    const meta = currentRoute.meta;    
+    router.beforeEach((to, from) => {
+        const meta = to.meta;
+
+        if (meta.hideNavbar) {
+            hide();
+        } else {
+            show();
+        }
+    });
+
+    const meta = currentRoute.meta;
 
     if (meta.hideNavbar) {
         hide();
@@ -53,29 +64,20 @@ onMounted(async () => {
     }
 });
 
-function getStatusClass(to: string) {
+const getStatusClass = (to: string) => {
     return to == currentRoute.path ? "active" : "inactive";
 }
 
-function hide() {
+const hide = () => {
     isVisible.value = false;
 }
 
-function show() {
+const show = () => {
     isVisible.value = true;
 }
 
-router.beforeEach((to, from) => {
-    const meta = to.meta;
+// ########################################### EVENTS ###########################################
 
-    if (meta.hideNavbar) {
-        hide();
-    } else {
-        show();
-    }
-});
-
-// ########################################### Evenements ###########################################
 const emit = defineEmits(["@open-search"]);
 
 const openSearch = () => {

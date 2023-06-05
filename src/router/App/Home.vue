@@ -51,11 +51,15 @@ import UtilsAuth from "../../utils/UtilsAuth";
 
 import Button from "../../components/Button.vue";
 
-const router = useRouter();
-const loginField = ref("");
+// ########################################### VARIABLES ###########################################
+
+const router        = useRouter();
+const loginField    = ref("");
 const passwordField = ref("");
-const showModal = ref(false);
-const modal = ref<HTMLElement | null>(null);
+const showModal     = ref(false);
+const modal         = ref<HTMLElement | null>(null);
+
+// ########################################### FUNCTIONS ###########################################
 
 onMounted(() => {
     gsap.to(modal.value, { translateY: "150%" });
