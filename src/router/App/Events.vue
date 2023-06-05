@@ -43,8 +43,6 @@ const router = useRouter();
 // ########################################### FUNCTIONS ###########################################
 
 onMounted(async () => {
-    // Data
-
     // Get local zip
     let localZip: string = "";
 

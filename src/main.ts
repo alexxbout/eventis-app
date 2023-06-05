@@ -9,7 +9,7 @@ import Register from "./router/registration/Register.vue";
 import Events from "./router/app/Events.vue";
 import EventDetail from "./components/EventDetail.vue";
 import Messages from "./router/app/Messages.vue";
-import Profil from "./router/app/Profile.vue";
+import Profile from "./router/app/Profile.vue";
 import Notifs from "./router/app/Notifs.vue";
 import NotFound from "./router/app/NotFound.vue";
 
@@ -67,13 +67,21 @@ const routes: Array<RouteRecordRaw> = [
         }
     },
     {
-        path: "/profile",
+        path: "/profile/:id?",
         name: "profile",
-        component: Profil,
+        component: Profile,
         meta: {
             requiresAuth: true
         }
     },
+    // {
+    //     path: "/profile/:id",
+    //     name: "profile",
+    //     component: Profile,
+    //     meta: {
+    //         requiresAuth: true
+    //     }
+    // },
     {
         path: "/notifs",
         name: "notifs",

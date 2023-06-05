@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col items-center justify-between w-full h-screen max-h-screen overflow-hidden margins">
+    <div class="flex flex-col items-center justify-around w-full h-screen overflow-hidden margins">
 
         <div class="flex flex-col items-center justify-center gap-y-10 h-max">
             <!-- Emoji -->
