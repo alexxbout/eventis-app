@@ -28,6 +28,7 @@ import UtilsAuth from "../utils/UtilsAuth";
 
 import UserCardSquare from "./UserCardSquare.vue";
 import UserCardRectangle from "./UserCardRectangle.vue";
+import { useRouter } from "vue-router";
 
 // ########################################### VARIABLES ###########################################
 
@@ -42,6 +43,7 @@ const props = defineProps({
     }
 });
 
+const router        = useRouter();
 const user          = UtilsAuth.getCurrentUser();
 const isPending     = ref(false);
 const loading       = ref(true);
@@ -153,7 +155,7 @@ const handleClick = async () => {
             break;
 
         case "SHOW_PROFIL":
-            // Ajoutez ici le code pour afficher le profil de l'utilisateur
+            router.push({ name: "profile", params: { id: props.data.user.id } });
             break;
     }
 };

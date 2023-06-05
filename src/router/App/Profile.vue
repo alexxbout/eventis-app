@@ -26,7 +26,7 @@
             <div class="flex flex-col items-center justify-center text-3xl font-medium h-max w-max gap-y-5">
                 <span>{{ user?.firstname + ' ' + user?.lastname }}</span>
 
-                <Button :data="{ apparence: { color: 'BLUE', size: 'BASE', type: 'SECONDARY', rounded: 'FULL' }, text: 'TEMP' }" />
+                <Button :data="btnFriendStyle" />
             </div>
         </div>
 
@@ -59,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 import Button from "../../components/Button.vue";
 import UserProfilPicture from "../../components/UserProfilPicture.vue";
@@ -71,18 +71,32 @@ import type { IUser } from "../../types/User";
 import UtilsAuth from "../../utils/UtilsAuth";
 import UtilsApi from "../../utils/UtilsApi";
 import { useRoute } from "vue-router";
-import { useRouter } from "vue-router";
+import { IButton } from "../../types/Button";
 
 const MAX_FRIENDS = 5;
 const MAX_INTERESTS = 3;
 const user = ref<IUser>(UtilsAuth.getCurrentUser()!);
-const router = useRouter();
 const route = useRoute();
 
 const friends = ref<IUser[]>([]);
 const interests = ref<IInterest[]>([]);
 
 const isCurrentUser = ref(false);
+
+const isFriend = ref(false);
+const isPending = ref(false);
+
+const btnFriendStyle = computed<IButton>(() => {
+    return {
+        apparence: {
+            color: isFriend.value ? "GRAY" : "BLUE",
+            type: isFriend.value ? "SECONDARY" : (isPending.value ? "SECONDARY" : "PRIMARY"),
+            size: "BASE",
+            rounded: "FULL"
+        },
+        text: isFriend.value ? "Gérer amitié" : (isPending.value ? "Retirer demande" : "Demander en ami"),
+    };
+});
 
 onMounted(async () => {
     // Check if current id is the same as the user id
@@ -91,16 +105,17 @@ onMounted(async () => {
     if (user.value.id == param || !param) {
         isCurrentUser.value = true;
     } else {
-        isCurrentUser.value = false;
-
         // Get user
         const dataUser = await UtilsApi.getUserById(param);
 
         if (dataUser) {
             user.value = dataUser;
+
+            isCurrentUser.value = false;
         } else {
-            router.push({ name: "profile" });
-            return;
+            user.value = UtilsAuth.getCurrentUser()!;
+            
+            isCurrentUser.value = true;
         }
     }
 
@@ -120,6 +135,15 @@ onMounted(async () => {
         interests.value = dataInterests;
 
         interests.value = interests.value.slice(0, MAX_INTERESTS);
+    }
+
+    // Set button style when user is not current user
+    if (!isCurrentUser.value) {
+
+        const idUser1 = UtilsAuth.getCurrentUser()!.id;
+        const idUser2 = user.value.id;
+
+        isFriend.value = await UtilsApi.isFriend(idUser1, idUser2);
     }
 });
 </script>
