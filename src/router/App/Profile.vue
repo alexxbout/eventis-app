@@ -10,7 +10,7 @@
         </div>
 
         <!-- Picture + fullname + settings -->
-        <div class="flex items-center gap-x-5 w-full bg-[#FAFAFA] rounded-[30px] p-5">
+        <div v-show="!isLoading" class="flex items-center gap-x-5 w-full bg-[#FAFAFA] rounded-[30px] p-5">
             <UserProfilPicture :data="{ pic: user?.pic, style: 'LARGE' }" />
 
             <div class="flex flex-col text-2xl font-medium gap-y-5">
@@ -21,14 +21,24 @@
             </div>
         </div>
 
+        <div v-show="isLoading" class="flex items-center gap-x-5 w-full h-full rounded-[30px] p-5 loading">
+            <div class="w-[90px] h-[90px] aspect-square rounded-full bg-white"></div>
+        </div>
+
         <!-- Bio -->
-        <div class="flex flex-col gap-y-3 bg-[#FAFAFA] rounded-[30px] p-5">
+        <div v-show="!isLoading" class="flex flex-col gap-y-3 bg-[#FAFAFA] rounded-[30px] p-5">
             <span class="text-xl font-medium">Bio</span>
             <span class="text-base text-gray-400">{{ user?.bio }}</span>
         </div>
 
+        <div v-show="isLoading" class="flex flex-col gap-y-3 rounded-[30px] p-5 loading">
+            <div class="h-5 w-4/5 bg-white rounded-lg"></div>
+            <div class="h-5 w-2/3 bg-white rounded-lg"></div>
+            <div class="h-5 w-1/3 bg-white rounded-lg"></div>
+        </div>
+
         <!-- Friends -->
-        <div v-if="isCurrentUser" class="flex flex-col gap-y-3 bg-[#FAFAFA] rounded-[30px] p-5">
+        <div v-if="isCurrentUser" v-show="!isLoading" class="flex flex-col gap-y-3 bg-[#FAFAFA] rounded-[30px] p-5">
             <span class="text-xl font-medium">Amis</span>
             <div class="flex items-center justify-between w-full">
                 <div class="flex items-center justify-center w-max">
@@ -39,12 +49,25 @@
             </div>
         </div>
 
+        <div v-if="isCurrentUser" v-show="isLoading" class="flex gap-y-3 gap-x-1 rounded-[30px] p-5 loading">
+            <div class="rounded-full bg-white h-[45px] w-[45px] aspect-square"></div>
+            <div class="rounded-full bg-white h-[45px] w-[45px] aspect-square"></div>
+            <div class="rounded-full bg-white h-[45px] w-[45px] aspect-square"></div>
+            <div class="rounded-full bg-white h-[45px] w-[45px] aspect-square"></div>
+        </div>
+
         <!-- Interests -->
-        <div class="flex flex-col gap-y-3 bg-[#FAFAFA] rounded-[30px] p-5">
+        <div v-show="!isLoading" class="flex flex-col gap-y-3 bg-[#FAFAFA] rounded-[30px] p-5">
             <span class="text-xl font-medium">Centres d’intérêts</span>
             <div style="grid-auto-columns: 1fr;" class="grid w-full grid-flow-col gap-x-3">
                 <InterestCardProfil v-for="interest in interests" :data="interest" />
             </div>
+        </div>
+
+        <div v-show="isLoading" class="flex gap-x-3 rounded-[30px] p-5 loading">
+            <div class="rounded-xl bg-white h-[80px] w-1/3 aspect-square"></div>
+            <div class="rounded-xl bg-white h-[80px] w-1/3 aspect-square"></div>
+            <div class="rounded-xl bg-white h-[80px] w-1/3 aspect-square"></div>
         </div>
     </div>
 </template>
@@ -79,6 +102,7 @@ const interests     = ref<IInterest[]>([]);
 const isCurrentUser = ref(false);
 const isFriend      = ref(false);
 const isPending     = ref(false);
+const isLoading     = ref(true);
 
 const btnProfileStyle = ref<IButton>({ apparence: { color: "BLUE", size: "XS", type: "SECONDARY", rounded: "FULL" }, text: "Paramètres du compte" });
 
@@ -100,12 +124,20 @@ onMounted(async () => {
     await router.isReady();
 
     router.beforeEach(async (to, from, next) => {
-        await updateComponent(getUserId(to));
-
         next();
+        
+        if (to.name === from.name) {
+            isLoading.value = true;
+
+            await updateComponent(getUserId(to));
+
+            isLoading.value = false;
+        }
     });
 
     await updateComponent(getUserId(route));
+
+    isLoading.value = false;
 });
 
 const getUserId = (route: RouteLocationNormalizedLoaded) => {
