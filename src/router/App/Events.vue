@@ -42,14 +42,11 @@ const router     = useRouter();
 // ########################################### FUNCTIONS ###########################################
 
 onMounted(async () => {
-    // Get local zip
-    let localZip: string = "";
-
     if (user!.idFoyer) {
         const foyerRequest = await UtilsApi.getFoyerById(user!.idFoyer);        
 
         if (foyerRequest) {
-            localZip = foyerRequest.zip.substring(0, 2);
+            const localZip = foyerRequest.zip.substring(0, 2);
 
             // Get events of local zip
             const eventsRequest = await UtilsApi.getEventsByZip(parseInt(localZip));

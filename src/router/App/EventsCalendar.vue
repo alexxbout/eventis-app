@@ -8,11 +8,10 @@
             </div>
         </div>
 
-        <div class="rounded-[30px] w-full h-max bg-[#FAFAFA] p-5">
+        <div class="rounded-[30px] w-full h-max bg-[#FAFAFA] p-5 shadow-card">
             <div class="flex gap-x-10 overflow-auto snap-x snap-mandatory">
                 <div v-if="calendar" v-for="data in calendar.data" class="min-w-full snap-center flex flex-col gap-y-10">
                     <div>
-                        <!-- Date like Juin, 2023 -->
                         <span class="text-[27px]">{{ getFrenchDate(data.month, data.year) }}</span>
                     </div>
 
@@ -20,7 +19,7 @@
                         <div v-for="day in days" class="text-center pb-5 font-light text-[#A0A0A0]">{{ day }}</div>
 
                         <span v-for="day in data.previous" class="text-gray-400">{{ day }}</span>
-                        <span v-for="day in data.current" @click="handleSelect(day, data.month, data.year)" :class="calendar.selected.month == data.month && calendar.selected.day == day && calendar.selected.year == data.year ? 'bg-primary text-white' : ''">{{ day }}</span>
+                        <span v-for="day in data.current" @click="handleSelect(day, data.month, data.year)" :style="getStyles(data, day)">{{ day }}</span>
                         <span v-for="day in data.next" class="text-gray-400">{{ day }}</span>
                     </div>
                 </div>
@@ -30,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { CSSProperties, StyleValue, onMounted, ref } from "vue";
 import UtilsApi from "../../utils/UtilsApi";
 import UtilsAuth from "../../utils/UtilsAuth";
 import UtilsZip from "../../utils/UtilsZip";
@@ -38,6 +37,10 @@ import { IEvent } from "../../types/Event";
 
 // ########################################### VARIABLES ###########################################
 
+/**
+ * Interface that represents the calendar.
+ * It contains the data of the calendar, the selected date and the current date.
+ */
 interface ICalendar {
     data: IDataCalendar[],
     selected: {
@@ -46,9 +49,18 @@ interface ICalendar {
         year: number;
     },
 
-    current: number;
+    current: {
+        day: number;
+        month: number;
+        year: number;
+    }
 };
 
+/**
+ * Interface that represents one month of the calendar.
+ * It contains the days of the previous month, the current month and the next month.
+ * It also contains the month and the year.
+ */
 interface IDataCalendar {
     previous: number[];
     current: number[];
@@ -58,11 +70,11 @@ interface IDataCalendar {
     year: number;
 };
 
-const nearbyZips = ref<string[]>([]);
+const user = UtilsAuth.getCurrentUser();
 
 const days = ref(["LUN", "MAR", "MER", "JEU", "VEN", "SAM", "DIM"]);
 
-const user = UtilsAuth.getCurrentUser();
+const nearbyZips = ref<string[]>([]);
 
 const calendar = ref<ICalendar>({
     data: [],
@@ -71,8 +83,31 @@ const calendar = ref<ICalendar>({
         month: new Date().getMonth() + 1,
         year: new Date().getFullYear()
     },
-    current: new Date().getDate()
+    current: {
+        day: new Date().getDate(),
+        month: new Date().getMonth() + 1,
+        year: new Date().getFullYear()
+    }
 });
+
+const isSelected = (data: IDataCalendar, day: number): boolean => {
+    return data.month === calendar.value.selected.month && data.year === calendar.value.selected.year && day === calendar.value.selected.day;
+};
+
+const isCurrentDay = (data: IDataCalendar, day: number): boolean => {
+    return data.month === calendar.value.current.month && data.year === calendar.value.current.year && day === calendar.value.current.day;
+};
+
+const getStyles = (data: IDataCalendar, day: number) => {
+    const styles: CSSProperties = {};
+
+    if (isSelected(data, day)) {
+        styles.backgroundColor = "#166CF7";
+        styles.color = "white";
+    }
+
+    return styles;
+};
 
 // ########################################### FUNCTIONS ###########################################
 
@@ -142,17 +177,15 @@ const getEvents = async (day: number, month: number, year: number): Promise<IEve
 
     const time = date.getTime();
 
-    let localZip: string = "";
-
     if (user!.idFoyer) {
         const foyerRequest = await UtilsApi.getFoyerById(user!.idFoyer);
 
         if (foyerRequest) {
-            localZip = foyerRequest.zip.substring(0, 2);
+            const localZip = foyerRequest.zip.substring(0, 2);
 
             // Get events of local zip
             const eventsRequest = await UtilsApi.getEventsByDateAndZip(time, parseInt(localZip));
-            
+
             if (eventsRequest) {
                 events.push(...eventsRequest);
             }
