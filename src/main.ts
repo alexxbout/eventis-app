@@ -7,6 +7,7 @@ import { routesGuard } from "./services/RouteGuard";
 import Home from "./router/app/Home.vue";
 import Register from "./router/registration/Register.vue";
 import Events from "./router/app/Events.vue";
+import EventsCalendar from "./router/app/EventsCalendar.vue";
 import EventDetail from "./components/EventDetail.vue";
 import Messages from "./router/app/Messages.vue";
 import Profile from "./router/app/Profile.vue";
@@ -47,7 +48,15 @@ const routes: Array<RouteRecordRaw> = [
             requiresAuth: true,
             hideNavbar: false
         }
-
+    },
+    {
+        path: "/eventsCalendar",
+        name: "eventsCalendar",
+        component: EventsCalendar,
+        meta: {
+            requiresAuth: true,
+            hideNavbar: false
+        }
     },
     {
         path: "/events/:id",
