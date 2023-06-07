@@ -644,6 +644,30 @@ class UtilsApi {
         return data;
     }
 
+
+    /**
+     * @param date Pass date from GMT time to get the events
+     * @param zip 
+     */
+    async getEventsByDateAndZip(date: number, zip: number): Promise<IEvent[] | null> {
+        let data: IEvent[] | null = null;
+        
+        await axios.get(this.baseUrl + "v1/event/cal/" + date + "/" + zip, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        }).then((response) => {
+            if (response.status == HTTPCodes.OK) {
+                data = response.data.data as IEvent[];
+            }
+        }).catch((error) => {
+            console.error(error, "Error while getting events by zip and date");
+        });
+
+        return data;
+    }
+
     async getEventById(idEvent: number): Promise<IEvent | null> {
         let data = null;
 
