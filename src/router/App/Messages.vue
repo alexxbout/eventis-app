@@ -1,6 +1,12 @@
 <template>
     <div class="flex flex-col mb-20 gap-y-8 margins">
-        <span class="header">Messages</span>
+        <!-- Header -->
+        <div class="flex items-center w-full">
+            <div class="flex gap-x-[15px] items-center justify-between w-max">
+                <i class="text-3xl bi bi-chat"></i>
+                <span class="header">Messages</span>
+            </div>
+        </div>
 
         <ConversationCard v-for="conv in conversations" :data="conv" />
     </div>

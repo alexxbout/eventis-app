@@ -18,11 +18,11 @@
     }
 
     .header {
-        @apply text-3xl font-semibold text-black;
+        @apply text-3xl font-semibold text-secondary;
     }
 
     .header-xs {
-        @apply text-2xl font-semibold text-black;
+        @apply text-2xl font-semibold text-secondary;
     }
 
     .margins {

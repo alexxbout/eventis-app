@@ -65,6 +65,10 @@ const locked = ref(false);
 // ############################################## FUNCTIONS ##############################################
 
 const getSize = (size: "BASE" | "XS"): StyleValue => {
+    if (props.data.apparence.custom) {
+        return { "height": props.data.apparence.custom.height, "padding": props.data.apparence.custom.padding };
+    }
+    
     return size == "XS" ? { "height": "33px", "padding": "0px 15px" } : { "height": "50px", "padding": "0px 18px" };
 };
 

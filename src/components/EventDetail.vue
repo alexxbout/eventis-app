@@ -1,7 +1,7 @@
 <template>
     <div ref="container" class="w-screen min-h-screen">
 
-        <i @click="handleClose" class="fixed text-3xl text-black top-5 right-5 bi bi-x-circle-fill"></i>
+        <i @click="handleClose" class="fixed text-3xl top-5 right-5 bi bi-x-circle-fill"></i>
 
 
         <div v-if="!passed" class="fixed bottom-0 flex w-full h-20 p-4 bg-white border-t gap-x-3 ">
@@ -23,9 +23,9 @@
                 <Emoji v-if="event?.emoji" :data="{ name: event.emoji, size: 'EVENT' }" />
 
                 <div class="gap-y-[5px] flex flex-col justify-center">
-                    <span class="text-[20px] font-semibold text-black">{{ event?.title }}</span>
+                    <span class="text-[20px] font-semibold">{{ event?.title }}</span>
 
-                    <span class="text-black text-[14px] font-light">
+                    <span class="text-[14px] font-light">
                         {{ event?.start != null && event?.city != null ? "Le " + formatDate(event.start) + " à " + event.city : "" }}
                     </span>
                 </div>

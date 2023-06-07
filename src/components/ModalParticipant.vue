@@ -6,7 +6,7 @@
             <div class="flex items-center justify-between w-full h-max">
                 <span class="header-xs">Participants</span>
 
-                <i @click="hide" class="text-3xl text-black bi bi-x-circle-fill"></i>
+                <i @click="hide" class="text-3xl bi bi-x-circle-fill"></i>
             </div>
 
             <!-- Users -->

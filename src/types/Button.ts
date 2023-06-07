@@ -6,6 +6,10 @@ export interface IButton {
         color        : "BLUE" | "GREEN" | "RED" | "WHITE" | "GRAY";
         size         : "BASE" | "XS";
         rounded?     : "BASE" | "FULL";
+        custom?: {
+            height: string;
+            padding: string;
+        }
     };
     icon?: {
         side: "LEFT" | "RIGHT";

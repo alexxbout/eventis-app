@@ -35,8 +35,8 @@
             </div>
 
             <div class="flex items-center w-full gap-5">
-                <Button class="w-full" @click="openRegistration" :data="{ apparence: { color: 'BLUE', size: 'BASE', type: 'SECONDARY', rounded: 'BASE' }, text: 'Rejoindre' }" />
-                <Button class="w-full" @click="openLogin" :data="{ apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY', rounded: 'BASE' }, text: 'Se connecter' }" />
+                <Button class="w-full" @click="openRegistration" :data="{ apparence: { color: 'BLUE', size: 'BASE', type: 'SECONDARY', rounded: 'FULL', custom: { height: '100%', padding: '18px 0px' } }, text: 'Rejoindre' }" />
+                <Button class="w-full shadow-[0px_0px_100px_5px_rgba(22,108,247,0.3)]" @click="openLogin" :data="{ apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY', rounded: 'FULL', custom: { height: '100%', padding: '18px 0px' } }, text: 'Se connecter' }" />
             </div>
         </div>
     </div>

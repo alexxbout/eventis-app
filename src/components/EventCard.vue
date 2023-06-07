@@ -14,7 +14,7 @@
                 <Emoji v-if="props.data.emoji" :data="{ name: props.data.emoji, size: 'EVENT' }" />
 
                 <div class="gap-y-[5px] flex flex-col justify-center">
-                    <span class="text-[24px] font-semibold text-black">{{ data.title }}</span>
+                    <span class="text-[24px] font-semibold">{{ data.title }}</span>
 
                     <span class="text-custom-gray text-[14px] font-light">{{ data.city }}</span>
                 </div>

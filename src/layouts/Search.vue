@@ -7,7 +7,7 @@
             <div class="flex flex-col h-full p-8 overflow-y-auto gap-y-5">
                 <!-- Header -->
                 <div>
-                    <span class="text-3xl font-semibold text-black">Recherche</span>
+                    <span class="text-3xl font-semibold">Recherche</span>
                 </div>
 
                 <!-- Input -->
@@ -20,7 +20,7 @@
 
                 <!-- Results -->
                 <div class="flex flex-col w-full gap-3 overflow-hidden overflow-y-auto h-max">
-                    <UserCard v-for="user in users" :data="{ user: user, style: 'RECTANGLE', action: 'SHOW_PROFIL' }" />
+                    <UserCard v-for="user in users" @@click="handleClick" :data="{ user: user, style: 'RECTANGLE', action: 'SHOW_PROFIL' }" />
                 </div>
             </div>
         </div>
@@ -100,6 +100,10 @@ const handleSearch = async () => {
     } else {
         users.value = [];
     }
+};
+
+const handleClick = () => {
+    close();
 };
 
 defineExpose({ open });

@@ -1,5 +1,5 @@
 <template>
-    <div class="relative flex flex-col mb-20 gap-y-16 margins">
+    <div class="relative flex flex-col mb-20 gap-y-6 margins">
 
         <!-- Header -->
         <div class="flex items-center w-full">
@@ -10,34 +10,25 @@
         </div>
 
         <!-- Picture + fullname + settings -->
-        <div v-if="isCurrentUser" class="flex items-center justify-center gap-x-5 w-max">
+        <div class="flex items-center gap-x-5 w-full bg-[#FAFAFA] rounded-[30px] p-5">
             <UserProfilPicture :data="{ pic: user?.pic, style: 'LARGE' }" />
 
-            <div class="flex flex-col text-3xl font-medium gap-y-5">
+            <div class="flex flex-col text-2xl font-medium gap-y-5">
                 <span>{{ user?.firstname + ' ' + user?.lastname }}</span>
 
-                <Button :data="{ apparence: { color: 'BLUE', size: 'XS', type: 'SECONDARY', rounded: 'FULL' }, text: 'Paramètres du compte' }" />
-            </div>
-        </div>
-
-        <div v-else class="flex flex-col items-center justify-center w-full gap-y-5">
-            <UserProfilPicture :data="{ pic: user?.pic, style: 'BIG' }" />
-
-            <div class="flex flex-col items-center justify-center text-3xl font-medium h-max w-max gap-y-5">
-                <span>{{ user?.firstname + ' ' + user?.lastname }}</span>
-
-                <Button :data="btnFriendStyle" />
+                <Button v-if="isCurrentUser" :data="btnProfileStyle" />
+                <Button v-else class="w-max" :data="btnFriendStyle" />
             </div>
         </div>
 
         <!-- Bio -->
-        <div class="flex flex-col gap-y-3">
+        <div class="flex flex-col gap-y-3 bg-[#FAFAFA] rounded-[30px] p-5">
             <span class="text-xl font-medium">Bio</span>
             <span class="text-base text-gray-400">{{ user?.bio }}</span>
         </div>
 
         <!-- Friends -->
-        <div v-if="isCurrentUser" class="flex flex-col gap-y-3">
+        <div v-if="isCurrentUser" class="flex flex-col gap-y-3 bg-[#FAFAFA] rounded-[30px] p-5">
             <span class="text-xl font-medium">Amis</span>
             <div class="flex items-center justify-between w-full">
                 <div class="flex items-center justify-center w-max">
@@ -49,7 +40,7 @@
         </div>
 
         <!-- Interests -->
-        <div class="flex flex-col gap-y-3">
+        <div class="flex flex-col gap-y-3 bg-[#FAFAFA] rounded-[30px] p-5">
             <span class="text-xl font-medium">Centres d’intérêts</span>
             <div style="grid-auto-columns: 1fr;" class="grid w-full grid-flow-col gap-x-3">
                 <InterestCardProfil v-for="interest in interests" :data="interest" />
@@ -72,6 +63,8 @@ import type { IButton } from "../../types/Button";
 
 import UtilsAuth from "../../utils/UtilsAuth";
 import UtilsApi from "../../utils/UtilsApi";
+import { useRouter } from "vue-router";
+import { RouteLocationNormalizedLoaded } from "vue-router";
 
 // ########################################### VARIABLES ###########################################
 
@@ -80,18 +73,21 @@ const MAX_INTERESTS = 3;
 
 const user          = ref<IUser>(UtilsAuth.getCurrentUser()!);
 const route         = useRoute();
+const router        = useRouter();
 const friends       = ref<IUser[]>([]);
 const interests     = ref<IInterest[]>([]);
 const isCurrentUser = ref(false);
 const isFriend      = ref(false);
 const isPending     = ref(false);
 
+const btnProfileStyle = ref<IButton>({ apparence: { color: "BLUE", size: "XS", type: "SECONDARY", rounded: "FULL" }, text: "Paramètres du compte" });
+
 const btnFriendStyle = computed<IButton>(() => {
     return {
         apparence: {
             color: isFriend.value ? "GRAY" : "BLUE",
             type: isFriend.value ? "SECONDARY" : (isPending.value ? "SECONDARY" : "PRIMARY"),
-            size: "BASE",
+            size: "XS",
             rounded: "FULL"
         },
         text: isFriend.value ? "Gérer amitié" : (isPending.value ? "Retirer demande" : "Demander en ami"),
@@ -101,27 +97,54 @@ const btnFriendStyle = computed<IButton>(() => {
 // ########################################### FUNCTIONS ###########################################
 
 onMounted(async () => {
-    // Check if current id is the same as the user id
-    const param = parseInt(route.params.id as string);
+    await router.isReady();
 
-    if (user.value.id == param || !param) {
+    router.beforeEach(async (to, from, next) => {
+        await updateComponent(getUserId(to));
+
+        next();
+    });
+
+    await updateComponent(getUserId(route));
+});
+
+const getUserId = (route: RouteLocationNormalizedLoaded) => {
+    const param = parseInt(route.params.id as string);
+    const idUser = param ? param : user.value.id;
+
+    return idUser;
+};
+
+const updateComponent = async (idUser: number) => {
+    // Load current user by default
+    user.value = UtilsAuth.getCurrentUser()!;
+
+    await updateUser(idUser);
+    await updateFriends();
+    await updateInterests();
+    
+    await updateBtnStyles();
+};
+
+const updateUser = async (idUser: number) => {
+    if (user.value.id == idUser) {
         isCurrentUser.value = true;
     } else {
-        // Get user
-        const dataUser = await UtilsApi.getUserById(param);
+        const dataUser = await UtilsApi.getUserById(idUser);
 
         if (dataUser) {
-            user.value = dataUser;
-
             isCurrentUser.value = false;
+
+            user.value = dataUser;
         } else {
-            user.value = UtilsAuth.getCurrentUser()!;
-            
             isCurrentUser.value = true;
+
+            user.value = UtilsAuth.getCurrentUser()!;
         }
     }
+};
 
-    // Get all friends
+const updateFriends = async () => {
     if (isCurrentUser.value) {
         const dataFriends = await UtilsApi.getAllFriends(user.value.id);
 
@@ -129,8 +152,9 @@ onMounted(async () => {
             friends.value = dataFriends.slice(0, MAX_FRIENDS);
         }
     }
+}
 
-    // Get all interests
+const updateInterests = async () => {
     const dataInterests = await UtilsApi.getUserInterests(user.value.id);
 
     if (dataInterests) {
@@ -138,16 +162,19 @@ onMounted(async () => {
 
         interests.value = interests.value.slice(0, MAX_INTERESTS);
     }
+}
 
-    // Set button style when user is not current user
+const updateBtnStyles = async () => {
     if (!isCurrentUser.value) {
 
         const idUser1 = UtilsAuth.getCurrentUser()!.id;
         const idUser2 = user.value.id;
 
-        isFriend.value = await UtilsApi.isFriend(idUser1, idUser2);
+        if (idUser1 != idUser2) {
+            isFriend.value = await UtilsApi.isFriend(idUser1, idUser2);
+        } else {
+            console.error("Unable to check if user is friend with himself");
+        }
     }
-});
+}
 </script>
-
-

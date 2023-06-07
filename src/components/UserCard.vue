@@ -116,9 +116,16 @@ const loadUserProfil = () => {
     };
 };
 
+// ########################################### EVENTS ###########################################
+
+const emit = defineEmits(["@click"]);
+
 // ########################################### HANDLERS ###########################################
 
 const handleClick = async () => {
+    // Emit event
+    emit("@click");
+
     switch (props.data.action) {
         case "FRIEND_REQUEST":
             if (isPending.value) { // Il existe déjà une demande d'ami
