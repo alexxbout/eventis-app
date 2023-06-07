@@ -1,5 +1,5 @@
 <template>
-    <div class="relative flex flex-col mb-20 gap-y-10 margins">
+    <div class="relative flex flex-col mb-20 gap-y-5 margins">
 
         <div class="flex items-center w-full gap-y-2">
             <div class="flex gap-x-[15px] items-center justify-center w-max">
@@ -8,22 +8,26 @@
             </div>
         </div>
 
-        <div class="rounded-[30px] w-full h-max bg-[#FAFAFA] p-5 shadow-card">
+        <div class="rounded-[30px] w-full h-max bg-[#FAFAFA] p-5">
             <div class="flex gap-x-10 overflow-auto snap-x snap-mandatory">
                 <div v-if="calendar" v-for="data in calendar.data" class="min-w-full snap-center flex flex-col gap-y-10">
                     <div>
                         <span class="text-[27px]">{{ getFrenchDate(data.month, data.year) }}</span>
                     </div>
 
-                    <div class="grid grid-cols-7 gap-1 place-items-center [&>span]:aspect-square [&>span]:p-2 [&>span]:flex [&>span]:items-center [&>span]:justify-center [&>span]:text-center [&>span]:w-full [&>span]:rounded-xl [&>span]:text-lg">
-                        <div v-for="day in days" class="text-center pb-5 font-light text-[#A0A0A0]">{{ day }}</div>
+                    <div class="grid grid-cols-7 gap-1 place-items-center [&>span]:aspect-square [&>span]:flex [&>span]:items-center [&>span]:justify-center [&>span]:text-center [&>span]:w-full [&>span]:rounded-xl [&>span]:text-lg">
+                        <div v-for="customDay in days" class="text-center pb-5 font-light text-[#A0A0A0]">{{ customDay }}</div>
 
-                        <span v-for="day in data.previous" class="text-gray-400">{{ day }}</span>
-                        <span v-for="day in data.current" @click="handleSelect(day, data.month, data.year)" :style="getStyles(data, day)">{{ day }}</span>
-                        <span v-for="day in data.next" class="text-gray-400">{{ day }}</span>
+                        <span v-for="customDay in data.previous" class="text-gray-400">{{ customDay.day }}</span>
+                        <span v-for="customDay in data.current" @click="handleSelect(customDay.day, data.month, data.year, customDay.hasEvents)" :style="getStyles(data, customDay)">{{ customDay.day }}</span>
+                        <span v-for="customDay in data.next" class="text-gray-400">{{ customDay.day }}</span>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="rounded-[30px] w-full h-max bg-[#FAFAFA] p-3 flex flex-col gap-y-5">
+            <EventCard v-for="event in events" :data="event" :hide-image="true" />
         </div>
     </div>
 </template>
@@ -33,16 +37,26 @@ import { CSSProperties, StyleValue, onMounted, ref } from "vue";
 import UtilsApi from "../../utils/UtilsApi";
 import UtilsAuth from "../../utils/UtilsAuth";
 import UtilsZip from "../../utils/UtilsZip";
-import { IEvent } from "../../types/Event";
+
+import type { IEvent } from "../../types/Event";
+import EventCard from "../../components/EventCard.vue";
 
 // ########################################### VARIABLES ###########################################
+
+/**
+ * Interface that represents a day of the calendar.
+ */
+interface ICustomDay {
+    day: number;
+    hasEvents: boolean;
+}
 
 /**
  * Interface that represents the calendar.
  * It contains the data of the calendar, the selected date and the current date.
  */
 interface ICalendar {
-    data: IDataCalendar[],
+    data: ICustomMonth[],
     selected: {
         day: number;
         month: number;
@@ -61,10 +75,10 @@ interface ICalendar {
  * It contains the days of the previous month, the current month and the next month.
  * It also contains the month and the year.
  */
-interface IDataCalendar {
-    previous: number[];
-    current: number[];
-    next: number[];
+interface ICustomMonth {
+    previous: ICustomDay[];
+    current: ICustomDay[];
+    next: ICustomDay[];
 
     month: number;
     year: number;
@@ -90,36 +104,48 @@ const calendar = ref<ICalendar>({
     }
 });
 
-const isSelected = (data: IDataCalendar, day: number): boolean => {
+const isSelected = (data: ICustomMonth, day: number): boolean => {
     return data.month === calendar.value.selected.month && data.year === calendar.value.selected.year && day === calendar.value.selected.day;
 };
 
-const isCurrentDay = (data: IDataCalendar, day: number): boolean => {
-    return data.month === calendar.value.current.month && data.year === calendar.value.current.year && day === calendar.value.current.day;
-};
+// const isCurrentDay = (data: ICustomMonth, day: number): boolean => {
+//     return data.month === calendar.value.current.month && data.year === calendar.value.current.year && day === calendar.value.current.day;
+// };
 
-const getStyles = (data: IDataCalendar, day: number) => {
+const getStyles = (data: ICustomMonth, customDay: ICustomDay) => {
     const styles: CSSProperties = {};
 
-    if (isSelected(data, day)) {
+    if (customDay.hasEvents) {
+        styles.color = "#166CF7";
+        styles.fontWeight = "bold";
+    }
+
+    if (isSelected(data, customDay.day)) {
         styles.backgroundColor = "#166CF7";
         styles.color = "white";
+        styles.fontWeight = "normal";
     }
 
     return styles;
 };
 
+const events = ref<IEvent[]>([]);
+
+const nbLoadedMonths = 5;
+
+const eventsOnDates = ref<{ year: Number, month: Number, date: Number }[]>([]);
+
 // ########################################### FUNCTIONS ###########################################
 
-onMounted(() => {
-    loadNextMonths(3);
+onMounted(async () => {
+    await loadEventsDates();
+
+    await selectDate(calendar.value.selected.day, calendar.value.selected.month, calendar.value.selected.year, true);
+
+    buildNextMonths(nbLoadedMonths);
 });
 
-const getFrenchDate = (month: number, year: number) => {
-    return new Date(year, month - 1, 1).toLocaleString("fr-FR", { month: "long" }).charAt(0).toUpperCase() + new Date(year, month - 1, 1).toLocaleString("fr-FR", { month: "long" }).slice(1) + ", " + year;
-};
-
-const loadNextMonths = (nb: number) => {
+const buildNextMonths = (nb: number) => {
     let currentYear = new Date().getFullYear();
     let currentMonth = new Date().getMonth() + 1;
 
@@ -136,8 +162,14 @@ const loadNextMonths = (nb: number) => {
     }
 };
 
-const generateCalendar = (year: number, month: number): IDataCalendar => {
-    const calendar: IDataCalendar = {
+/**
+ * Genreate the days of given month and year.
+ * @param year 
+ * @param month
+ * @returns the days of the month and the year given.
+ */
+const generateCalendar = (year: number, month: number): ICustomMonth => {
+    const calendar: ICustomMonth = {
         previous: [],
         current: [],
         next: [],
@@ -152,22 +184,31 @@ const generateCalendar = (year: number, month: number): IDataCalendar => {
 
     // Add the days from the previous month
     for (let i = previousMonthDays - startDay + 1; i <= previousMonthDays; i++) {
-        calendar.previous.push(i);
+        calendar.previous.push({
+            day: i,
+            hasEvents: false
+        });
     }
 
     // Add the days from the current month
     for (let i = 1; i <= currentMonthDays; i++) {
-        calendar.current.push(i);
+        calendar.current.push({
+            day: i,
+            hasEvents: eventsOnDates.value.some((date) => date.year === year && date.month === month && date.date === i)
+        });
     }
 
     // Add the remaining days to complete the grid up to 42 days
     const remainingDays = 42 - (calendar.previous.length + calendar.current.length);
     for (let i = 1; i <= remainingDays; i++) {
-        calendar.next.push(i);
+        calendar.next.push({
+            day: i,
+            hasEvents: false
+        });
     }
 
     return calendar;
-}
+};
 
 const getEvents = async (day: number, month: number, year: number): Promise<IEvent[]> => {
     const events: IEvent[] = [];
@@ -207,11 +248,29 @@ const getEvents = async (day: number, month: number, year: number): Promise<IEve
     }
 
     return events;
-}
+};
+
+const loadEventsDates = async () => {
+    const dates = await UtilsApi.getEventsForTime(nbLoadedMonths);
+
+    for (const date of dates) {
+        const dateSplit = date.split("-");
+
+        eventsOnDates.value.push({
+            year: parseInt(dateSplit[0]),
+            month: parseInt(dateSplit[1]),
+            date: parseInt(dateSplit[2])
+        });
+    }
+};
+
+const getFrenchDate = (month: number, year: number) => {
+    return new Date(year, month - 1, 1).toLocaleString("fr-FR", { month: "long" }).charAt(0).toUpperCase() + new Date(year, month - 1, 1).toLocaleString("fr-FR", { month: "long" }).slice(1) + ", " + year;
+};
 
 // ########################################### HANDLERS ###########################################
 
-const handleSelect = async (day: number, month: number, year: number) => {
+const selectDate = async (day: number, month: number, year: number, hasEvents: Boolean) => {
     // Update selected date
     calendar.value.selected = {
         day: day,
@@ -220,9 +279,15 @@ const handleSelect = async (day: number, month: number, year: number) => {
     };
 
     // Get events
-    const events = await getEvents(day, month, year);
+    if (hasEvents) {
+        events.value = await getEvents(day, month, year);
+    } else {
+        events.value = [];
+    }
+};
 
-    console.log(events);
-}
+const handleSelect = async (day: number, month: number, year: number, hasEvents: Boolean) => {
+    await selectDate(day, month, year, hasEvents);
+};
 
 </script>

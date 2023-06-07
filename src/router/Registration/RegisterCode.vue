@@ -4,7 +4,7 @@
         <div class="flex items-center justify-between w-full">
             <i @click.prevent="router.push({ name: 'home' })" class="bi bi-arrow-left-short bg-[#F2F2F7] text-center flex items-center justify-center text-3xl text-[#3C3C43]/60 w-12 h-12 aspect-square rounded-full"></i>
 
-            <object v-show="loading" class="w-10 h-10" :data="'/src/assets/spinner.svg'" type="image/svg+xml"></object>
+            <object v-show="isLoading" class="w-10 h-10" :data="'/src/assets/spinner.svg'" type="image/svg+xml"></object>
         </div>
 
         <!-- Code -->
@@ -41,14 +41,14 @@ const router        = useRouter();
 const formElement   = ref<HTMLFormElement | null>();
 const inputs        = ref<HTMLInputElement[]>([]);
 const codeLength    = ref(5);
-const loading       = ref(false);
+const isLoading       = ref(false);
 const readyToSubmit = ref(false);
 const nextBtnStyle  = computed<IButton>(() => {
     return {
         apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY' },
         text: 'Vérifier',
         type: 'submit',
-        disabled: !readyToSubmit.value || loading.value
+        disabled: !readyToSubmit.value || isLoading.value
     }
 });
 
@@ -79,8 +79,8 @@ const handleInput = (event: Event) => {
 }
 
 const handleSubmit = () => {
-    if (!loading.value && getFormValidity()) {
-        loading.value = true;
+    if (!isLoading.value && getFormValidity()) {
+        isLoading.value = true;
 
         setTimeout(async () => {
             const code = getCode();
@@ -91,11 +91,11 @@ const handleSubmit = () => {
                 setValidInputs();
 
                 setTimeout(() => {
-                    loading.value = false;
+                    isLoading.value = false;
                     props.next();
                 }, 1000);
             } else {
-                loading.value = false;
+                isLoading.value = false;
                 setInvalidInputs();
             }
         }, 2000);

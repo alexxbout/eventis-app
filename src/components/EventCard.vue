@@ -3,18 +3,20 @@
     <div class="w-full h-max" @click="openEvent">
 
         <!-- Card -->
-        <div class="relative w-full overflow-hidden bg-white h-max shadow-card rounded-2xl">
+        <div class="relative w-full overflow-hidden bg-white h-max rounded-2xl" :class="props.hideImage ? '' : 'shadow-card'">
 
             <!-- Image -->
-            <div v-if="props.data.pic" :style="{ backgroundImage: 'url(' + UtilsApi.getImage('events', props.data.pic) + ')', filter: passed ? 'grayscale(1)' : '' }" class="h-[350px] w-full bg-no-repeat bg-cover bg-center"></div>
-            <div v-else class="h-[350px] w-full"></div>
+            <div v-if="!props.hideImage">
+                <div v-if="props.data.pic" :style="{ backgroundImage: 'url(' + UtilsApi.getImage('events', props.data.pic) + ')', filter: passed ? 'grayscale(1)' : '' }" class="h-[350px] w-full bg-no-repeat bg-cover bg-center"></div>
+                <div v-else class="h-[350px] w-full"></div>
+            </div>
 
             <!-- Info -->
             <div class="flex items-center w-full p-5 h-max gap-x-4">
                 <Emoji v-if="props.data.emoji" :data="{ name: props.data.emoji, size: 'EVENT' }" />
 
                 <div class="gap-y-[5px] flex flex-col justify-center">
-                    <span class="text-[24px] font-semibold">{{ data.title }}</span>
+                    <span class="font-semibold" :class="props.hideImage ? 'text-[20px]' : 'text-[24px]'">{{ data.title }}</span>
 
                     <span class="text-custom-gray text-[14px] font-light">{{ data.city }}</span>
                 </div>
@@ -37,6 +39,10 @@ const props = defineProps({
     data: {
         type: Object as PropType<IEvent>,
         required: true
+    },
+    hideImage: {
+        type: Boolean,
+        default: false
     }
 });
 

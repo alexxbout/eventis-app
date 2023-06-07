@@ -668,6 +668,25 @@ class UtilsApi {
         return data;
     }
 
+    async getEventsForTime(timelapse: number): Promise<string[]> {
+        let data: string[]= [];
+        
+        await axios.get(this.baseUrl + "v1/event/cal/"+ timelapse, {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        }).then((response) => {
+            if (response.status == HTTPCodes.OK) {
+                data = response.data.data as string[];
+            }
+        }).catch((error) => {
+            console.error(error, "Error while getting dates of the events");
+        });
+
+        return data;
+    }
+
     async getEventById(idEvent: number): Promise<IEvent | null> {
         let data = null;
 
