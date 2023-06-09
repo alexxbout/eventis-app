@@ -12,7 +12,7 @@ module.exports = {
       },
       colors: {
         "primary"          : "#166CF7",
-        "secondary"        : "#061E45",
+        "secondary"        : "#0e215c",
         "custom-light-blue": "#ECF3FD",
         "custom-gray"      : "#A2A2A2",
         "custom-light-gray": "#FAFAFA",

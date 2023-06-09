@@ -50,9 +50,9 @@ const routes: Array<RouteRecordRaw> = [
         }
     },
     {
-        path: "/eventsCalendar",
+        path: "/events/calendar",
         name: "eventsCalendar",
-        component: EventsCalendar,
+        component: Events,
         meta: {
             requiresAuth: true,
             hideNavbar: false
@@ -83,14 +83,6 @@ const routes: Array<RouteRecordRaw> = [
             requiresAuth: true
         }
     },
-    // {
-    //     path: "/profile/:id",
-    //     name: "profile",
-    //     component: Profile,
-    //     meta: {
-    //         requiresAuth: true
-    //     }
-    // },
     {
         path: "/notifs",
         name: "notifs",

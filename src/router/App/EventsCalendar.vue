@@ -1,44 +1,36 @@
 <template>
-    <div class="relative flex flex-col mb-20 gap-y-5 margins">
+    <div class="rounded-[30px] w-full h-max bg-[#FAFAFA] p-5">
+        <div class="flex gap-x-10 overflow-auto snap-x snap-mandatory">
+            <div v-if="calendar" v-for="data in calendar.data" class="min-w-full snap-center flex flex-col gap-y-10">
+                <div>
+                    <span class="text-[27px]">{{ getFrenchDate(data.month, data.year) }}</span>
+                </div>
 
-        <div class="flex items-center w-full gap-y-2">
-            <div class="flex gap-x-[15px] items-center justify-center w-max">
-                <i class="text-3xl bi bi-house"></i>
-                <span class="header">Évènements</span>
-            </div>
-        </div>
+                <div class="grid grid-cols-7 gap-1 place-items-center [&>span]:aspect-square [&>span]:flex [&>span]:items-center [&>span]:justify-center [&>span]:text-center [&>span]:w-full [&>span]:rounded-xl [&>span]:text-lg">
+                    <div v-for="customDay in days" class="text-center pb-5 font-light text-[#A0A0A0]">{{ customDay }}</div>
 
-        <div class="rounded-[30px] w-full h-max bg-[#FAFAFA] p-5">
-            <div class="flex gap-x-10 overflow-auto snap-x snap-mandatory">
-                <div v-if="calendar" v-for="data in calendar.data" class="min-w-full snap-center flex flex-col gap-y-10">
-                    <div>
-                        <span class="text-[27px]">{{ getFrenchDate(data.month, data.year) }}</span>
-                    </div>
-
-                    <div class="grid grid-cols-7 gap-1 place-items-center [&>span]:aspect-square [&>span]:flex [&>span]:items-center [&>span]:justify-center [&>span]:text-center [&>span]:w-full [&>span]:rounded-xl [&>span]:text-lg">
-                        <div v-for="customDay in days" class="text-center pb-5 font-light text-[#A0A0A0]">{{ customDay }}</div>
-
-                        <span v-for="customDay in data.previous" class="text-gray-400">{{ customDay.day }}</span>
-                        <span v-for="customDay in data.current" @click="handleSelect(customDay.day, data.month, data.year, customDay.hasEvents)" :style="getStyles(data, customDay)">{{ customDay.day }}</span>
-                        <span v-for="customDay in data.next" class="text-gray-400">{{ customDay.day }}</span>
-                    </div>
+                    <span v-for="customDay in data.previous" class="text-gray-400">{{ customDay.day }}</span>
+                    <span v-for="customDay in data.current" @click="handleSelect(customDay.day, data.month, data.year, customDay.hasEvents)" :style="getStyles(data, customDay)">{{ customDay.day }}</span>
+                    <span v-for="customDay in data.next" class="text-gray-400">{{ customDay.day }}</span>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="rounded-[30px] w-full h-max bg-[#FAFAFA] p-3 flex flex-col gap-y-5">
-            <EventCard v-for="event in events" :data="event" :hide-image="true" />
-        </div>
+    <div class="rounded-[30px] w-full h-max bg-[#FAFAFA] p-3 flex flex-col gap-y-5">
+        <EventCard v-for="event in events" :data="event" :hide-image="true" />
     </div>
 </template>
 
 <script setup lang="ts">
-import { CSSProperties, StyleValue, onMounted, ref } from "vue";
+import { CSSProperties, onMounted, ref } from "vue";
+
 import UtilsApi from "../../utils/UtilsApi";
 import UtilsAuth from "../../utils/UtilsAuth";
 import UtilsZip from "../../utils/UtilsZip";
 
 import type { IEvent } from "../../types/Event";
+
 import EventCard from "../../components/EventCard.vue";
 
 // ########################################### VARIABLES ###########################################

@@ -1,21 +1,29 @@
 <template>
     <div class="relative flex flex-col mb-20 gap-y-5 margins">
 
-        <div class="flex items-center w-full gap-y-2">
+        <div class="flex items-center justify-between w-full gap-y-2">
             <div class="flex gap-x-[15px] items-center justify-center w-max">
                 <i class="text-3xl bi bi-house"></i>
                 <span class="header">Évènements</span>
             </div>
+
+            <!-- Custom switch -->
+            <div class="bg-[#EFEFEF] rounded-full w-max h-max grid grid-flow-col p-1 gap-x-2 overflow-hidden">
+                <input type="radio" :name="randomId" id="list" class="appearance-none hidden peer/list" value="list" :checked="selected === 'list'" @change="handleSelector">
+                <label for="list" class="px-5 py-2 w-full h-full rounded-full peer-checked/list:bg-white peer-checked/list:text-black text-[#A2A2A2] text-lg">
+                    <i class="bi bi-view-stacked"></i>
+                </label>
+
+                <input type="radio" :name="randomId" id="calendar" class="appearance-none hidden peer/calendar" value="calendar" :checked="selected === 'calendar'" @change="handleSelector">
+                <label for="calendar" class="px-5 py-2 w-full h-full rounded-full peer-checked/calendar:bg-white peer-checked/calendar:text-black text-[#A2A2A2] text-lg">
+                    <i class="bi bi-calendar3"></i>
+                </label>
+            </div>
         </div>
 
-        <div v-for="data in customData" class="flex flex-col w-full gap-y-10">
-            <div :id="data.zip" class="flex items-center justify-center gap-x-4">
-                <div class="w-full h-px bg-gray-400 rounded-full"></div>
-                <div class="text-center text-gray-400 w-min whitespace-nowrap">{{ UtilsZip.getDepartement(data.zip) }}</div>
-                <div class="w-full h-px bg-gray-400 rounded-full"></div>
-            </div>
-
-            <EventCard v-for="event in data.events" :id="event.id" :data="event" />
+        <div class="flex flex-col w-full gap-y-10">
+            <EventsList v-if="selected === 'list'" />
+            <EventsCalendar v-if="selected === 'calendar'" />
         </div>
     </div>
 </template>
@@ -24,75 +32,39 @@
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
-import EventCard from "../../components/EventCard.vue";
+import EventsList from "./EventsList.vue";
 
-import type { IEvent } from "../../types/Event";
-
-import UtilsZip from "../../utils/UtilsZip";
-import UtilsApi from "../../utils/UtilsApi";
-import UtilsAuth from "../../utils/UtilsAuth";
+import EventsCalendar from "./EventsCalendar.vue";
+import { useRoute } from "vue-router";
 
 // ########################################### VARIABLES ###########################################
 
-const customData = ref<{ zip: string, events: IEvent[] }[]>([]);
-const nearbyZips = ref<string[]>([]);
-const user       = UtilsAuth.getCurrentUser();
-const router     = useRouter();
+const randomId = ref<string>(Math.floor(Math.random() * 1000000).toString());
+
+const selected = ref<string>("list");
+
+const route = useRoute();
+const router = useRouter();
 
 // ########################################### FUNCTIONS ###########################################
 
 onMounted(async () => {
-    if (user!.idFoyer) {
-        const foyerRequest = await UtilsApi.getFoyerById(user!.idFoyer);        
-
-        if (foyerRequest) {
-            const localZip = foyerRequest.zip.substring(0, 2);
-
-            // Get events of local zip
-            const eventsRequest = await UtilsApi.getEventsByZip(parseInt(localZip));
-
-            if (eventsRequest) {
-                customData.value.push({ zip: localZip, events: eventsRequest });
-            }
-
-            // Get nearby zips
-            nearbyZips.value = UtilsZip.getNearbyZips(parseInt(localZip));
-
-            // Get events of nearby zips
-            if (nearbyZips.value.length > 0) {
-                for (const zip of nearbyZips.value) {
-                    const eventsRequest = await UtilsApi.getEventsByZip(parseInt(zip));
-
-                    if (eventsRequest) {
-                        customData.value.push({ zip: zip, events: eventsRequest });
-                    }
-                }
-            }
-        }
+    if (route.path.includes("/calendar")) {
+        selected.value = "calendar";
+        router.replace({ path: "/events/calendar" });
     }
-
-    // Scroll to section with id of last route param
-    await router.isReady();
-
-    router.afterEach((to, from, next) => {
-        if (from.name === "eventDetail") {
-
-            const params = from.params;
-
-            if (params.id) {
-                const id = params.id as string;
-
-                // Timeout required to allow page to render before scrolling
-                setTimeout(() => {
-                    const element = document.getElementById(id);
-
-                    if (element) {
-                        element.scrollIntoView({ behavior: "smooth" });
-                    }
-                }, 200);
-            }
-        }
-    });
 });
+
+// ########################################### HANDLERS ###########################################
+
+const handleSelector = () => {
+    if (selected.value === "list") {
+        selected.value = "calendar";
+        router.replace({ path: "/events/calendar" });
+    } else {
+        selected.value = "list";
+        router.replace({ path: "/events" });
+    }
+};
 
 </script>

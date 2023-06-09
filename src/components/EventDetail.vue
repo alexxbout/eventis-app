@@ -1,7 +1,7 @@
 <template>
     <div ref="container" class="w-screen min-h-screen">
 
-        <i @click="handleClose" class="fixed text-3xl top-5 right-5 bi bi-x-circle-fill"></i>
+        <i @click="handleClose" class="fixed text-3xl top-5 right-5 bi bi-x-circle-fill text-black"></i>
 
 
         <div v-if="!passed" class="fixed bottom-0 flex w-full h-20 p-4 bg-white border-t gap-x-3 ">
@@ -57,14 +57,14 @@ import Emoji from "./Emoji.vue";
 
 // ############################################### VARIABLES ###############################################
 
-const router           = useRouter();
-const route            = useRoute();
-const user             = UtilsAuth.getCurrentUser();
+const router = useRouter();
+const route = useRoute();
+const user = UtilsAuth.getCurrentUser();
 const modalParticipant = ref<InstanceType<typeof ModalParticipant> | null>(null);
-const header           = ref<HTMLElement | null>(null);
-const event            = ref<IEvent>();
-const passed           = ref(false);
-const isParticipating  = ref(false);
+const header = ref<HTMLElement | null>(null);
+const event = ref<IEvent>();
+const passed = ref(false);
+const isParticipating = ref(false);
 
 const btnParticipantsStyle = computed<IButton>(() => {
     return {
@@ -146,7 +146,7 @@ const handleModal = () => {
 }
 
 const handleClose = () => {
-    router.push({ name: "events" });
+    router.back();
 }
 
 const handleParticipate = async () => {
