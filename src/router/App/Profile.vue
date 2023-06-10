@@ -1,5 +1,5 @@
 <template>
-    <div class="relative flex flex-col mb-20 gap-y-6 margins">
+    <div class="flex flex-col mb-20 gap-y-6 margins">
 
         <!-- Header -->
         <div class="flex items-center w-full">

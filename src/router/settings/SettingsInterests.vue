@@ -1,45 +1,42 @@
 <template>
-    <div class="flex flex-col justify-around w-full h-full">
-        <!-- Retour -->
-        <div class="flex items-center w-full">
-            <i @click.prevent="props.previous()" class="bi bi-arrow-left-short bg-[#F2F2F7] text-center flex items-center justify-center text-3xl text-[#3C3C43]/60 w-12 h-12 aspect-square rounded-full"></i>
+    <div class="h-full">
+
+        <div class="fixed bottom-0 flex w-full h-20 p-4 bg-white border-t gap-x-3 z-20">
+            <Button @@click="router.push({name: 'settings'})" class="w-full" :data="{ apparence: { color: 'GRAY', size: 'BASE', type: 'SECONDARY' }, text: 'Retour' }" />
         </div>
 
-        <div class="flex flex-col h-3/5 gap-y-14">
+        <div class="margins flex flex-col gap-y-14 mb-20">
             <div class="flex flex-col gap-y-4">
                 <span class="header">Complétez votre profil avec vos centres d'intérêt</span>
                 <span class="text-gray-500">Sélectionnez au maximum 3 centres d'intérêts qui seront affichés sur votre profil.</span>
             </div>
 
             <div class="grid w-full grid-cols-1 gap-3 overflow-hidden overflow-y-auto h-max">
-                <InterestCard v-for="data in interests" @@click="handleClick" :data="data.interests" :selected="data.selected" :disabled="data.disabled" />
+                <InterestCard v-for="data in interests" ref="cards" @@click="handleClick" :data="data.interests" :selected="data.selected" :disabled="data.disabled" />
             </div>
         </div>
-
-        <!-- Suivant -->
-        <Button class="w-full" @@click="props.next()" :data="{ apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY' }, text: 'Suivant', icon: { name: 'ARROW_RIGHT', side: 'RIGHT' } }" />
     </div>
 </template>
 
 <script setup lang="ts">
-import { inject, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 
 import InterestCard from "../../components/InterestCard.vue";
-import Button from "../../components/Button.vue";
 
-import type { IRegistration } from "../../types/Register";
 import type { IInterest } from "../../types/Interest";
 
 import UtilsAuth from "../../utils/UtilsAuth";
 import UtilsApi from "../../utils/UtilsApi";
+import Button from "../../components/Button.vue";
+import { useRouter } from "vue-router";
 
 // ############################################## VARIABLES ##############################################
 
 const MAX_INTERESTS = 3;
 
-const props = inject("props") as IRegistration;
 const interests = ref<{ interests: IInterest, selected: boolean, disabled?: boolean }[]>([]);
 const user = UtilsAuth.getCurrentUser();
+const router = useRouter();
 
 // ############################################## FUNCTIONS ##############################################
 
@@ -134,5 +131,4 @@ const handleRemove = (id: number) => {
         }
     }
 };
-
 </script>

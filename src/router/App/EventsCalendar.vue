@@ -17,13 +17,13 @@
         </div>
     </div>
 
-    <div class="rounded-[30px] w-full h-max bg-[#FAFAFA] p-3 flex flex-col gap-y-5">
+    <div v-show="events.length > 0" class="rounded-[30px] w-full h-max bg-[#FAFAFA] p-3 flex flex-col gap-y-5">
         <EventCard v-for="event in events" :data="event" :hide-image="true" />
     </div>
 </template>
 
 <script setup lang="ts">
-import { CSSProperties, onMounted, ref } from "vue";
+import { CSSProperties, onMounted, ref, watch } from "vue";
 
 import UtilsApi from "../../utils/UtilsApi";
 import UtilsAuth from "../../utils/UtilsAuth";

@@ -7,11 +7,15 @@ import { routesGuard } from "./services/RouteGuard";
 import Home from "./router/app/Home.vue";
 import Register from "./router/registration/Register.vue";
 import Events from "./router/app/Events.vue";
-import EventsCalendar from "./router/app/EventsCalendar.vue";
 import EventDetail from "./components/EventDetail.vue";
 import Messages from "./router/app/Messages.vue";
 import Profile from "./router/app/Profile.vue";
 import Notifs from "./router/app/Notifs.vue";
+import Settings from "./router/settings/Settings.vue";
+import SettingsBlocked from "./router/settings/SettingsBlocked.vue";
+import SettingsInfos from "./router/settings/SettingsInfos.vue";
+import SettingsInterests from "./router/settings/SettingsInterests.vue";
+import SettingsPassword from "./router/settings/SettingsPassword.vue";
 import NotFound from "./router/app/NotFound.vue";
 
 // Importation des méthodes pour créer le router
@@ -89,6 +93,51 @@ const routes: Array<RouteRecordRaw> = [
         component: Notifs,
         meta: {
             requiresAuth: true,
+        }
+    },
+    {
+        path: "/settings",
+        name: "settings",
+        component: Settings,
+        meta: {
+            requiresAuth: true,
+            hideNavbar: true
+        }
+    },
+    {
+        path: "/settings/blocked",
+        name: "settingsBlocked",
+        component: SettingsBlocked,
+        meta: {
+            requiresAuth: true,
+            hideNavbar: true
+        }
+    },
+    {
+        path: "/settings/infos",
+        name: "settingsInfos",
+        component: SettingsInfos,
+        meta: {
+            requiresAuth: true,
+            hideNavbar: true
+        }
+    },
+    {
+        path: "/settings/interests",
+        name: "settingsInterests",
+        component: SettingsInterests,
+        meta: {
+            requiresAuth: true,
+            hideNavbar: true
+        }
+    },
+    {
+        path: "/settings/password",
+        name: "settingsPassword",
+        component: SettingsPassword,
+        meta: {
+            requiresAuth: true,
+            hideNavbar: true
         }
     },
     {

@@ -4,7 +4,7 @@
         <i @click="handleClose" class="fixed text-3xl top-5 right-5 bi bi-x-circle-fill text-black"></i>
 
 
-        <div v-if="!passed" class="fixed bottom-0 flex w-full h-20 p-4 bg-white border-t gap-x-3 ">
+        <div v-if="!passed" class="fixed bottom-0 flex w-full h-20 p-4 bg-white border-t gap-x-3">
             <Button @@click="handleParticipate" :data="btnParticipateStyle" :delay="1000" class="w-full" />
 
             <Button @@click="handleModal" :data="btnParticipantsStyle" class="w-max" />
