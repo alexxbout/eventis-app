@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ITab } from "../types/Tab";
+import type { ITab } from "../types/interfaces";
 
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";

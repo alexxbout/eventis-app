@@ -1,14 +1,8 @@
 import axios from "axios";
 import AuthService from "./UtilsAuth";
-import { IEvent } from "../types/Event";
-import { IParticipant } from "../types/Participants";
-import { HTTPCodes } from "./HTTPCodes";
-import { ICode } from "../types/Code";
-import { IFoyer } from "../types/Foyer";
 
-import { INotification } from "../types/Notification";
-import { IInterest } from "../types/Interest";
-import { IUser } from "../types/User";
+import type { IEvent, IParticipant, ICode, IFoyer, INotification, IInterest, IUser } from "../types/interfaces";
+import { HTTPCodes } from "./HTTPCodes";
 
 const removeNullValues = (obj: any) => {
     return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v !== null));

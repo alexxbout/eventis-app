@@ -27,8 +27,7 @@ import { inject, onMounted, ref } from "vue";
 import InterestCard from "../../components/InterestCard.vue";
 import Button from "../../components/Button.vue";
 
-import type { IRegistration } from "../../types/Register";
-import type { IInterest } from "../../types/Interest";
+import type { IRegistration, IInterest } from "../../types/interfaces";
 
 import UtilsAuth from "../../utils/UtilsAuth";
 import UtilsApi from "../../utils/UtilsApi";

@@ -29,7 +29,7 @@ import UtilsApi from "../../utils/UtilsApi";
 import UtilsAuth from "../../utils/UtilsAuth";
 import UtilsZip from "../../utils/UtilsZip";
 
-import type { IEvent } from "../../types/Event";
+import type { IEvent } from "../../types/interfaces";
 
 import EventCard from "../../components/EventCard.vue";
 

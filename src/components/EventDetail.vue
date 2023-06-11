@@ -45,8 +45,7 @@
 import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import type { IEvent } from "../types/Event";
-import type { IButton } from "../types/Button";
+import type { IEvent, IButton } from "../types/interfaces";
 
 import UtilsApi from "../utils/UtilsApi";
 import UtilsAuth from "../utils/UtilsAuth";

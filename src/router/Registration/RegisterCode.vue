@@ -28,8 +28,7 @@
 import { computed, inject, ref, } from "vue";
 import { useRouter } from "vue-router";
 
-import type { IRegistration } from "../../types/Register";
-import type { IButton } from "../../types/Button";
+import type { IRegistration, IButton } from "../../types/interfaces";
 
 import ApiService from "../../utils/UtilsApi";
 import Button from "../../components/Button.vue";

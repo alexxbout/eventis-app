@@ -86,9 +86,7 @@ import Button from "../../components/Button.vue";
 import UserProfilPicture from "../../components/UserProfilPicture.vue";
 import InterestCardProfil from "../../components/InterestCardProfil.vue";
 
-import type { IInterest } from "../../types/Interest";
-import type { IUser } from "../../types/User";
-import type { IButton } from "../../types/Button";
+import type { IInterest, IUser, IButton } from "../../types/interfaces";
 
 import UtilsAuth from "../../utils/UtilsAuth";
 import UtilsApi from "../../utils/UtilsApi";

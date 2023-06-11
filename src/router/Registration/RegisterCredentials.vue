@@ -60,8 +60,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 
-import type { IUser } from "../../types/User";
-import type { IButton } from "../../types/Button";
+import type { IUser, IButton } from "../../types/interfaces";
 
 import Button from "../../components/Button.vue";
 

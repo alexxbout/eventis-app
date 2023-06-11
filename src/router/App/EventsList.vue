@@ -16,7 +16,7 @@ import { useRouter } from "vue-router";
 
 import EventCard from "../../components/EventCard.vue";
 
-import type { IEvent } from "../../types/Event";
+import type { IEvent } from "../../types/interfaces";
 
 import UtilsZip from "../../utils/UtilsZip";
 import UtilsApi from "../../utils/UtilsApi";

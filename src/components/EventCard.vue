@@ -29,7 +29,7 @@
 import { PropType, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
-import type { IEvent } from "../types/Event";
+import { type IEvent } from "../types/interfaces";
 
 import UtilsApi from "../utils/UtilsApi";
 

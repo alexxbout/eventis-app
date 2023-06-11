@@ -26,9 +26,7 @@ import { inject, onMounted, ref } from "vue";
 import UserCard from "../../components/UserCard.vue";
 import Button from "../../components/Button.vue";
 
-import type { IUser } from "../../types/User";
-import type { IRegistration } from "../../types/Register";
-import type { IButton } from "../../types/Button";
+import type { IUser, IRegistration, IButton } from "../../types/interfaces";
 
 import UtilsApi from "../../utils/UtilsApi";
 import UtilsAuth from "../../utils/UtilsAuth";

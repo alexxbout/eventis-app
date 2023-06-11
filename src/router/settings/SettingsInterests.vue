@@ -19,7 +19,7 @@ import { onMounted, ref } from "vue";
 
 import InterestCard from "../../components/InterestCard.vue";
 
-import type { IInterest } from "../../types/Interest";
+import type { IInterest } from "../../types/interfaces";
 
 import UtilsAuth from "../../utils/UtilsAuth";
 import UtilsApi from "../../utils/UtilsApi";

@@ -22,7 +22,7 @@ import { gsap, Power4 } from "gsap";
 
 import { PropType, ref, onMounted, onUnmounted } from "vue";
 
-import type { IParticipant } from "../types/Participants";
+import type { IParticipant } from "../types/interfaces";
 
 import UserCard from "./UserCard.vue";
 

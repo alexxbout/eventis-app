@@ -10,8 +10,7 @@
 <script setup lang="ts">
 import { PropType, StyleValue, computed, ref } from "vue";
 
-import type { IButton } from "../types/Button";
-import { getIconByName } from "../types/Button";
+import { type IButton, getIconByName } from "../types/interfaces";
 
 // ############################################### VARIABLES ###############################################
 

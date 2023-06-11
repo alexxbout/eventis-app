@@ -31,8 +31,7 @@
 import { ref, PropType, onMounted } from "vue";
 import { gsap, Power4 } from "gsap";
 
-import type { IUser } from "../types/User";
-import type { IApp } from "../types/App";
+import type { IApp, IUser } from "../types/interfaces";
 
 import UtilsApi from "../utils/UtilsApi";
 

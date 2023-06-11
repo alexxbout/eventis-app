@@ -32,8 +32,7 @@ import Button from "../../components/Button.vue";
 import UtilsAuth from "../../utils/UtilsAuth";
 import UtilsApi from "../../utils/UtilsApi";
 
-import type { IButton, } from "../../types/Button";
-import type { IRegistration } from "../../types/Register";
+import type { IButton, IRegistration } from "../../types/interfaces";
 
 // ########################################### VARIABLES ###########################################
 

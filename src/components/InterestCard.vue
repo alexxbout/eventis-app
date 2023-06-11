@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import { PropType, ref} from "vue";
 
-import type { IInterest } from "../types/Interest";
+import type { IInterest } from "../types/interfaces";
 
 import Emoji from "./Emoji.vue";
 

@@ -19,9 +19,7 @@
 <script setup lang="ts">
 import { PropType, onMounted, ref } from "vue";
 
-import type { IUser } from "../types/User";
-import type { IButton } from "../types/Button";
-import type { IInterest } from "../types/Interest";
+import type { IUser, IButton, IInterest} from "../types/interfaces";
 
 import UtilsApi from "../utils/UtilsApi";
 import UtilsAuth from "../utils/UtilsAuth";

@@ -26,8 +26,7 @@ import UtilsApi from "../../utils/UtilsApi";
 import UtilsAuth from "../../utils/UtilsAuth";
 import UserCard from "../../components/UserCard.vue";
 
-import type { INotification } from "../../types/Notification";
-import type { IUser } from "../../types/User";
+import type { INotification, IUser } from "../../types/interfaces";
 
 // ########################################### VARIABLES ###########################################
 

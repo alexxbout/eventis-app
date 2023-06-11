@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import type { IUser } from "../../types/User";
+import type { IUser } from "../../types/interfaces";
 import UtilsAuth from "../../utils/UtilsAuth";
 import UserProfilPicture from "../../components/UserProfilPicture.vue";
 import { useRouter } from "vue-router";

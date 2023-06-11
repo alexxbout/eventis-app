@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import type { IConversationCard } from "../../types/ConversationCard";
+import type { IConversationCard } from "../../types/interfaces";
 
 import ConversationCard from "../../components/ConversationCard.vue";
 

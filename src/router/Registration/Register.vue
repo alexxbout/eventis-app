@@ -12,8 +12,7 @@
 <script setup lang="ts">
 import { ref, provide} from "vue";
 
-import type { IRegistration } from "../../types/Register";
-import type { IUser } from "../../types/User";
+import type { IUser, IRegistration } from "../../types/interfaces";
 
 import UtilsApi from "../../utils/UtilsApi";
 import UtilsAuth from "../../utils/UtilsAuth";
