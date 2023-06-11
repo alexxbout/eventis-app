@@ -16,7 +16,7 @@ export interface IUser {
     idRole    : number;
     idFoyer   : number;
     active    : string;
-    pic       : string;
+    pic       : string | null;
     bio       : string;
 }
 

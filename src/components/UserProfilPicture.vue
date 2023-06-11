@@ -21,7 +21,7 @@ import UtilsApi from "../utils/UtilsApi";
 const props = defineProps({
     data: {
         type: Object as PropType<{
-            pic?: string,
+            pic: string | null,
             style: "SMALL" | "MEDIUM" | "LARGE" | "BIG"
         }>,
         required: true
