@@ -50,8 +50,6 @@
 </template>
 
 <script setup lang="ts">
-import gsap from "gsap";
-
 import { ref } from "vue";
 import type { IUser } from "../../types/interfaces";
 import UtilsAuth from "../../utils/UtilsAuth";
@@ -77,9 +75,9 @@ interface ITab {
 
 const tabs = ref<ITab[]>([
     { icon: "bi bi-person-vcard-fill", name: "Informations personnelles", route: "settingsInfos" },
-    { icon: "bi bi-shield-lock-fill", name: "Mot de passe", route: "settingsPassword" },
+    { icon: "bi bi-file-lock2-fill", name: "Mot de passe", route: "settingsPassword" },
     { icon: "bi bi-star-fill", name: "Centres d'intérêts", route: "settingsInterests" },
-    { icon: "bi bi-person-fill", name: "Utilisateurs bloqués", route: "settingsBlocked" }
+    { icon: "bi bi-person-fill-slash", name: "Utilisateurs bloqués", route: "settingsBlocked" }
 ]);
 
 const handleLogout = () => {

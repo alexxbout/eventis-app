@@ -65,7 +65,7 @@ onMounted(async () => {
 });
 
 const getStatusClass = (to: string) => {
-    return to == currentRoute.path ? "active" : "inactive";
+    return currentRoute.path.includes(to) ? "active" : "inactive";
 }
 
 const hide = () => {

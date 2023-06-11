@@ -1,14 +1,12 @@
 <template>
-    <!-- <div class="flex items-center justify-center w-full h-max gap-x-5"> -->
-        <div :style="{'border-color': color, 'color': color}" class="flex flex-col items-center bg-white justify-center w-full border-[3px] rounded-2xl h-max gap-y-2 p-2">
-            <Emoji :data="{ name: props.data.emoji, size: 'PROFILE' }" />
-            <span class="font-medium">{{ props.data.name }}</span>
-        </div>
-    <!-- </div> -->
+    <div :style="{ 'border-color': color, 'color': color }" class="flex flex-col items-center bg-white justify-center w-full border-[3px] rounded-2xl h-max gap-y-2 p-2">
+        <Emoji :data="{ name: props.data.emoji, size: 'PROFILE' }" />
+        <span class="font-medium text-center">{{ props.data.name }}</span>
+    </div>
 </template>
 
 <script setup lang="ts">
-import { PropType, ref} from "vue";
+import { PropType, ref } from "vue";
 
 import type { IInterest } from "../types/interfaces";
 

@@ -1,6 +1,7 @@
 <template>
     <div class="w-max h-max">
-        <object class="pointer-events-none" :style="getStyle()" :data="'/src/assets/emojis/' + props.data.name + '.svg'" type="image/svg+xml"></object>
+        <img v-if="props.fastMode" class="pointer-events-none" :style="getStyle()" :src="'/src/assets/emojis/' + props.data.name + '.svg'" alt="">
+        <object v-else class="pointer-events-none" :style="getStyle()" :data="'/src/assets/emojis/' + props.data.name + '.svg'" type="image/svg+xml"></object>
     </div>
 </template>
 
@@ -14,6 +15,10 @@ const props = defineProps({
             size: "DEFAULT" | "INTEREST" | "PROFILE" | "EVENT" | "BIG";
         }>,
         required: true
+    },
+    fastMode: {
+        type: Boolean,
+        default: false
     }
 });
 
