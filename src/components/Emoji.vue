@@ -1,6 +1,6 @@
 <template>
     <div class="w-max h-max">
-        <img v-if="props.fastMode" class="pointer-events-none" :style="getStyle()" :src="'/src/assets/emojis/' + props.data.name + '.svg'" alt="">
+        <img v-if="props.fastMode" style="opacity: 0.99;" class="pointer-events-none" :style="getStyle()" :src="'/src/assets/emojis/' + props.data.name + '.svg'" alt="">
         <object v-else class="pointer-events-none" :style="getStyle()" :data="'/src/assets/emojis/' + props.data.name + '.svg'" type="image/svg+xml"></object>
     </div>
 </template>
@@ -25,7 +25,7 @@ const props = defineProps({
 const getStyle = (): StyleValue => {
     switch (props.data.size) {
         case "INTEREST":
-            return { "width": "20px", "height": "20px", "shape-rendering": "optimizeSpeed", "textRendering": "optimizeSpeed", "colorRendering": "optimizeSpeed" };
+            return { "width": "25px", "height": "25px", "shape-rendering": "optimizeSpeed", "textRendering": "optimizeSpeed", "colorRendering": "optimizeSpeed" };
 
         // case "USER_CARD"
 

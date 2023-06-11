@@ -2,7 +2,7 @@
     <button @click="handleClick" :class="props.selected ? 'bg-[#F1FBE9]' : 'bg-[#ECF1F9]'" class="flex items-center justify-between w-full px-3 py-4 overflow-hidden transition-colors duration-200 h-max rounded-xl disabled:grayscale card" :disabled="props.disabled">
         <!-- Emoji + interest name -->
         <div class="flex items-center justify-center gap-x-2 w-max grow-0">
-            <Emoji :data="{ name: props.data.emoji, size: 'INTEREST' }" />
+            <Emoji :data="{ name: props.data.emoji, size: 'INTEREST' }" :fast-mode="true" />
             <span class="text-lg font-semibold whitespace-nowrap" :style="{ 'color': props.selected ? '#69AF31' : '#166CF7' }">{{ props.data.name }}</span>
         </div>
 
