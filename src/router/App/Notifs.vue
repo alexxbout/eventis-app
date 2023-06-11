@@ -3,7 +3,7 @@
 
         <div class="flex items-center w-full gap-y-2">
             <div class="flex gap-x-[15px] items-center justify-center w-max">
-                <i class="text-3xl bi bi-bell"></i>
+                <!-- <i class="text-[27px] bi bi-bell"></i> -->
                 <span class="header">Notifications</span>
             </div>
         </div>

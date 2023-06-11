@@ -1,5 +1,5 @@
 <template>
-    <button @click="handleClick" :type="props.data.type" :style="style" :disabled="props.data.disabled" class="flex items-center justify-center text-sm font-semibold text-center text-white gap-x-2">
+    <button @click="handleClick" :type="props.data.type" :style="style" :disabled="props.data.disabled" class="flex items-center justify-center text-sm font-semibold text-center text-white gap-x-2 transition-colors duration-150 ease-linear">
 
         <i v-if="props.data.icon" :style="{ 'order': (props.data.icon.side == 'RIGHT' ? '9999' : '-9999'), 'font-size': '16px'}" :class="getIconByName(props.data.icon.name)"></i>
 

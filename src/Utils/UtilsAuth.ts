@@ -27,7 +27,7 @@ class UtilsAuth {
 
     getToken(): string | null {
         try {
-            const item = JSON.parse(localStorage.getItem("item") || "{}");
+            const item = JSON.parse(localStorage.getItem("app") || "{}");
             return item.token;
         } catch (error) {
             console.error("Erreur lors de la récupération du token", error);
@@ -47,7 +47,7 @@ class UtilsAuth {
 
     getCurrentUser(): IUser | null {
         try {
-            const item = JSON.parse(localStorage.getItem("item") || "{}");
+            const item = JSON.parse(localStorage.getItem("app") || "{}");
 
             return item.user as IUser;
         }
@@ -65,7 +65,7 @@ class UtilsAuth {
             password: password
         }).then((response) => {
             if (response.status == HTTPCodes.OK && response.data.data.token) {
-                localStorage.setItem("item", JSON.stringify(response.data.data));
+                localStorage.setItem("app", JSON.stringify(response.data.data));
                 data = true;
             }
         }).catch((error) => {
@@ -76,7 +76,7 @@ class UtilsAuth {
     }
 
     logout() {
-        localStorage.removeItem("item");
+        localStorage.removeItem("app");
     }
 }
 

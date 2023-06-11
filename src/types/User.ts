@@ -1,14 +1,15 @@
 export interface IUser {
-    firstname  : string;
-    lastname   : string;
-    password?  : string;
-    login?     : string;
-    id         : number;
-    idFoyer?   : number;
-    idRole?    : number;
-    active?    : boolean;
-    pic?       : string;
-    lastLogin? : string;
-    lastLogout?: string;
-    bio?       : string;
+    id        : number;
+    firstname : string;
+    lastname  : string;
+    login     : string;
+    emoji     : string | null;
+    pseudo    : string;
+    showPseudo: string;
+    password  : string;
+    idRole    : number;
+    idFoyer   : number;
+    active    : string;
+    pic       : string;
+    bio       : string;
 }

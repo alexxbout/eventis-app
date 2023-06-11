@@ -1,19 +1,15 @@
 <template>
-    <div class="h-full">
+    <div class="margins flex flex-col gap-y-14 mb-20">
+        <div class="flex gap-x-[15px] items-center justify-center w-max">
+            <i @click="router.push({ name: 'settings' })" class="bi bi-arrow-left-short back"></i>
 
-        <div class="fixed bottom-0 flex w-full h-20 p-4 bg-white border-t gap-x-3 z-20">
-            <Button @@click="router.push({name: 'settings'})" class="w-full" :data="{ apparence: { color: 'GRAY', size: 'BASE', type: 'SECONDARY' }, text: 'Retour' }" />
+            <!-- <i class="text-[27px] bi bi-star-fill"></i> -->
+            <span class="header">Centres d'intérêts</span>
         </div>
 
-        <div class="margins flex flex-col gap-y-14 mb-20">
-            <div class="flex flex-col gap-y-4">
-                <span class="header">Complétez votre profil avec vos centres d'intérêt</span>
-                <span class="text-gray-500">Sélectionnez au maximum 3 centres d'intérêts qui seront affichés sur votre profil.</span>
-            </div>
 
-            <div class="grid w-full grid-cols-1 gap-3 overflow-hidden overflow-y-auto h-max">
-                <InterestCard v-for="data in interests" ref="cards" @@click="handleClick" :data="data.interests" :selected="data.selected" :disabled="data.disabled" />
-            </div>
+        <div class="flex flex-col w-full gap-y-3">
+            <InterestCard v-for="data in interests" ref="cards" @@click="handleClick" :data="data.interests" :selected="data.selected" :disabled="data.disabled" />
         </div>
     </div>
 </template>

@@ -4,19 +4,25 @@
         <!-- Header -->
         <div class="flex items-center w-full">
             <div class="flex gap-x-[15px] items-center justify-between w-max">
-                <i class="text-3xl bi bi-person-circle"></i>
+                <!-- <i class="text-[27px] bi bi-person-circle"></i> -->
                 <span class="header">Profil</span>
             </div>
         </div>
 
         <!-- Picture + fullname + settings -->
         <div v-show="!isLoading" class="flex items-center gap-x-5 w-full bg-[#FAFAFA] rounded-[30px] p-5">
-            <UserProfilPicture :data="{ pic: user?.pic, style: 'LARGE' }" />
+            <UserProfilPicture :data="{ pic: user.pic, style: 'LARGE' }" />
 
-            <div class="flex flex-col text-2xl font-medium gap-y-5">
-                <span>{{ user?.firstname + ' ' + user?.lastname }}</span>
+            <div class="flex flex-col gap-y-5">
+                <div class="flex flex-col gap-y-0">
+                    <div v-if="user.showPseudo == '1'" class="flex gap-x-2 items-center">
+                        <Emoji v-if="user.emoji != null" :data="{ name: user.emoji, size: 'PROFILE' }" />
+                        <span class="text-2xl font-medium">{{ user.pseudo }}</span>
+                    </div>
+                    <span v-show="user.showPseudo == '0'" class="text-2xl font-medium">{{ user.firstname + ' ' + user.lastname }}</span>
+                </div>
 
-                <Button v-if="isCurrentUser" :data="btnProfileStyle" />
+                <Button v-if="isCurrentUser" @@click="router.push({ name: 'settings' })" :data="btnProfileStyle" />
                 <Button v-else class="w-max" :data="btnFriendStyle" />
             </div>
         </div>
@@ -28,7 +34,7 @@
         <!-- Bio -->
         <div v-show="!isLoading" class="flex flex-col gap-y-3 bg-[#FAFAFA] rounded-[30px] p-5">
             <span class="text-xl font-medium">Bio</span>
-            <span class="text-base text-gray-400">{{ user?.bio }}</span>
+            <span class="text-base text-gray-400 whitespace-pre-wrap">{{ user.bio }}</span>
         </div>
 
         <div v-show="isLoading" class="flex flex-col gap-y-3 rounded-[30px] p-5 loading">
@@ -88,6 +94,7 @@ import UtilsAuth from "../../utils/UtilsAuth";
 import UtilsApi from "../../utils/UtilsApi";
 import { useRouter } from "vue-router";
 import { RouteLocationNormalizedLoaded } from "vue-router";
+import Emoji from "../../components/Emoji.vue";
 
 // ########################################### VARIABLES ###########################################
 
@@ -125,7 +132,7 @@ onMounted(async () => {
 
     router.beforeEach(async (to, from, next) => {
         next();
-        
+
         if (to.name === from.name) {
             isLoading.value = true;
 
@@ -148,17 +155,17 @@ const getUserId = (route: RouteLocationNormalizedLoaded) => {
 };
 
 const updateComponent = async (idUser: number) => {
-    // Load current user by default
     user.value = UtilsAuth.getCurrentUser()!;
 
     await updateUser(idUser);
     await updateFriends();
     await updateInterests();
-    
+
     await updateBtnStyles();
 };
 
 const updateUser = async (idUser: number) => {
+    // Load user
     if (user.value.id == idUser) {
         isCurrentUser.value = true;
     } else {

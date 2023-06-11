@@ -10,6 +10,10 @@ import { INotification } from "../types/Notification";
 import { IInterest } from "../types/Interest";
 import { IUser } from "../types/User";
 
+const removeNullValues = (obj: any) => {
+    return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v !== null));
+}
+
 /**
  * Service de gestion des appels à l'API
  */
@@ -232,18 +236,32 @@ class UtilsApi {
     //     });
     // }
 
-    // updateUser(idUser: number, firstname: string | null, lastname: string | null, pseudo: string | null) {
-    //     return axios.put(this.baseUrl + "v1/user/" + idUser, {
-    //         "firstname": firstname,
-    //         "lastname": lastname,
-    //         "pseudo": pseudo
-    //     }, {
-    //         headers: {
-    //             "Authorization": "Bearer " + AuthService.getToken(),
-    //             "Content-Type": "application/json"
-    //         }
-    //     });
-    // }
+    async updateUser(idUser: number, firstname?: string, lastname?: string, emoji?: string | null, pseudo?: string, showPseudo?: string, bio?: string): Promise<boolean> {
+        let data = false;
+
+        // build an object with only the not null values
+        const body = {
+            "firstname" : firstname,
+            "lastname"  : lastname,
+            "emoji"     : emoji,
+            "pseudo"    : pseudo,
+            "showPseudo": showPseudo,
+            "bio"       : bio
+        };
+
+        await axios.put(this.baseUrl + "v1/user/" + idUser, removeNullValues(body), {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        }).then((response) => {
+            data = response.status === HTTPCodes.OK;
+        }).catch((error) => {
+            console.log(error, "Error while updating user");
+        });
+
+        return data;
+    }
 
     // deactivateUser(idUser: number) {
     //     return axios.put(this.baseUrl + "v1/user/deactivate" + idUser, null, {
@@ -651,7 +669,7 @@ class UtilsApi {
      */
     async getEventsByDateAndZip(date: number, zip: number): Promise<IEvent[] | null> {
         let data: IEvent[] | null = null;
-        
+
         await axios.get(this.baseUrl + "v1/event/cal/" + date + "/" + zip, {
             headers: {
                 "Authorization": "Bearer " + AuthService.getToken(),
@@ -669,9 +687,9 @@ class UtilsApi {
     }
 
     async getEventsForTime(timelapse: number): Promise<string[]> {
-        let data: string[]= [];
-        
-        await axios.get(this.baseUrl + "v1/event/cal/"+ timelapse, {
+        let data: string[] = [];
+
+        await axios.get(this.baseUrl + "v1/event/cal/" + timelapse, {
             headers: {
                 "Authorization": "Bearer " + AuthService.getToken(),
                 "Content-Type": "application/json"
@@ -926,6 +944,27 @@ class UtilsApi {
             }
         }).catch((error) => {
             console.error(error, "Error while searching");
+        });
+
+        return data;
+    }
+
+    // ############################################## EMOJIS ##############################################
+
+    async getEmojis(): Promise<string[]> {
+        let data: string[] = [];
+
+        await axios.get(this.baseUrl + "v1/emoji", {
+            headers: {
+                "Authorization": "Bearer " + AuthService.getToken(),
+                "Content-Type": "application/json"
+            }
+        }).then((response) => {
+            if (response.status == HTTPCodes.OK) {
+                data = response.data.data as string[];
+            }
+        }).catch((error) => {
+            console.error(error, "Error while getting emojis");
         });
 
         return data;

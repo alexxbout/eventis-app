@@ -1,5 +1,7 @@
 <template>
-    <object :style="getStyle()" :data="'/src/assets/emojis/' + props.data.name + '.svg'" type="image/svg+xml"></object>
+    <div class="w-max h-max">
+        <object class="pointer-events-none" :style="getStyle()" :data="'/src/assets/emojis/' + props.data.name + '.svg'" type="image/svg+xml"></object>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -18,21 +20,22 @@ const props = defineProps({
 const getStyle = (): StyleValue => {
     switch (props.data.size) {
         case "INTEREST":
-            return { "width": "18px", "height": "20px" };
+            return { "width": "20px", "height": "20px", "shape-rendering": "optimizeSpeed", "textRendering": "optimizeSpeed", "colorRendering": "optimizeSpeed" };
+
+        // case "USER_CARD"
 
         case "PROFILE":
-            return { "width": "26px", "height": "26px" };
+            return { "width": "30px", "height": "30px", "shape-rendering": "optimizeSpeed", "textRendering": "optimizeSpeed", "colorRendering": "optimizeSpeed" };
 
         case "EVENT":
-            return { "width": "50px", "height": "50px" };
+            return { "width": "50px", "height": "50px", "shape-rendering": "optimizeSpeed", "textRendering": "optimizeSpeed", "colorRendering": "optimizeSpeed" };
 
         case "BIG":
-            return { "width": "250px", "height": "250px" };
+            return { "width": "250px", "height": "250px", "shape-rendering": "optimizeSpeed", "textRendering": "optimizeSpeed", "colorRendering": "optimizeSpeed" };
 
         case "DEFAULT":
         default:
-            return { "width": "25px", "height": "25px" };
+            return { "width": "45px", "height": "45px", "shape-rendering": "optimizeSpeed", "textRendering": "optimizeSpeed", "colorRendering": "optimizeSpeed" };
     }
 }
-
 </script>

@@ -3,7 +3,7 @@
         <!-- Header -->
         <div class="flex items-center w-full">
             <div class="flex gap-x-[15px] items-center justify-between w-max">
-                <i class="text-3xl bi bi-chat"></i>
+                <!-- <i class="text-[27px] bi bi-chat"></i> -->
                 <span class="header">Messages</span>
             </div>
         </div>

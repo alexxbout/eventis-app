@@ -18,7 +18,7 @@
     }
 
     .header {
-        @apply text-3xl font-semibold text-secondary;
+        @apply text-[27px] font-bold text-secondary;
     }
 
     .header-xs {
@@ -44,6 +44,12 @@
 
     .invalid-input {
         @apply outline-custom-red text-custom-red outline-2 ring-2 ring-custom-red;
+    }
+
+    /* Buttons */
+
+    .back {
+        @apply text-3xl text-gray-300 bg-gray-800 w-10 h-10 text-center flex items-center justify-center aspect-square rounded-full;
     }
 }
 

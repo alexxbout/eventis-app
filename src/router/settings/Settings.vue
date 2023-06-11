@@ -1,8 +1,20 @@
 <template>
     <div class="flex flex-col justify-between margins h-screen">
-        <div class="flex flex-col items-center justify-center gap-y-6">
+        <div class="flex flex-col justify-center gap-y-6">
+
+            <div class="flex gap-x-[15px] items-center justify-center w-max">
+
+                <i @click="router.push({ name: 'profile' })" class="bi bi-arrow-left-short back"></i>
+
+                <!-- <i class="text-[27px] bi bi-star-fill"></i> -->
+                <span class="header">Réglages</span>
+            </div>
+
             <div class="flex justify-center items-center gap-x-5 w-full bg-[#FAFAFA] rounded-[30px] p-5">
-                <UserProfilPicture :data="{ pic: user?.pic, style: 'LARGE' }" />
+                <div class="relative">
+                    <UserProfilPicture :data="{ pic: user?.pic, style: 'LARGE' }" />
+                    <i class="absolute -bottom-0 -right-0 bi bi-camera-fill h-7 w-7 text-center flex items-center justify-center text-white text-xs bg-primary rounded-full"></i>
+                </div>
 
                 <div class="flex flex-col">
                     <span class="text-2xl font-medium">{{ user?.firstname + ' ' + user?.lastname }}</span>
@@ -35,6 +47,7 @@ import type { IUser } from "../../types/User";
 import UtilsAuth from "../../utils/UtilsAuth";
 import UserProfilPicture from "../../components/UserProfilPicture.vue";
 import { useRouter } from "vue-router";
+import Button from "../../components/Button.vue";
 
 const user = ref<IUser>(UtilsAuth.getCurrentUser()!);
 const router = useRouter();
@@ -46,15 +59,15 @@ interface ITab {
 }
 
 const tabs = ref<ITab[]>([
-    { icon: "bi bi-star-fill", name: "Centres d'intérêts", route: "settingsInterests" },
     { icon: "bi bi-person-vcard-fill", name: "Informations personnelles", route: "settingsInfos" },
     { icon: "bi bi-shield-lock-fill", name: "Mot de passe", route: "settingsPassword" },
+    { icon: "bi bi-star-fill", name: "Centres d'intérêts", route: "settingsInterests" },
     { icon: "bi bi-person-fill", name: "Utilisateurs bloqués", route: "settingsBlocked" }
 ]);
 
 const handleLogout = () => {
     UtilsAuth.logout();
-    router.push({ name: "home"});
+    router.push({ name: "home" });
 };
 
 const handleSection = (route: string) => {
