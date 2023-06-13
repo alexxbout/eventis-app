@@ -11,8 +11,7 @@ et de node (JS)
 
 Installation des prérequis: 
     XAMPP: https://www.apachefriends.org/index.html
-    Composer : https://getcomposer.org/download/  --> bien faire un composer update
-    ensuite
+    Composer : https://getcomposer.org/download/  --> composer install
 
     Initialisation du depot git:
         git Init
