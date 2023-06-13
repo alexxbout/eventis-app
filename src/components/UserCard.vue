@@ -12,14 +12,14 @@
         </div>
     </div>
 
-    <UserCardSquare v-if="!loading && props.data.style == 'SQUARE'" @@click="handleClick" :data="{ user: props.data.user, interests: userInterests }" :button="btnStyle" />
-    <UserCardRectangle v-else-if="!loading && props.data.style == 'RECTANGLE'" @@click="handleClick" :data="{ user: props.data.user }" :button="btnStyle" />
+    <UserCardSquare v-if="!hidden && !loading && props.data.style == 'SQUARE'" @@click="handleClick" :data="{ user: props.data.user, interests: interests }" :button="btnStyle" />
+    <UserCardRectangle v-else-if="!hidden && !loading && props.data.style == 'RECTANGLE'" @@click="handleClick" :data="{ user: props.data.user }" :button="btnStyle" />
 </template>
   
 <script setup lang="ts">
 import { PropType, onMounted, ref } from "vue";
 
-import type { IUser, IButton, IInterest} from "../types/interfaces";
+import type { IUser, IButton, IInterest } from "../types/interfaces";
 
 import UtilsApi from "../utils/UtilsApi";
 import UtilsAuth from "../utils/UtilsAuth";
@@ -30,22 +30,23 @@ import { useRouter } from "vue-router";
 
 // ########################################### VARIABLES ###########################################
 
+const router    = useRouter();
+const user      = UtilsAuth.getCurrentUser();
+const isPending = ref(false);
+const loading   = ref(true);
+const interests = ref<IInterest[]>([]);
+const hidden    = ref(false);
+
 const props = defineProps({
     data: {
         type: Object as PropType<{
             user: IUser,
             style: "SQUARE" | "RECTANGLE",
-            action: "FRIEND_REQUEST" | "SHOW_PROFIL"
+            action: "FRIEND_REQUEST" | "SHOW_PROFIL" | "UNBLOCK_FRIEND"
         }>,
         required: true,
     }
 });
-
-const router        = useRouter();
-const user          = UtilsAuth.getCurrentUser();
-const isPending     = ref(false);
-const loading       = ref(true);
-const userInterests = ref<IInterest[]>([]);
 
 const btnStyle = ref<IButton>({
     apparence: {
@@ -66,6 +67,10 @@ onMounted(async () => {
 
         case "SHOW_PROFIL":
             loadUserProfil();
+            break;
+
+        case "UNBLOCK_FRIEND":
+            loadUnblockFriend();
             break;
     }
 
@@ -98,8 +103,8 @@ const loadInterests = async () => {
     const interestsData = await UtilsApi.getUserInterests(props.data.user.id);
 
     if (interestsData) {
-        userInterests.value = interestsData;
-        userInterests.value = userInterests.value.slice(0, 2);
+        interests.value = interestsData;
+        interests.value = interests.value.slice(0, 2);
     }
 };
 
@@ -111,6 +116,17 @@ const loadUserProfil = () => {
             type: "PRIMARY"
         },
         text: "Profil"
+    };
+};
+
+const loadUnblockFriend = () => {
+    btnStyle.value = {
+        apparence: {
+            color: "RED",
+            size: "XS",
+            type: "PRIMARY"
+        },
+        text: "Débloquer"
     };
 };
 
@@ -161,6 +177,15 @@ const handleClick = async () => {
 
         case "SHOW_PROFIL":
             router.push({ name: "profile", params: { id: props.data.user.id } });
+            break;
+
+        case "UNBLOCK_FRIEND":
+            const unblock = await UtilsApi.removeBlockedUser(user!.id, props.data.user.id);
+
+            if (unblock) {
+                hidden.value = true;
+            }
+            
             break;
     }
 };

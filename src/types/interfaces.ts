@@ -165,3 +165,12 @@ export interface IApp {
     setFixed   : () => void;
     removeFixed: () => void;
 }
+
+// BLOCKED
+
+export interface IBlocked {
+    id       : number;
+    idBlocked: number;
+    idUser   : number;
+    since    : string;
+}

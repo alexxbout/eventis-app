@@ -1,5 +1,5 @@
 <template>
-    <form id="2" @submit.prevent="handleSubmit" ref="formElement" class="flex flex-col justify-around w-full h-full">
+    <form @submit.prevent="handleSubmit" ref="formElement" class="flex flex-col justify-around w-full h-full">
         <div class="margins flex flex-col gap-y-14 mb-20">
             <div class="flex gap-x-[15px] items-center justify-center w-max">
                 <i @click="router.push({ name: 'settings' })" class="bi bi-arrow-left-short back"></i>

@@ -1,7 +1,7 @@
 import axios from "axios";
 import AuthService from "./UtilsAuth";
 
-import type { IEvent, IParticipant, ICode, IFoyer, INotification, IInterest, IUser } from "../types/interfaces";
+import type { IEvent, IParticipant, ICode, IFoyer, INotification, IInterest, IUser, IBlocked } from "../types/interfaces";
 import { HTTPCodes } from "./HTTPCodes";
 
 const removeNullValues = (obj: any) => {
@@ -412,15 +412,15 @@ class UtilsApi {
     //     });
     // }
 
+    async getAllBlocked(idUser: number): Promise<IBlocked[]> {
+        let data: IBlocked[] = [];
 
-    // getAllUsersBlocked(idUser: number) {
-    //     return axios.get(this.baseUrl + "v1/user/blocked/" + idUser, {
-    //         headers: {
-    //             "Authorization": "Bearer " + AuthService.getToken(),
-    //             "Content-Type": "application/json"
-    //         }
-    //     });
-    // }
+        await this.performRequest("getAllUsersBlocked", "GET", "v1/user/blocked/" + idUser, null, (response) => {
+            data = response.data.data as IBlocked[];
+        });
+
+        return data;
+    }
 
     // addBlockedUser(idUser: number, idBlocked: number) {
     //     return axios.post(this.baseUrl + "v1/user/blocked/" + idUser + "/" + idBlocked, null, {
@@ -431,14 +431,15 @@ class UtilsApi {
     //     });
     // }
 
-    // removeBlockedUser(idUser: number, idBlocked: number) {
-    //     return axios.delete(this.baseUrl + "v1/user/blocked/" + idUser + "/" + idBlocked, {
-    //         headers: {
-    //             "Authorization": "Bearer " + AuthService.getToken(),
-    //             "Content-Type": "application/json"
-    //         }
-    //     });
-    // }
+    async removeBlockedUser(idUser: number, idBlocked: number): Promise<boolean> {
+        let data = false;
+
+        await this.performRequest("removeBlockedUser", "DELETE", "v1/user/blocked/" + idUser + "/" + idBlocked, null, (response) => {
+            data = response.status === HTTPCodes.OK;
+        });
+
+        return data;
+    }
 
     // ############################################## ROLE ##############################################
 
@@ -716,7 +717,7 @@ class UtilsApi {
 
         await this.performRequest("getEmojis", "GET", "v1/emoji", null, (response) => {
             if (response.status == HTTPCodes.OK) {
-                data = response.data.data as string[];  
+                data = response.data.data as string[];
             }
         });
 
