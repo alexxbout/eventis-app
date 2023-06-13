@@ -1,18 +1,10 @@
-# Vue 3 + TypeScript + Vite
-
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Type Support For `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+Ce projet à été porté par Alexandre Boutinaud, Emma Le Brenn, Hoël Girard et Derek Victor entre le 19 mai 2023 et le 16 juin 2023.
+Durant cette periode, nous avons developpé une application web VueJS ainsi qu’une API REST (PHP CodeIgniter 4) associée à une base de données.
+Le besoin traité par ce projet est à la  fois réel et nécessaire dans le contexte du projet de fin de Licence. Diversia est avant tout une application web destinée aux personnes en situation de handicap résidant dans des foyers d'accompagnement et de prise en charge.
+Ce projet est réalisé à la demande d’utilisateurs d’un foyer, et répond à une demande sans réponse jusqu’à aujourd'hui.
+L’application intègre différents concepts tels que l'authentification des utilisateurs, la mise en place de rôles, la gestion d'événements, de localisation, de relation entre les utilisateurs et la notion de structure d’organisation (foyers).
+Langages et frameworks:
+API: PHP 8.0 et CodeIgniter 4
+Application web: VueJS 3, Axios pour les appels à l’API
+Base de données: SQL
+Le code est privé et est la propriété exclusive des membres actifs du projet cités au début de la préface.
