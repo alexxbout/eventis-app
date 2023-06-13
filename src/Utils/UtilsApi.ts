@@ -28,7 +28,7 @@ class UtilsApi {
         this.errorLevel = import.meta.env.VITE_ERROR_LEVEL;
     }
 
-    async performRequest(name: string, method: string, url: string, data: any, actionCallBack: (response: any) => void, errorCallback?: (response: any) => void, authHeaders: boolean = true, extraHeaders?: any) {
+    async performRequest(name: string, method: string, url: string, data: any, actionCallBack: (response: any) => void, errorCallback?: (response: any) => void, authHeaders: boolean = true, customHeaders?: any) {
         if (this.errorLevel > 0) console.log("DEBUG : API - " + name);
 
         const headers: { [key: string]: string; } = {
@@ -39,9 +39,9 @@ class UtilsApi {
             headers["Authorization"] = "Bearer " + AuthService.getToken();
         }
 
-        if (extraHeaders) {
-            for (const key in extraHeaders) {
-                headers[key] = extraHeaders[key];
+        if (customHeaders) {
+            for (const key in customHeaders) {
+                headers[key] = customHeaders[key];
             }
         }
 
@@ -143,9 +143,18 @@ class UtilsApi {
     async updateUserPicture(id: number, picture: FormData): Promise<string | null> {
         let data = null;
 
-        await this.performRequest("updateUserPicture", "POST", "v1/user/image/" + id, picture, (response) => {
-            data = response.data.data.file as string;
-        });
+        await this.performRequest(
+            "updateUserPicture",
+            "POST",
+            "v1/user/image/" + id, picture,
+            (response) => {
+                data = response.data.data.file as string;
+            },
+            undefined,
+            true,
+            {
+                "Content-Type": "multipart/form-data"
+            });
 
         return data;
     }
@@ -416,7 +425,7 @@ class UtilsApi {
         let data: IBlocked[] = [];
 
         await this.performRequest("getAllUsersBlocked", "GET", "v1/user/blocked/" + idUser, null, (response) => {
-            data = response.data.data as IBlocked[];
+            data = response.status === HTTPCodes.OK ? response.data.data as IBlocked[] : [];
         });
 
         return data;

@@ -3,11 +3,15 @@
         <div class="flex gap-x-[15px] items-center justify-center w-max">
             <i @click="router.push({ name: 'settings' })" class="bi bi-arrow-left-short back"></i>
 
-            <span class="header">Informations perso.</span>
+            <span class="header">Bloqués</span>
         </div>
 
         <div class="flex flex-col w-full gap-y-10">
             <UserCard v-for="user in users" :data="{ action: 'UNBLOCK_FRIEND', style: 'RECTANGLE', user: user }" />
+
+            <div v-if="users.length == 0">
+                <span>Aucun utilisateur bloqué</span>
+            </div>
         </div>
     </div>
 </template>

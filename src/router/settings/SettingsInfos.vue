@@ -9,7 +9,6 @@
         <div class="flex gap-x-[15px] items-center justify-center w-max">
             <i @click="router.push({ name: 'settings' })" class="bi bi-arrow-left-short back"></i>
 
-            <!-- <i class="text-[27px] bi bi-person-vcard-fill"></i> -->
             <span class="header">Informations perso.</span>
         </div>
 
