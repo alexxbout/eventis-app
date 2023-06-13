@@ -79,10 +79,10 @@ const formElement    = ref<HTMLFormElement | null>(null);
 
 const nextBtnStyle = computed<IButton>(() => {
     return {
-        apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY' },
-        text: 'Suivant',
-        icon: { name: 'ARROW_RIGHT', side: 'RIGHT' },
-        type: 'submit',
+        apparence: { color: "BLUE", size: "BASE", type: "PRIMARY" },
+        text: "Suivant",
+        icon: { name: "ARROW_RIGHT", side: "RIGHT" },
+        type: "submit",
         disabled: !readyToSubmit.value
     }
 });

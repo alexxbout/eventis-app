@@ -40,13 +40,13 @@ const router        = useRouter();
 const formElement   = ref<HTMLFormElement | null>();
 const inputs        = ref<HTMLInputElement[]>([]);
 const codeLength    = ref(5);
-const isLoading       = ref(false);
+const isLoading     = ref(false);
 const readyToSubmit = ref(false);
 const nextBtnStyle  = computed<IButton>(() => {
     return {
-        apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY' },
-        text: 'Vérifier',
-        type: 'submit',
+        apparence: { color: "BLUE", size: "BASE", type: "PRIMARY" },
+        text: "Vérifier",
+        type: "submit",
         disabled: !readyToSubmit.value || isLoading.value
     }
 });

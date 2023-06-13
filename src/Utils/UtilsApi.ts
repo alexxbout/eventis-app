@@ -17,11 +17,15 @@ class UtilsApi {
     baseUrl: string;
     authorizationHeader: any;
 
+    errorLevel: number;
+
     constructor() {
         this.hostUrl = import.meta.env.VITE_API_URL;
         this.baseUrl = this.hostUrl + "api/";
 
         this.authorizationHeader = AuthService.getAuthHeader();
+
+        this.errorLevel = import.meta.env.VITE_ERROR_LEVEL;
     }
 
     // ############################################## IMAGES ##############################################
@@ -235,12 +239,12 @@ class UtilsApi {
 
         // build an object with only the not null values
         const body = {
-            "firstname" : firstname,
-            "lastname"  : lastname,
-            "emoji"     : emoji,
-            "pseudo"    : pseudo,
+            "firstname": firstname,
+            "lastname": lastname,
+            "emoji": emoji,
+            "pseudo": pseudo,
             "showPseudo": showPseudo,
-            "bio"       : bio
+            "bio": bio
         };
 
         await axios.put(this.baseUrl + "v1/user/" + idUser, removeNullValues(body), {
@@ -275,17 +279,73 @@ class UtilsApi {
     //     });
     // }
 
-    // updateUserPassword(idUser: number, oldpass: string, newpass: string) {
-    //     return axios.put(this.baseUrl + "v1/user/password" + idUser, {
-    //         "oldPassword": oldpass,
-    //         "newPassword": newpass
-    //     }, {
-    //         headers: {
-    //             "Authorization": "Bearer " + AuthService.getToken(),
-    //             "Content-Type": "application/json"
-    //         }
-    //     });
-    // }
+    async performRequest(name: string, method: string, url: string, data: any, actionCallBack: (response: any) => void, errorCallback?: (response: any) => void, authHeaders: boolean = true, extraHeaders?: any) {
+        if (this.errorLevel > 0) console.log("DEBUG : API - " + name);
+
+        const headers: { [key: string]: string; } = {
+            "Content-Type": "application/json"
+        };
+
+        if (authHeaders) {
+            headers["Authorization"] = "Bearer " + AuthService.getToken();
+        }
+
+        if (extraHeaders) {
+            for (const key in extraHeaders) {
+                headers[key] = extraHeaders[key];
+            }
+        }
+
+        await axios.request({
+            method: method,
+            url: this.baseUrl + url,
+            data: data,
+            headers: headers
+        }).then((response) => {
+            if (this.errorLevel > 0) console.log(response);
+
+            actionCallBack(response);
+        }).catch((error) => {
+            if (this.errorLevel > 0) {
+                console.log(error);
+                console.log("DEBUG : " + error.response?.data?.message);
+
+                if (error.response?.data?.errors) {
+                    for (const key in error.response.data.errors) {
+                        console.log("DEBUG : " + key + " - " + error.response.data.errors[key]);
+                    }
+                }
+            }
+
+            if (errorCallback) {
+                errorCallback(error);
+            }
+        }).finally(() => {
+            if (this.errorLevel > 0) console.log("DEBUG : API - " + name + " - END");
+        });
+    }
+
+    async updateUserPassword(idUser: number, oldpass: string, newpass: string): Promise<{ status: boolean; error: string }> {
+        const data: { status: boolean; error: string } = { status: false, error: "" };
+
+        await this.performRequest(
+            "updateUserPassword",
+            "PUT",
+            "v1/user/password/" + idUser,
+            {
+                "id": idUser,
+                "oldPassword": oldpass,
+                "newPassword": newpass
+            },
+            (response) => {
+                data.status = response.status === HTTPCodes.OK;
+            },
+            (error) => {
+                data.error = error.response?.data?.message;
+            });
+
+        return data;
+    }
 
     async getAffinities(idUser: number): Promise<IUser[] | null> {
         let data: IUser[] | null = null;
