@@ -412,14 +412,17 @@ class UtilsApi {
 
     // ############################################## BLOCKED ##############################################
 
-    // checkBlocked(idUser: number, idUser2: number) {
-    //     return axios.get(this.baseUrl + "v1/user/blocked/" + idUser + "/" + idUser2, {
-    //         headers: {
-    //             "Authorization": "Bearer " + AuthService.getToken(),
-    //             "Content-Type": "application/json"
-    //         }
-    //     });
-    // }
+    async isBlocked(idUser: number, idUser2: number): Promise<boolean> {
+        let data = false;
+
+        await this.performRequest("isBlocked", "GET", "v1/user/blocked/" + idUser + "/" + idUser2, null, (response) => {
+            if (response.status === HTTPCodes.OK) {
+                data = response.data.data.blocked as boolean;
+            }
+        });
+
+        return data;
+    }
 
     async getAllBlocked(idUser: number): Promise<IBlocked[]> {
         let data: IBlocked[] = [];
@@ -431,14 +434,15 @@ class UtilsApi {
         return data;
     }
 
-    // addBlockedUser(idUser: number, idBlocked: number) {
-    //     return axios.post(this.baseUrl + "v1/user/blocked/" + idUser + "/" + idBlocked, null, {
-    //         headers: {
-    //             "Authorization": "Bearer " + AuthService.getToken(),
-    //             "Content-Type": "application/json"
-    //         }
-    //     });
-    // }
+    async addBlockedUser(idUser: number, idBlocked: number): Promise<boolean> {
+        let data = false;
+
+        await this.performRequest("addBlockedUser", "POST", "v1/user/blocked/" + idUser + "/" + idBlocked, null, (response) => {
+            data = response.status === HTTPCodes.CREATED;
+        });
+
+        return data;
+    }
 
     async removeBlockedUser(idUser: number, idBlocked: number): Promise<boolean> {
         let data = false;

@@ -17,8 +17,6 @@ onMounted(async () => {
 });
 
 const handleEmojiSelect = (emoji: string) => {
-    console.log(emoji);
-    
     emit("@select", emoji);
 };
 

@@ -2,8 +2,6 @@
     <div class="margins flex flex-col gap-y-14 mb-20">
         <div class="flex gap-x-[15px] items-center justify-center w-max">
             <i @click="router.push({ name: 'settings' })" class="bi bi-arrow-left-short back"></i>
-
-            <!-- <i class="text-[27px] bi bi-star-fill"></i> -->
             <span class="header">Centres d'intérêts</span>
         </div>
 
@@ -23,7 +21,6 @@ import type { IInterest } from "../../types/interfaces";
 
 import UtilsAuth from "../../utils/UtilsAuth";
 import UtilsApi from "../../utils/UtilsApi";
-import Button from "../../components/Button.vue";
 import { useRouter } from "vue-router";
 
 // ############################################## VARIABLES ##############################################

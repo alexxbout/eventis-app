@@ -1,5 +1,5 @@
 <template>
-    <div ref="container" v-show="visible" class="fixed bottom-0 flex flex-col justify-end w-screen h-screen">
+    <div ref="container" v-show="visible" class="fixed bottom-0 flex flex-col justify-end w-screen h-screen z-30">
 
         <div ref="modal" class="modal bg-white w-full max-h-[50%] h-max rounded-t-[35px] justify-between flex flex-col p-10 gap-y-10 shadow-modal">
             <!-- Header -->

@@ -7,7 +7,7 @@
 
             <!-- Text -->
             <div class="flex flex-col gap-y-4">
-                <span class="header">La page demandée n’a pas été trouvée...</span>
+                <span class="header leading-10">La page demandée n’a pas été trouvée...</span>
             </div>
         </div>
 

@@ -6,7 +6,7 @@
             <span class="header">Bloqués</span>
         </div>
 
-        <div class="flex flex-col w-full gap-y-10">
+        <div class="flex flex-col w-full gap-y-3">
             <UserCard v-for="user in users" :data="{ action: 'UNBLOCK_FRIEND', style: 'RECTANGLE', user: user }" />
 
             <div v-if="users.length == 0">

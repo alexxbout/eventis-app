@@ -1,29 +1,30 @@
 <template>
-    <div class="flex flex-col mb-20 gap-y-6 margins">
+    <div v-if="targetUser" class="flex flex-col mb-20 gap-y-6 margins">
 
         <!-- Header -->
         <div class="flex items-center w-full">
             <div class="flex gap-x-[15px] items-center justify-between w-max">
-                <!-- <i class="text-[27px] bi bi-person-circle"></i> -->
+                <i v-show="!isCurrentUser" @click="router.back()" class="bi bi-arrow-left-short back"></i>
+
                 <span class="header">Profil</span>
             </div>
         </div>
 
         <!-- Picture + fullname + settings -->
         <div v-show="!isLoading" class="flex items-center gap-x-5 w-full bg-[#FAFAFA] rounded-[30px] p-5">
-            <UserProfilPicture :data="{ pic: user.pic, style: 'LARGE' }" />
+            <UserProfilPicture :data="{ pic: targetUser.pic, style: 'LARGE' }" />
 
             <div class="flex flex-col gap-y-5">
                 <div class="flex flex-col gap-y-0">
-                    <div v-if="user.showPseudo == '1'" class="flex gap-x-2 items-center">
-                        <Emoji v-if="user.emoji != null" :data="{ name: user.emoji, size: 'PROFILE' }" />
-                        <span class="text-2xl font-medium">{{ user.pseudo }}</span>
+                    <div v-if="targetUser.showPseudo == '1'" class="flex gap-x-2 items-center">
+                        <Emoji v-if="targetUser.emoji != null" :data="{ name: targetUser.emoji, size: 'PROFILE' }" />
+                        <span class="text-2xl font-medium">{{ targetUser.pseudo }}</span>
                     </div>
-                    <span v-show="user.showPseudo == '0'" class="text-2xl font-medium">{{ user.firstname + ' ' + user.lastname }}</span>
+                    <span v-show="targetUser.showPseudo == '0'" class="text-2xl font-medium">{{ targetUser.firstname + ' ' + targetUser.lastname }}</span>
                 </div>
 
                 <Button v-if="isCurrentUser" @@click="router.push({ name: 'settings' })" :data="btnProfileStyle" />
-                <Button v-else class="w-max" :data="btnFriendStyle" />
+                <Button v-else @@click="handleFriendButton" :data="btnFriendStyle" />
             </div>
         </div>
 
@@ -34,7 +35,7 @@
         <!-- Bio -->
         <div v-show="!isLoading" class="flex flex-col gap-y-3 bg-[#FAFAFA] rounded-[30px] p-5">
             <span class="text-xl font-medium">Bio</span>
-            <span class="text-base text-gray-400 whitespace-pre-wrap">{{ user.bio }}</span>
+            <span class="text-base text-gray-400 whitespace-pre-wrap">{{ targetUser.bio }}</span>
         </div>
 
         <div v-show="isLoading" class="flex flex-col gap-y-3 rounded-[30px] p-5 loading">
@@ -51,7 +52,7 @@
                     <UserProfilPicture class="-mx-2" v-for="friend in friends" :data="{ pic: friend?.pic, style: 'SMALL' }" />
                 </div>
 
-                <Button :data="{ apparence: { color: 'BLUE', size: 'XS', type: 'SECONDARY', rounded: 'FULL' }, text: 'Voir plus' }" />
+                <Button @@click="router.push({ name: 'friends' })" :data="{ apparence: { color: 'BLUE', size: 'XS', type: 'SECONDARY', rounded: 'FULL' }, text: 'Voir plus' }" />
             </div>
         </div>
 
@@ -76,6 +77,11 @@
             <div class="rounded-xl bg-white h-[80px] w-1/3 aspect-square"></div>
         </div>
     </div>
+
+    <Modal ref="modal" :data="{ header: { title: 'Gestion de l\'amitié', closeButton: true } }">
+        <Button @@click="handleBlock" :data="{ apparence: { color: 'RED', size: 'BASE', type: 'PRIMARY' }, text: 'Bloquer' }"></Button>
+        <!-- <Button @@click="handleRemoveFriend" :data="{ apparence: { color: 'RED', size: 'BASE', type: 'SECONDARY' }, text: 'Retirer' }"></Button> -->
+    </Modal>
 </template>
 
 <script setup lang="ts">
@@ -93,12 +99,16 @@ import UtilsApi from "../../utils/UtilsApi";
 import { useRouter } from "vue-router";
 import { RouteLocationNormalizedLoaded } from "vue-router";
 import Emoji from "../../components/Emoji.vue";
+import Modal from "../../components/Modal.vue";
 
 // ########################################### VARIABLES ###########################################
 
 const MAX_FRIENDS = 5;
 const MAX_INTERESTS = 3;
 
+const ERROR_LEVEL = import.meta.env.VITE_ERROR_LEVEL;
+
+const targetUser    = ref<IUser | null>(null);
 const user          = ref<IUser>(UtilsAuth.getCurrentUser()!);
 const route         = useRoute();
 const router        = useRouter();
@@ -108,6 +118,8 @@ const isCurrentUser = ref(false);
 const isFriend      = ref(false);
 const isPending     = ref(false);
 const isLoading     = ref(true);
+const isBlocked     = ref(false);
+const modal         = ref<InstanceType<typeof Modal> | null>(null);
 
 const btnProfileStyle = ref<IButton>({ apparence: { color: "BLUE", size: "XS", type: "SECONDARY", rounded: "FULL" }, text: "Paramètres du compte" });
 
@@ -153,35 +165,54 @@ const getUserId = (route: RouteLocationNormalizedLoaded) => {
 };
 
 const updateComponent = async (idUser: number) => {
-    user.value = UtilsAuth.getCurrentUser()!;
+    await updateUserData(idUser);
+    await updateBlockedStatus();
 
-    await updateUser(idUser);
-    await updateFriends();
-    await updateInterests();
+    if (!isBlocked.value) {
+        await updateFriendsStatus();
+        await updateInterests();
 
-    await updateBtnStyles();
+        await updateBtnStyles();
+    } else {
+        router.push({ name: "notfound" });
+    }
 };
 
-const updateUser = async (idUser: number) => {
-    // Load user
+const updateUserData = async (idUser: number) => {
     if (user.value.id == idUser) {
         isCurrentUser.value = true;
+
+        targetUser.value = user.value;
     } else {
         const dataUser = await UtilsApi.getUserById(idUser);
 
         if (dataUser) {
             isCurrentUser.value = false;
 
-            user.value = dataUser;
+            // user.value = dataUser;
+            targetUser.value = dataUser;
         } else {
             isCurrentUser.value = true;
 
-            user.value = UtilsAuth.getCurrentUser()!;
+            // user.value = UtilsAuth.getCurrentUser()!;
+            targetUser.value = user.value;
         }
     }
 };
 
-const updateFriends = async () => {
+const updateBlockedStatus = async () => {
+    if (!isCurrentUser.value && targetUser.value) {
+        const idUser1 = user.value.id;
+        // const idUser2 = user.value.id;
+        const idUser2 = targetUser.value.id;
+
+        if (idUser1 != idUser2) {
+            isBlocked.value = await UtilsApi.isBlocked(idUser1, idUser2);
+        }
+    }
+};
+
+const updateFriendsStatus = async () => {
     if (isCurrentUser.value) {
         const dataFriends = await UtilsApi.getAllFriends(user.value.id);
 
@@ -189,29 +220,58 @@ const updateFriends = async () => {
             friends.value = dataFriends.slice(0, MAX_FRIENDS);
         }
     }
-}
+};
 
 const updateInterests = async () => {
-    const dataInterests = await UtilsApi.getUserInterests(user.value.id);
+    if (targetUser.value) {
+        const dataInterests = await UtilsApi.getUserInterests(targetUser.value.id);
 
-    if (dataInterests) {
-        interests.value = dataInterests;
+        if (dataInterests) {
+            interests.value = dataInterests;
 
-        interests.value = interests.value.slice(0, MAX_INTERESTS);
+            interests.value = interests.value.slice(0, MAX_INTERESTS);
+        }
     }
-}
+};
 
 const updateBtnStyles = async () => {
-    if (!isCurrentUser.value) {
+    if (!isCurrentUser.value && targetUser.value) {
 
-        const idUser1 = UtilsAuth.getCurrentUser()!.id;
-        const idUser2 = user.value.id;
+        const idUser1 = user.value.id;
+        const idUser2 = targetUser.value.id;
 
         if (idUser1 != idUser2) {
             isFriend.value = await UtilsApi.isFriend(idUser1, idUser2);
-        } else {
-            console.error("Unable to check if user is friend with himself");
+        } else if (ERROR_LEVEL > 0) {
+            console.log("DEBUG : Unable to check if user is friend with himself");
         }
     }
-}
+};
+
+// ########################################### HANDLES ###########################################
+
+const handleFriendButton = () => {
+    // TODO: Handle friend button
+
+    // Already friend
+    // Not friend and no pending request
+    // Not friend and pending request
+
+    if (isFriend.value) {
+        modal.value?.show();
+    }
+};
+
+const handleBlock = async () => {
+    if (targetUser.value) {
+        const success = await UtilsApi.addBlockedUser(user.value.id, targetUser.value.id);
+
+        if (success) {
+            isBlocked.value = true;
+
+            router.back();
+        }
+    }
+};
+
 </script>

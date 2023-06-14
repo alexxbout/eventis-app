@@ -37,7 +37,9 @@
     </div>
 
     <div v-if="event?.participants">
-        <ModalParticipant ref="modalParticipant" :data="event.participants" />
+        <Modal ref="modal" :data="{ header: { closeButton: true, title: 'Participants' } }">
+            <UserCard v-for="participant in event.participants" :key="participant.id" :data="{ user: participant.user, action: 'SHOW_PROFIL', style: 'RECTANGLE' }" />
+        </Modal>
     </div>
 </template>
 
@@ -51,18 +53,19 @@ import UtilsApi from "../utils/UtilsApi";
 import UtilsAuth from "../utils/UtilsAuth";
 
 import Button from "./Button.vue";
-import ModalParticipant from "./ModalParticipant.vue";
 import Emoji from "./Emoji.vue";
+import Modal from "./Modal.vue";
+import UserCard from "./UserCard.vue";
 
 // ############################################### VARIABLES ###############################################
 
-const router = useRouter();
-const route = useRoute();
-const user = UtilsAuth.getCurrentUser();
-const modalParticipant = ref<InstanceType<typeof ModalParticipant> | null>(null);
-const header = ref<HTMLElement | null>(null);
-const event = ref<IEvent>();
-const passed = ref(false);
+const router          = useRouter();
+const route           = useRoute();
+const user            = UtilsAuth.getCurrentUser();
+const modal           = ref<InstanceType<typeof Modal> | null>(null);
+const header          = ref<HTMLElement | null>(null);
+const event           = ref<IEvent>();
+const passed          = ref(false);
 const isParticipating = ref(false);
 
 const btnParticipantsStyle = computed<IButton>(() => {
@@ -140,7 +143,7 @@ const formatDate = (date: string) => {
 
 const handleModal = () => {
     if (event.value?.participants && event.value.participants.length > 0) {
-        modalParticipant.value?.show();
+        modal.value?.show();
     }
 }
 

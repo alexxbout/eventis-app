@@ -74,6 +74,14 @@ const routes: Array<RouteRecordRaw> = [
         }
     },
     {
+        path: "/profile/friends",
+        name: "friends",
+        component: () => import("./router/app/Friends.vue"),
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
         path: "/notifs",
         name: "notifs",
         component: () => import("./router/app/Notifs.vue"),
