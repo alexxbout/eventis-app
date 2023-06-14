@@ -26,13 +26,17 @@
                 <Switch @@update="handleSwitch" :value="user.showPseudo == '1'" />
             </div>
 
-            <div v-show="user.showPseudo == '1'" class="relative z-30 h-max">
+            <div v-show="user.showPseudo == '1'" class="relative z-30 h-max flex flex-col gap-y-2">
                 <Input @@update="updatePseudo" :name="'pseudo'" :label="'Pseudo'" :minlength="3" :maxlength="15" :value="user.pseudo">
                 <button @click="handleEmojiPicker" class="bg-[#F3F6FC] rounded-2xl p-4 h-[56px] w-[56px] aspect-square touch-manipulation">
                     <i v-if="user.emoji == null" class="bi bi-emoji-smile-fill text-xl text-primary"></i>
                     <i v-else class="bi bi-trash-fill text-xl text-custom-red"></i>
                 </button>
                 </Input>
+
+                <div v-if="error">
+                    <span class="text-custom-red">{{ error }}</span>
+                </div>
 
                 <EmojiList @@select="handleEmojiSelect" v-show="showEmojis" class="absolute inset-y-24 w-full z-30" />
             </div>
@@ -63,6 +67,8 @@ const successStyle = ref<IButton>({ apparence: { color: "GREEN", size: "BASE", t
 const errorStyle = ref<IButton>({ apparence: { color: "RED", size: "BASE", type: "PRIMARY" }, text: "Erreur lors de l'enregistrement" });
 
 const submitBtnStyle = ref<IButton>(defaultStyle.value);
+
+const error = ref<string | null>(null);
 
 const updateLastname = (value: string) => {
     user.value.lastname = value;
@@ -110,17 +116,20 @@ const handleSubmit = async () => {
         user.value.bio
     );
 
-    if (status) {
+    if (status.success) {
+        error.value = null;
+        
         submitBtnStyle.value = successStyle.value;
 
         // Update user in local storage
         const item: { user: IUser } = JSON.parse(localStorage.getItem("app") || "{}");
-
         item.user = user.value;
-
         localStorage.setItem("app", JSON.stringify(item));
     } else {
         submitBtnStyle.value = errorStyle.value;
+        if (status.error) {
+            error.value = status.error;
+        }
     }
 }
 </script>

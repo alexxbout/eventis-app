@@ -206,23 +206,8 @@ class UtilsApi {
         return data;
     }
 
-    // addUser(firstname: string, lastname: string, password: string, idFoyer: number, idRole: number) {
-    //     return axios.post(this.baseUrl + "v1/user/", {
-    //         "firstname": firstname,
-    //         "lastname": lastname,
-    //         "password": password,
-    //         "idFoyer": idFoyer,
-    //         "idRole": idRole
-    //     }, {
-    //         headers: {
-    //             "Authorization": "Bearer " + AuthService.getToken(),
-    //             "Content-Type": "application/json"
-    //         }
-    //     });
-    // }
-
-    async updateUser(idUser: number, firstname?: string, lastname?: string, emoji?: string | null, pseudo?: string, showPseudo?: string, bio?: string): Promise<boolean> {
-        let data = false;
+    async updateUser(idUser: number, firstname?: string, lastname?: string, emoji?: string | null, pseudo?: string, showPseudo?: string, bio?: string): Promise<{ success: boolean, error?: string }> {
+        let data: { success: boolean, error?: string } = { success: false };
 
         const body = {
             "firstname": firstname,
@@ -234,7 +219,10 @@ class UtilsApi {
         };
 
         await this.performRequest("updateUser", "PUT", "v1/user/" + idUser, removeNullValues(body), (response) => {
-            data = response.status === HTTPCodes.OK;
+            data.success = response.status === HTTPCodes.OK;
+        }, (error) => {
+            data.success = false;
+            data.error = error.response.data.message;
         });
 
         return data;

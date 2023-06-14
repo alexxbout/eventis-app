@@ -3,8 +3,8 @@
         <label :for="props.name">{{ props.label }}</label>
         <div class="flex gap-x-2 w-full">
             <slot></slot>
-            <input v-if="props.apparence == 'input'" ref="inputElement" class="bg-[#F3F6FC] rounded-2xl p-4 w-full" v-model="value" :name="props.name" :id="props.name" :placeholder="props.placeholder" :pattern="props.pattern" :minlength="props.minlength" :maxlength="props.maxlength" :type="props.type" :required="props.required">
-            <textarea v-else-if="props.apparence == 'textarea'" class="bg-[#F3F6FC] rounded-2xl p-4 min-h-[125px] w-full" v-model="value" :name="props.name" :id="props.name" :placeholder="props.placeholder" :minlength="props.minlength" :maxlength="props.maxlength" :required="props.required" type="text">{{ props.value }}</textarea>
+            <input v-if="props.apparence == 'input'" ref="inputElement" class="bg-[#F3F6FC] rounded-2xl p-4 w-full input" v-model="value" :name="props.name" :id="props.name" :placeholder="props.placeholder" :pattern="props.pattern" :minlength="props.minlength" :maxlength="props.maxlength" :type="props.type" :required="props.required">
+            <textarea v-else-if="props.apparence == 'textarea'" class="bg-[#F3F6FC] rounded-2xl p-4 min-h-[125px] w-full input" v-model="value" :name="props.name" :id="props.name" :placeholder="props.placeholder" :minlength="props.minlength" :maxlength="props.maxlength" :required="props.required" type="text">{{ props.value }}</textarea>
         </div>
     </div>
 </template>
