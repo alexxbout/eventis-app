@@ -174,3 +174,14 @@ export interface IBlocked {
     idUser   : number;
     since    : string;
 }
+
+// FRIENDS
+
+export interface IPending {
+    pending        : boolean;
+    value          : {
+        id         : number;
+        idRequester: number;
+        idRequested: number;
+    } | null;
+}

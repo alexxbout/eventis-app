@@ -14,7 +14,7 @@
         <div v-show="!isLoading" class="flex items-center gap-x-5 w-full bg-[#FAFAFA] rounded-[30px] p-5">
             <UserProfilPicture :data="{ pic: targetUser.pic, style: 'LARGE' }" />
 
-            <div class="flex flex-col gap-y-5">
+            <div class="flex flex-col gap-y-5 w-full">
                 <div class="flex flex-col gap-y-0">
                     <div v-if="targetUser.showPseudo == '1'" class="flex gap-x-2 items-center">
                         <Emoji v-if="targetUser.emoji != null" :data="{ name: targetUser.emoji, size: 'PROFILE' }" />
@@ -23,8 +23,17 @@
                     <span v-show="targetUser.showPseudo == '0'" class="text-2xl font-medium">{{ targetUser.firstname + ' ' + targetUser.lastname }}</span>
                 </div>
 
-                <Button v-if="isCurrentUser" @@click="router.push({ name: 'settings' })" :data="btnProfileStyle" />
-                <Button v-else @@click="handleFriendButton" :data="btnFriendStyle" />
+                <!-- Settings -->
+                <Button v-if="isCurrentUser" @@click="router.push({ name: 'settings' })" :data="btnProfileStyle" class="w-max" />
+
+                <!-- Manage friend incomming friend request -->
+                <div v-if="isRequested" class="flex items-center justify-center gap-x-3 w-full">
+                    <Button @@click="handleAcceptRequest" :data="buttonsRequestedStyle[0]" class="w-full"></Button>
+                    <Button @@click="handleRejectRequest" :data="buttonsRequestedStyle[1]" class="w-full"></Button>
+                </div>
+
+                <!-- Manage friendship -->
+                <Button v-else-if="!isCurrentUser" @@click="handleFriendButton" :data="btnFriendStyle" class="w-max" />
             </div>
         </div>
 
@@ -80,7 +89,7 @@
 
     <Modal ref="modal" :data="{ header: { title: 'Gestion de l\'amitié', closeButton: true } }">
         <Button @@click="handleBlock" :data="{ apparence: { color: 'RED', size: 'BASE', type: 'PRIMARY' }, text: 'Bloquer' }"></Button>
-        <!-- <Button @@click="handleRemoveFriend" :data="{ apparence: { color: 'RED', size: 'BASE', type: 'SECONDARY' }, text: 'Retirer' }"></Button> -->
+        <Button @@click="handleRemoveFriend" :data="{ apparence: { color: 'RED', size: 'BASE', type: 'SECONDARY' }, text: 'Retirer' }"></Button>
     </Modal>
 </template>
 
@@ -92,7 +101,7 @@ import Button from "../../components/Button.vue";
 import UserProfilPicture from "../../components/UserProfilPicture.vue";
 import InterestCardProfil from "../../components/InterestCardProfil.vue";
 
-import type { IInterest, IUser, IButton } from "../../types/interfaces";
+import type { IInterest, IUser, IButton, IPending } from "../../types/interfaces";
 
 import UtilsAuth from "../../utils/UtilsAuth";
 import UtilsApi from "../../utils/UtilsApi";
@@ -108,32 +117,62 @@ const MAX_INTERESTS = 3;
 
 const ERROR_LEVEL = import.meta.env.VITE_ERROR_LEVEL;
 
-const targetUser    = ref<IUser | null>(null);
-const user          = ref<IUser>(UtilsAuth.getCurrentUser()!);
-const route         = useRoute();
-const router        = useRouter();
-const friends       = ref<IUser[]>([]);
-const interests     = ref<IInterest[]>([]);
+const targetUser = ref<IUser | null>(null);
+const user = ref<IUser>(UtilsAuth.getCurrentUser()!);
+const route = useRoute();
+const router = useRouter();
+const friends = ref<IUser[]>([]);
+const interests = ref<IInterest[]>([]);
 const isCurrentUser = ref(false);
-const isFriend      = ref(false);
-const isPending     = ref(false);
-const isLoading     = ref(true);
-const isBlocked     = ref(false);
-const modal         = ref<InstanceType<typeof Modal> | null>(null);
+const isFriend = ref(false);
+const isPending = ref<IPending>({ pending: false, value: null });
+const isRequester = computed(() => isPending.value.value?.idRequester == user.value.id);
+const isRequested = computed(() => isPending.value.value?.idRequested == user.value.id);
+const isLoading = ref(true);
+const isBlocked = ref(false);
+const modal = ref<InstanceType<typeof Modal> | null>(null);
 
-const btnProfileStyle = ref<IButton>({ apparence: { color: "BLUE", size: "XS", type: "SECONDARY", rounded: "FULL" }, text: "Paramètres du compte" });
+const btnProfileStyle = ref<IButton>(
+    {
+        apparence: {
+            color: "BLUE",
+            size: "XS",
+            type: "SECONDARY",
+            rounded: "FULL"
+        },
+        text: "Paramètres du compte"
+    });
 
 const btnFriendStyle = computed<IButton>(() => {
     return {
         apparence: {
             color: isFriend.value ? "GRAY" : "BLUE",
-            type: isFriend.value ? "SECONDARY" : (isPending.value ? "SECONDARY" : "PRIMARY"),
+            type: isFriend.value ? "SECONDARY" : (isPending.value.pending && isRequester ? "SECONDARY" : "PRIMARY"),
             size: "XS",
             rounded: "FULL"
         },
-        text: isFriend.value ? "Gérer amitié" : (isPending.value ? "Retirer demande" : "Demander en ami"),
+        text: isFriend.value ? "Gérer amitié" : (isPending.value.pending && isRequester ? "Retirer demande" : "Demander en ami"),
     };
 });
+
+const buttonsRequestedStyle = ref<IButton[]>([
+    {
+        apparence: {
+            color: "GREEN",
+            type: "PRIMARY",
+            size: "XS"
+        },
+        text: "Oui"
+    },
+    {
+        apparence: {
+            color: "RED",
+            type: "PRIMARY",
+            size: "XS"
+        },
+        text: "Non"
+    }
+]);
 
 // ########################################### FUNCTIONS ###########################################
 
@@ -155,6 +194,9 @@ onMounted(async () => {
     await updateComponent(getUserId(route));
 
     isLoading.value = false;
+
+    console.log(isPending.value);
+
 });
 
 const getUserId = (route: RouteLocationNormalizedLoaded) => {
@@ -169,10 +211,10 @@ const updateComponent = async (idUser: number) => {
     await updateBlockedStatus();
 
     if (!isBlocked.value) {
-        await updateFriendsStatus();
+        await updateFriends();
         await updateInterests();
 
-        await updateBtnStyles();
+        await updateFriendship();
     } else {
         router.push({ name: "notfound" });
     }
@@ -189,12 +231,10 @@ const updateUserData = async (idUser: number) => {
         if (dataUser) {
             isCurrentUser.value = false;
 
-            // user.value = dataUser;
             targetUser.value = dataUser;
         } else {
             isCurrentUser.value = true;
 
-            // user.value = UtilsAuth.getCurrentUser()!;
             targetUser.value = user.value;
         }
     }
@@ -203,7 +243,6 @@ const updateUserData = async (idUser: number) => {
 const updateBlockedStatus = async () => {
     if (!isCurrentUser.value && targetUser.value) {
         const idUser1 = user.value.id;
-        // const idUser2 = user.value.id;
         const idUser2 = targetUser.value.id;
 
         if (idUser1 != idUser2) {
@@ -212,7 +251,8 @@ const updateBlockedStatus = async () => {
     }
 };
 
-const updateFriendsStatus = async () => {
+const updateFriends = async () => {
+    // Update friends only if the user is the current user
     if (isCurrentUser.value) {
         const dataFriends = await UtilsApi.getAllFriends(user.value.id);
 
@@ -234,14 +274,19 @@ const updateInterests = async () => {
     }
 };
 
-const updateBtnStyles = async () => {
+const updateFriendship = async () => {
     if (!isCurrentUser.value && targetUser.value) {
-
         const idUser1 = user.value.id;
         const idUser2 = targetUser.value.id;
 
         if (idUser1 != idUser2) {
+            // Update friendship status
             isFriend.value = await UtilsApi.isFriend(idUser1, idUser2);
+
+            if (!isFriend.value) {
+                // If they are not friends, check if there is a pending request
+                isPending.value = await UtilsApi.isPending(idUser1, idUser2);
+            }
         } else if (ERROR_LEVEL > 0) {
             console.log("DEBUG : Unable to check if user is friend with himself");
         }
@@ -250,27 +295,72 @@ const updateBtnStyles = async () => {
 
 // ########################################### HANDLES ###########################################
 
-const handleFriendButton = () => {
+const handleFriendButton = async () => {
     // TODO: Handle friend button
 
     // Already friend
+    // - Show modal to manage friendship
     // Not friend and no pending request
+    // - Send friend request
     // Not friend and pending request
+    // - Remove pending request
 
     if (isFriend.value) {
         modal.value?.show();
+    } else {
+        if (isPending.value.pending) {
+            // Remove pending request
+            if (await UtilsApi.rejectFriendRequest(user.value.id, targetUser.value!.id)) {
+                isPending.value = await UtilsApi.isPending(user.value.id, targetUser.value!.id);
+            } else if (ERROR_LEVEL > 0) {
+                console.log("DEBUG : Unable to remove pending request");
+            }
+        } else {
+            // Send friend request
+            if (await UtilsApi.askFriend(user.value.id, targetUser.value!.id)) {
+                isPending.value = await UtilsApi.isPending(user.value.id, targetUser.value!.id);
+            } else if (ERROR_LEVEL > 0) {
+                console.log("DEBUG : Unable to send friend request");
+            }
+        }
     }
 };
 
 const handleBlock = async () => {
-    if (targetUser.value) {
-        const success = await UtilsApi.addBlockedUser(user.value.id, targetUser.value.id);
+    const success = await UtilsApi.addBlockedUser(user.value.id, targetUser.value!.id);
 
-        if (success) {
-            isBlocked.value = true;
+    if (success) {
+        isBlocked.value = true;
 
-            router.back();
-        }
+        router.back();
+    }
+};
+
+const handleRemoveFriend = async () => {
+    const success = await UtilsApi.removeFriendship(user.value.id, targetUser.value!.id);
+
+    if (success) {
+        isFriend.value = false;
+
+        modal.value?.hide();
+    }
+};
+
+const handleAcceptRequest = async () => {
+    if (await UtilsApi.acceptFriendRequest(user.value.id, targetUser.value!.id)) {
+        isFriend.value = true;
+
+        isPending.value = { pending: false, value: null };
+    } else if (ERROR_LEVEL > 0) {
+        console.log("DEBUG : Unable to accept friend request");
+    }
+};
+
+const handleRejectRequest = async () => {
+    if (await UtilsApi.rejectFriendRequest(user.value.id, targetUser.value!.id)) {
+        isPending.value = await UtilsApi.isPending(user.value.id, targetUser.value!.id);
+    } else if (ERROR_LEVEL > 0) {
+        console.log("DEBUG : Unable to reject friend request");
     }
 };
 

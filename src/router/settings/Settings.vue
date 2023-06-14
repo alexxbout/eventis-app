@@ -10,7 +10,7 @@
             </div>
 
             <!-- User card -->
-            <div class="flex justify-center items-center gap-x-5 w-full bg-[#FAFAFA] rounded-[30px] p-5">
+            <div class="flex items-center gap-x-5 w-full bg-[#FAFAFA] rounded-[30px] p-5">
                 <div @click="handleModal" class="relative">
                     <UserProfilPicture :data="{ pic: user.pic, style: 'LARGE' }" />
                     <i class="absolute -bottom-0 -right-0 bi bi-camera-fill h-7 w-7 text-center flex items-center justify-center text-white text-xs bg-primary rounded-full"></i>

@@ -86,7 +86,9 @@ const loadFriendRequest = async () => {
     const friends = await UtilsApi.isFriend(user!.id, props.data.user.id);
 
     if (!friends) {
-        isPending.value = await UtilsApi.isPending(user!.id, props.data.user.id);
+        const data = await UtilsApi.isPending(user!.id, props.data.user.id);
+        
+        isPending.value = data.pending;
 
         btnStyle.value = {
             apparence: {

@@ -1,7 +1,7 @@
 import axios from "axios";
 import AuthService from "./UtilsAuth";
 
-import type { IEvent, IParticipant, ICode, IFoyer, INotification, IInterest, IUser, IBlocked } from "../types/interfaces";
+import type { IEvent, IParticipant, ICode, IFoyer, INotification, IInterest, IUser, IBlocked, IPending } from "../types/interfaces";
 import { HTTPCodes } from "./HTTPCodes";
 
 const removeNullValues = (obj: any) => {
@@ -354,22 +354,25 @@ class UtilsApi {
         return data;
     }
 
-    async acceptFriendRequest(idUser1: number, idFriend: number): Promise<boolean> {
+    async acceptFriendRequest(idRequester: number, idRequested: number): Promise<boolean> {
         let data = false;
 
-        await this.performRequest("acceptFriendRequest", "POST", "v1/user/" + idUser1 + "/friend/accept/" + idFriend, null, (response) => {
+        await this.performRequest("acceptFriendRequest", "POST", "v1/user/" + idRequester + "/friend/accept/" + idRequested, null, (response) => {
             data = response.status === HTTPCodes.CREATED;
         });
 
         return data;
     }
 
-    async isPending(idUser1: number, idUser2: number): Promise<boolean> {
-        let data = false;
+    async isPending(idRequester: number, idRequested: number): Promise<IPending> {
+        let data: IPending = {
+            pending: false,
+            value: null
+        };
 
-        await this.performRequest("isPending", "GET", "v1/user/" + idUser1 + "/friend/pending/" + idUser2, null, (response) => {
+        await this.performRequest("isPending", "GET", "v1/user/" + idRequester + "/friend/pending/" + idRequested, null, (response) => {
             if (response.status === HTTPCodes.OK) {
-                data = response.data.data.pending as boolean;
+                data = response.data.data as IPending;
             }
         });
 
