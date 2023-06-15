@@ -33,7 +33,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/events",
         name: "events",
-        component: () => import("./router/app/Events.vue"),
+        component: () => import("./router/app/events/Events.vue"),
         meta: {
             requiresAuth: true,
             hideNavbar: false
@@ -42,7 +42,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/events/calendar",
         name: "eventsCalendar",
-        component: () => import("./router/app/Events.vue"),
+        component: () => import("./router/app/events/Events.vue"),
         meta: {
             requiresAuth: true,
             hideNavbar: false
@@ -51,7 +51,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/events/:id",
         name: "eventDetail",
-        component: () => import("./components/EventDetail.vue"),
+        component: () => import("./router/app/events/EventDetail.vue"),
         meta: {
             requiresAuth: true,
             hideNavbar: true
@@ -92,7 +92,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/settings",
         name: "settings",
-        component: () => import("./router/settings/Settings.vue"),
+        component: () => import("./router/app/settings/Settings.vue"),
         meta: {
             requiresAuth: true,
             hideNavbar: true
@@ -101,7 +101,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/settings/blocked",
         name: "settingsBlocked",
-        component: () => import("./router/settings/SettingsBlocked.vue"),
+        component: () => import("./router/app/settings/SettingsBlocked.vue"),
         meta: {
             requiresAuth: true,
             hideNavbar: true
@@ -110,7 +110,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/settings/infos",
         name: "settingsInfos",
-        component: () => import("./router/settings/SettingsInfos.vue"),
+        component: () => import("./router/app/settings/SettingsInfos.vue"),
         meta: {
             requiresAuth: true,
             hideNavbar: true
@@ -119,7 +119,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/settings/interests",
         name: "settingsInterests",
-        component: () => import("./router/settings/SettingsInterests.vue"),
+        component: () => import("./router/app/settings/SettingsInterests.vue"),
         meta: {
             requiresAuth: true,
             hideNavbar: true
@@ -128,10 +128,19 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/settings/password",
         name: "settingsPassword",
-        component: () => import("./router/settings/SettingsPassword.vue"),
+        component: () => import("./router/app/settings/SettingsPassword.vue"),
         meta: {
             requiresAuth: true,
             hideNavbar: true
+        }
+    },
+    {
+        path: "/admin",
+        name: "admin",
+        component: () => import("./router/admin/Admin.vue"),
+        meta: {
+            requiresAuth: true,
+            hideNavbar: false
         }
     },
     {

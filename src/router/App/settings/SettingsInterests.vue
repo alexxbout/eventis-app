@@ -15,12 +15,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 
-import InterestCard from "../../components/InterestCard.vue";
+import InterestCard from "../../../components/InterestCard.vue";
 
-import type { IInterest } from "../../types/interfaces";
+import type { IInterest } from "../../../types/interfaces";
 
-import UtilsAuth from "../../utils/UtilsAuth";
-import UtilsApi from "../../utils/UtilsApi";
+import UtilsAuth from "../../../utils/UtilsAuth";
+import UtilsApi from "../../../utils/UtilsApi";
 import { useRouter } from "vue-router";
 
 // ############################################## VARIABLES ##############################################

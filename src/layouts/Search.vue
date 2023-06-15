@@ -35,7 +35,7 @@ import type { IApp, IUser } from "../types/interfaces";
 
 import UtilsApi from "../utils/UtilsApi";
 
-import UserCard from "../components/UserCard.vue";
+import UserCard from "../router/app/users/UserCard.vue";
 
 // ########################################### VARIABLES ###########################################
 
@@ -46,11 +46,11 @@ const props = defineProps({
     }
 });
 
-const opened = ref(false);
+const opened    = ref(false);
 const container = ref<HTMLElement | null>(null);
-const search = ref<HTMLElement | null>(null);
-const input = ref("");
-const users = ref<IUser[]>([]);
+const search    = ref<HTMLElement | null>(null);
+const input     = ref("");
+const users     = ref<IUser[]>([]);
 
 // ########################################### FUNCTIONS ###########################################
 

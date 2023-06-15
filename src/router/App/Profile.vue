@@ -98,7 +98,7 @@ import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 
 import Button from "../../components/Button.vue";
-import UserProfilPicture from "../../components/UserProfilPicture.vue";
+import UserProfilPicture from "./users/UserProfilPicture.vue";
 import InterestCardProfil from "../../components/InterestCardProfil.vue";
 
 import type { IInterest, IUser, IButton, IPending } from "../../types/interfaces";

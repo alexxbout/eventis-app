@@ -25,11 +25,11 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 
-import type { IUser, IButton, IInterest } from "../types/interfaces";
+import type { IUser, IButton, IInterest } from "../../../types/interfaces";
 
-import Button from "./Button.vue";
+import Button from "../../../components/Button.vue";
 import UserProfilPicture from "./UserProfilPicture.vue";
-import Emoji from "./Emoji.vue";
+import Emoji from "../../../components/Emoji.vue";
 
 // ########################################### VARIABLES ###########################################
 

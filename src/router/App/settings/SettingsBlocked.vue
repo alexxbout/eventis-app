@@ -18,11 +18,11 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import UserCard from "../../components/UserCard.vue";
+import UserCard from "../users/UserCard.vue";
 import { onMounted, ref } from "vue";
-import type { IUser, IBlocked } from "../../types/interfaces";
-import UtilsApi from "../../utils/UtilsApi";
-import UtilsAuth from "../../utils/UtilsAuth";
+import type { IUser, IBlocked } from "../../../types/interfaces";
+import UtilsApi from "../../../utils/UtilsApi";
+import UtilsAuth from "../../../utils/UtilsAuth";
 
 const router  = useRouter();
 const user    = UtilsAuth.getCurrentUser()!;

@@ -14,13 +14,13 @@
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
-import EventCard from "../../components/EventCard.vue";
+import EventCard from "./EventCard.vue";
 
-import type { IEvent } from "../../types/interfaces";
+import type { IEvent } from "../../../types/interfaces";
 
-import UtilsZip from "../../utils/UtilsZip";
-import UtilsApi from "../../utils/UtilsApi";
-import UtilsAuth from "../../utils/UtilsAuth";
+import UtilsZip from "../../../utils/UtilsZip";
+import UtilsApi from "../../../utils/UtilsApi";
+import UtilsAuth from "../../../utils/UtilsAuth";
 
 // ########################################### VARIABLES ###########################################
 

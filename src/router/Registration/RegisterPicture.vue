@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { ref, inject } from "vue";
 
-import UserProfilPicture from "../../components/UserProfilPicture.vue";
+import UserProfilPicture from "../app/users/UserProfilPicture.vue";
 import Button from "../../components/Button.vue";
 
 import UtilsAuth from "../../utils/UtilsAuth";

@@ -25,13 +25,13 @@
 <script setup lang="ts">
 import { CSSProperties, onMounted, ref, watch } from "vue";
 
-import UtilsApi from "../../utils/UtilsApi";
-import UtilsAuth from "../../utils/UtilsAuth";
-import UtilsZip from "../../utils/UtilsZip";
+import UtilsApi from "../../../utils/UtilsApi";
+import UtilsAuth from "../../../utils/UtilsAuth";
+import UtilsZip from "../../../utils/UtilsZip";
 
-import type { IEvent } from "../../types/interfaces";
+import type { IEvent } from "../../../types/interfaces";
 
-import EventCard from "../../components/EventCard.vue";
+import EventCard from "../events/EventCard.vue";
 
 // ########################################### VARIABLES ###########################################
 

@@ -17,12 +17,12 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { IUser } from '../../types/interfaces';
-import UtilsApi from '../../utils/UtilsApi';
-import UtilsAuth from '../../utils/UtilsAuth';
-import { useRouter } from 'vue-router';
-import UserCard from '../../components/UserCard.vue';
+import { onMounted, ref } from "vue";
+import type { IUser } from "../../types/interfaces";
+import UtilsApi from "../../utils/UtilsApi";
+import UtilsAuth from "../../utils/UtilsAuth";
+import { useRouter } from "vue-router";
+import UserCard from "./users/UserCard.vue";
 
 const user    = UtilsAuth.getCurrentUser()!;
 const router  = useRouter();

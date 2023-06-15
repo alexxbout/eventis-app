@@ -2,7 +2,7 @@
     <div class="flex flex-col items-center justify-around w-screen h-screen margins">
 
         <!-- Login modal -->
-        <div v-show="showModal" ref="modal" class="fixed bottom-0 flex flex-col w-screen h-screen">
+        <!-- <div v-show="showModal" ref="modal" class="fixed bottom-0 flex flex-col w-screen h-screen">
 
             <div @click="closeLogin" class="w-full h-full"></div>
 
@@ -21,12 +21,30 @@
 
                 <Button class="w-full" :data="{ apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY' }, text: 'Se connecter', type: 'submit' }" />
             </form>
-        </div>
+        </div> -->
+
+        <Modal ref="modal" :data="{header: { closeButton: true, title: 'Se connecter'}}">
+            <form @submit.prevent="handleLogin" class="w-full h-max justify-between flex flex-col gap-y-20">
+                <div class="flex flex-col gap-y-7">
+                    <div>
+                        <label for="">Identifiant</label>
+                        <input v-model="loginField" type="text" placeholder=" " class="input" required>
+                    </div>
+
+                    <div>
+                        <label for="">Mot de passe</label>
+                        <input v-model="passwordField" type="password" placeholder=" " class="input" required>
+                    </div>
+                </div>
+
+                <Button class="w-full" :data="{ apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY' }, text: 'Se connecter', type: 'submit' }" />
+            </form>
+        </Modal>
 
         <div class="flex flex-col items-center justify-around w-full h-full">
             <!-- Home -->
             <div class="flex flex-col gap-y-5">
-                <span class="text-5xl font-bold">Diversia</span>
+                <span class="text-5xl font-bold">Eventis</span>
                 <span class="font-light text-gray-500">Notre application de messagerie est un espace de partage et de connexion pour les personnes en situation de handicap, pour créer des relations positives et épanouissantes.</span>
             </div>
 
@@ -50,20 +68,17 @@ import { gsap, Power4 } from "gsap";
 import UtilsAuth from "../../utils/UtilsAuth";
 
 import Button from "../../components/Button.vue";
+import Modal from "../../components/Modal.vue";
 
 // ########################################### VARIABLES ###########################################
 
-const router        = useRouter();
-const loginField    = ref("");
+const router = useRouter();
+const loginField = ref("");
 const passwordField = ref("");
-const showModal     = ref(false);
-const modal         = ref<HTMLElement | null>(null);
+const showModal = ref(false);
+const modal = ref<InstanceType<typeof Modal>>();
 
 // ########################################### FUNCTIONS ###########################################
-
-onMounted(() => {
-    gsap.to(modal.value, { translateY: "150%" });
-});
 
 const openRegistration = () => {
     if (UtilsAuth.isLoggedIn()) {
@@ -77,26 +92,12 @@ const openLogin = () => {
     if (UtilsAuth.isLoggedIn()) {
         router.push({ name: "events" });
     } else {
-        showModal.value = true;
-
-        gsap.to(modal.value,
-            {
-                duration: 0.7,
-                translateY: "0%",
-                ease: Power4.easeOut
-            });
+        modal.value?.show();
     }
 }
 
 const closeLogin = () => {
-    gsap.to(modal.value,
-        {
-            duration: 0.7,
-            translateY: "150%",
-            ease: Power4.easeInOut
-        }).then(() => {
-            showModal.value = false;
-        });
+    modal.value?.hide();
 }
 
 const handleLogin = async () => {

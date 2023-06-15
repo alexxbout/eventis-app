@@ -10,7 +10,7 @@
             </div>
 
             <!-- Users -->
-            <div class="flex flex-col w-full overflow-y-auto overflow-hidden max-h-[1/2] h-max gap-y-5">
+            <div class="flex flex-col w-full overflow-y-auto overflow-hidden max-h-[1/2] h-max gap-y-5 p-1">
                 <slot></slot>
             </div>
         </div>

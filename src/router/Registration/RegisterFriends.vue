@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { inject, onMounted, ref } from "vue";
 
-import UserCard from "../../components/UserCard.vue";
+import UserCard from "../app/users/UserCard.vue";
 import Button from "../../components/Button.vue";
 
 import type { IUser, IRegistration, IButton } from "../../types/interfaces";

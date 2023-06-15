@@ -6,7 +6,7 @@
 
   <!-- Mobile -->
   <div class="w-screen h-full select-none md:hidden">
-    <Search ref="searchComponent" :app="{ setFixed, removeFixed }" />
+    <Search ref="search" :app="{ setFixed, removeFixed }" />
 
     <div ref="content">
       <router-view></router-view>
@@ -17,12 +17,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, provide } from "vue";
 import Navbar from "./layouts/Navbar.vue";
 import Search from "./layouts/Search.vue";
 
-// ########################################### Variables ###########################################  
-const searchComponent = ref<InstanceType<typeof Search> | null>(null);
+// ########################################### VARIABLES ###########################################
+
+const search = ref<InstanceType<typeof Search> | null>(null);
 
 const navbar = ref<InstanceType<typeof Navbar> | null>(null);
 
@@ -30,7 +31,8 @@ const content = ref<HTMLElement | null>(null);
 
 let prevScrollY = 0;
 
-// ########################################### Fonctions ###########################################
+// ########################################### FUNCTIONS ###########################################
+
 const setFixed = () => {
   prevScrollY = window.scrollY;
 
@@ -52,10 +54,11 @@ const removeFixed = () => {
 }
 
 const handleSearch = () => {
-  searchComponent.value?.open();
+  search.value?.open();
 }
 
-// ########################################### Hooks ###########################################
+// ########################################### HOOKS ###########################################
+
 onMounted(() => {
   // Disable pinch zoom on mobile
   document.addEventListener("gesturestart", function (e) {
@@ -63,4 +66,7 @@ onMounted(() => {
   });
 });
 
+// ########################################### EXPORTS ###########################################
+
+provide("props", search);
 </script>

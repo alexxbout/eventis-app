@@ -64,11 +64,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { IButton } from "../../types/interfaces";
-import Input from "../../components/Input.vue";
-import Button from "../../components/Button.vue";
-import UtilsApi from "../../utils/UtilsApi";
-import UtilsAuth from "../../utils/UtilsAuth";
+import { IButton } from "../../../types/interfaces";
+import Input from "../../../components/Input.vue";
+import Button from "../../../components/Button.vue";
+import UtilsApi from "../../../utils/UtilsApi";
+import UtilsAuth from "../../../utils/UtilsAuth";
 
 const router = useRouter();
 

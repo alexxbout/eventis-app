@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 
-import UtilsApi from "../utils/UtilsApi";
+import UtilsApi from "../../../utils/UtilsApi";
 
 const props = defineProps({
     data: {

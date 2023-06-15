@@ -23,7 +23,6 @@ export interface IUser {
 // TAB
 
 export interface ITab {
-    name   : string;
     path   : string;
     svg    : string;
     custom?: boolean;
@@ -184,4 +183,12 @@ export interface IPending {
         idRequester: number;
         idRequested: number;
     } | null;
+}
+
+// SETTINGS
+
+export interface ISection {
+    icon : string;
+    name : string;
+    route: string;
 }

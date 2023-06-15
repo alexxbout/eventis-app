@@ -29,11 +29,11 @@
 import { PropType, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
-import { type IEvent } from "../types/interfaces";
+import { type IEvent } from "../../../types/interfaces";
 
-import UtilsApi from "../utils/UtilsApi";
+import UtilsApi from "../../../utils/UtilsApi";
 
-import Emoji from "./Emoji.vue";
+import Emoji from "../../../components/Emoji.vue";
 
 const props = defineProps({
     data: {

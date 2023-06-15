@@ -3,7 +3,6 @@
 
         <i @click="handleClose" class="fixed text-3xl top-5 right-5 bi bi-x-circle-fill text-black"></i>
 
-
         <div v-if="!passed" class="fixed bottom-0 flex w-full h-20 p-4 bg-white border-t gap-x-3">
             <Button @@click="handleParticipate" :data="btnParticipateStyle" :delay="1000" class="w-full" />
 
@@ -47,15 +46,15 @@
 import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import type { IEvent, IButton } from "../types/interfaces";
+import type { IEvent, IButton } from "../../../types/interfaces";
 
-import UtilsApi from "../utils/UtilsApi";
-import UtilsAuth from "../utils/UtilsAuth";
+import UtilsApi from "../../../utils/UtilsApi";
+import UtilsAuth from "../../../utils/UtilsAuth";
 
-import Button from "./Button.vue";
-import Emoji from "./Emoji.vue";
-import Modal from "./Modal.vue";
-import UserCard from "./UserCard.vue";
+import Button from "../../../components/Button.vue";
+import Emoji from "../../../components/Emoji.vue";
+import Modal from "../../../components/Modal.vue";
+import UserCard from "../users/UserCard.vue";
 
 // ############################################### VARIABLES ###############################################
 

@@ -48,14 +48,14 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import Input from "../../components/Input.vue";
-import Button from "../../components/Button.vue";
+import Input from "../../../components/Input.vue";
+import Button from "../../../components/Button.vue";
 import { ref } from "vue";
-import UtilsAuth from "../../utils/UtilsAuth";
-import Switch from "../../components/Switch.vue";
-import EmojiList from "../../components/EmojiList.vue";
-import UtilsApi from "../../utils/UtilsApi";
-import type { IUser, IButton } from "../../types/interfaces";
+import UtilsAuth from "../../../utils/UtilsAuth";
+import Switch from "../../../components/Switch.vue";
+import EmojiList from "../../../components/EmojiList.vue";
+import UtilsApi from "../../../utils/UtilsApi";
+import type { IUser, IButton } from "../../../types/interfaces";
 
 const router = useRouter();
 const user = ref(UtilsAuth.getCurrentUser()!);

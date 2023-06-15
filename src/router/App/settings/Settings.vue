@@ -1,5 +1,5 @@
 <template>
-    <div class="TEMP flex flex-col justify-between margins h-screen">
+    <div class="flex flex-col justify-between margins h-screen">
         <div class="flex flex-col justify-center gap-y-6">
 
             <div class="flex gap-x-[15px] items-center justify-center w-max">
@@ -22,14 +22,16 @@
                 </div>
             </div>
 
-            <button v-for="tab in tabs" @click="handleSection(tab.route)" class="flex justify-between items-center w-full bg-[#FAFAFA] rounded-[30px] p-5">
-                <div class="w-max flex items-center justify-center gap-x-2">
-                    <i :class="tab.icon" class="text-lg"></i>
-                    <span>{{ tab.name }}</span>
-                </div>
+            <div class="bg-[#FAFAFA] rounded-[30px] p-5 w-full flex flex-col divide-y">
+                <button v-for="tab in tabs" @click="handleSection(tab.route)" class="flex justify-between items-center w-full first:pt-0 pt-5 last:pb-0 pb-5">
+                    <div class="w-max flex items-center justify-center gap-x-2">
+                        <i :class="tab.icon" class="text-lg"></i>
+                        <span>{{ tab.name }}</span>
+                    </div>
 
-                <i class="bi bi-chevron-right text-lg"></i>
-            </button>
+                    <i class="bi bi-chevron-right text-lg"></i>
+                </button>
+            </div>
         </div>
 
         <div>
@@ -40,40 +42,34 @@
         </div>
     </div>
 
-    <Modal ref="modal" :data="{header: {title: 'Photo de profil', closeButton: true}}">
+    <Modal ref="modal" :data="{ header: { title: 'Photo de profil', closeButton: true } }">
         <label for="image" class="relative">
             <input ref="fileInput" @change="updatePicture" type="file" class="absolute z-20 w-full h-full opacity-0" id="image" name="image">
-            <Button class="w-full relative" :data="{apparence: {color: 'BLUE', size: 'BASE', type: 'PRIMARY'}, text: user.pic ? 'Modifier' : 'Ajouter'}" />
+            <Button class="w-full relative" :data="{ apparence: { color: 'BLUE', size: 'BASE', type: 'PRIMARY' }, text: user.pic ? 'Modifier' : 'Ajouter' }" />
         </label>
-        <Button v-if="user.pic" @click="deletePicture" class="w-full" :data="{apparence: { color: 'RED', size: 'BASE', type: 'PRIMARY'}, text: 'Supprimer'}" />
+        <Button v-if="user.pic" @click="deletePicture" class="w-full" :data="{ apparence: { color: 'RED', size: 'BASE', type: 'PRIMARY' }, text: 'Supprimer' }" />
     </Modal>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import type { IUser } from "../../types/interfaces";
-import UtilsAuth from "../../utils/UtilsAuth";
-import UserProfilPicture from "../../components/UserProfilPicture.vue";
+import type { ISection, IUser } from "../../../types/interfaces";
+import UtilsAuth from "../../../utils/UtilsAuth";
+import UserProfilPicture from "../users/UserProfilPicture.vue";
 import { useRouter } from "vue-router";
-import Button from "../../components/Button.vue";
-import UtilsApi from "../../utils/UtilsApi";
-import UtilsLocalStorage from "../../utils/UtilsLocalStorage";
-import Modal from "../../components/Modal.vue";
+import Button from "../../../components/Button.vue";
+import UtilsApi from "../../../utils/UtilsApi";
+import UtilsLocalStorage from "../../../utils/UtilsLocalStorage";
+import Modal from "../../../components/Modal.vue";
 
-const user      = ref<IUser>(UtilsAuth.getCurrentUser()!);
-const router    = useRouter();
+const user = ref<IUser>(UtilsAuth.getCurrentUser()!);
+const router = useRouter();
 
-const modal     = ref<InstanceType<typeof Modal> | null>(null);
+const modal = ref<InstanceType<typeof Modal> | null>(null);
 
 const fileInput = ref<HTMLInputElement | null>(null);
 
-interface ITab {
-    icon: string;
-    name: string;
-    route: string;
-}
-
-const tabs = ref<ITab[]>([
+const tabs = ref<ISection[]>([
     { icon: "bi bi-person-vcard-fill", name: "Informations personnelles", route: "settingsInfos" },
     { icon: "bi bi-file-lock2-fill", name: "Mot de passe", route: "settingsPassword" },
     { icon: "bi bi-star-fill", name: "Centres d'intérêts", route: "settingsInterests" },

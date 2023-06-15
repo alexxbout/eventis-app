@@ -16,9 +16,9 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 
-import type { IUser, IButton } from "../types/interfaces";
+import type { IUser, IButton } from "../../../types/interfaces";
 
-import Button from "./Button.vue";
+import Button from "../../../components/Button.vue";
 import UserProfilPicture from "./UserProfilPicture.vue";
 
 // ########################################### VARIABLES ###########################################
