@@ -1,38 +1,61 @@
+# Installation de l'application
+
+
 Pour fonctionner, l'application necessite:
-une base de données MySQL,
-l'application VueJS,
-l'API CodeIgniter.
+- une base de données MySQL,
+- l'application VueJS,
+- l'API CodeIgniter.
 
 
+## Installation des prérequis:
+>XAMPP: 
+>>     https://www.apachefriends.org/index.html
+>
+>Composer : 
+>>     https://getcomposer.org/download/
+>Node : 
+>>     https://nodejs.org/en/download
+>Initialisation du depot git: (a faire pour l'API et l'application)<br />
+>>     git init
+>>     git clone <repository (SSH or HTTPS)
+>Initialisation du depot git: (a faire pour l'API et l'application)<br />
+>>     git init
+>>     git clone <repository (SSH or HTTPS)
+>Base de données: (via phpMyAdmin si disponible)
+>
+>>     mysql -u username -p database_name < script.sql
+> En cas de soucis, remplacer l'encodage des tables dans le script par: 
+>>     utf8mb4_unicode_ci
+>
+
+## Installation de l'application et de l'API
+
+<br/>
+
+### API:
+>Initialisation de la configuration
+>>     composer install
+>Pour lancer l'API:
+>>     php spark serve
+<br/><br/>
+
+### Application:
+>Initialisation de la configuration
+>>     npm install
+>Lancer l'appli en developement:
+>>     npm run -dev
+<br/><br/>
 
 
-Pour faire fonctionner ces projets, il est necessaire de disposer de composer (PHP)
-et de node (JS)
+## Configuration
+<br/>
 
-Installation des prérequis: 
-    XAMPP: https://www.apachefriends.org/index.html
-    Composer : https://getcomposer.org/download/  --> composer install
+> Faire correspondre les bonnes adresses avec les bonnes variables
+> dans le fichier `.env`: <br/>
+>> Adresse de l'API dans l'application<br/>
+>> Adresse de la base de données dans l'API<br/>  
 
-    Initialisation du depot git:
-        git Init
-        git clone <reposetory (SSH or HTTPS)>
-
-Import de la base de données:
-    Necessite MySQL (fourni avec XAMPP) et phpMyAdmin (préférable)
-    Importer le script fourni
-    En cas de soucis, remplacer l'encodage des tables dans le script par:
-         utf8mb4_unicode_ci
-
-Pour l'API:
-    Cloner le depot,
-    composer install
-    Lancer l'API: php spark serve
-Pour l'application:
-    Cloner le depot
-    npm install
-    Lancer l'appli en developement: npm run -dev
-
-Dans les deux cas, le fichier d'environement .env est a editer afin de faire
-correspondre les adresses de la base de données, de l'API et de l'application.
-Les tests de l'API on été réalisés sur API Talend Tester, et sont privés
-https://chrome.google.com/webstore/detail/talend-api-tester-free-ed/aejoelaoggembcahagimdiliamlcdmfm 
+## Tests
+<br/>
+Les tests de l'API on été réalisés sur [Talend API Tester](https://chrome.google.com/webstore/detail/talend-api-tester-free-ed/aejoelaoggembcahagimdiliamlcdmfm ) <br/>
+Le contenu des tests est à récupérer auprès des membres du projet
