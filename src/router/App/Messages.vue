@@ -3,12 +3,13 @@
         <!-- Header -->
         <div class="flex items-center w-full">
             <div class="flex gap-x-[15px] items-center justify-between w-max">
-                <!-- <i class="text-[27px] bi bi-chat"></i> -->
                 <span class="header">Messages</span>
             </div>
         </div>
 
-        <ConversationCard v-for="conv in conversations" :data="conv" />
+        <div class="flex flex-col gap-y-5">
+            <ConversationCard @click="handleClick" v-for="conv in conversations" :data="conv" />
+        </div>
     </div>
 </template>
 
@@ -18,54 +19,21 @@ import { ref } from "vue";
 import type { IConversationCard } from "../../types/interfaces";
 
 import ConversationCard from "../../components/ConversationCard.vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const conversations = ref<IConversationCard[]>([
     {
-        userFullName: "Lila Doe",
-        lastMessage: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
+        userFullName: "John Doe",
+        lastMessage: "Hello, comment vas-tu ?",
         lastMessageTime: "12:00",
         nbUnreadMessages: 1,
         userAvatar: "https://i.pravatar.cc/150?img=68"
-    },
-    {
-        userFullName: "Alex Doe",
-        lastMessage: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-        lastMessageTime: "12:00",
-        nbUnreadMessages: 20,
-        userAvatar: "https://i.pravatar.cc/150?img=49"
-    },
-    {
-        userFullName: "Philippe Doe",
-        lastMessage: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-        lastMessageTime: "12:00",
-        nbUnreadMessages: 99,
-        userAvatar: "https://i.pravatar.cc/150?img=45"
-    },
-    {
-        userFullName: "Popo Doe",
-        lastMessage: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-        lastMessageTime: "12:00",
-        nbUnreadMessages: 100,
-        userAvatar: "https://i.pravatar.cc/150?img=8"
-    },
-    {
-        userFullName: "Seb Doe",
-        lastMessage: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-        lastMessageTime: "12:00",
-        nbUnreadMessages: 0,
-        userAvatar: "https://i.pravatar.cc/150?img=10"
-    },
-    {
-        userFullName: "Random Doe",
-        lastMessage: "Je suis un message",
-        lastMessageTime: "12:00",
-        nbUnreadMessages: 0
-    },
-    {
-        userFullName: "John Doe",
-        lastMessage: "Je suis un message",
-        lastMessageTime: "12:00",
-        nbUnreadMessages: 0
     }
 ]);
+
+const handleClick = () => {
+    router.push("/messages/1");
+};
 </script>

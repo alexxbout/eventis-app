@@ -66,6 +66,15 @@ const routes: Array<RouteRecordRaw> = [
         }
     },
     {
+        path: "/messages/:id",
+        name: "messagesDetail",
+        component: () => import("./router/app/MessagesDetails.vue"),
+        meta: {
+            requiresAuth: true,
+            hideNavbar: true
+        }
+    },
+    {
         path: "/profile/:id?",
         name: "profile",
         component: () => import("./router/app/Profile.vue"),

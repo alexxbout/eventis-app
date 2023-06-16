@@ -53,7 +53,8 @@ onMounted(async () => {
     interests.value = allInterests.map((interest) => {
         return {
             interests: interest,
-            selected: userInterests.some((userInterest) => userInterest.id === interest.id)
+            // selected: userInterests.some((userInterest) => userInterest.id === interest.id)
+            selected: false
         };
     });
 

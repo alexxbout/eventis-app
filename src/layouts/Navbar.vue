@@ -1,5 +1,5 @@
 <template>
-    <div ref="navbar" v-if="isVisible && user" class="fixed z-10 flex items-center justify-center w-screen opacity-100 bottom-1">
+    <div ref="navbar" v-if="isVisible && user" class="fixed z-10 flex items-center justify-center w-screen opacity-100 bottom-5">
         <div class="grid w-full grid-cols-5 py-4 mx-5 text-xs gap-x-10 rounded-3xl px-7 bg-white/80 backdrop-blur-lg backdrop-saturate-200 shadow-navbar">
 
             <div v-for="tab in (user.idRole == 2 ? userTabs : adminTabs)">
@@ -25,7 +25,6 @@ import type { ITab, IUser } from "../types/interfaces";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import UtilsAuth from "../utils/UtilsAuth";
-import { RouteRecordRaw } from "vue-router";
 import { RouteLocationNormalized } from "vue-router";
 
 // ########################################### VARIABLES ###########################################

@@ -291,7 +291,7 @@ class UtilsApi {
     }
 
     async getUserInterests(idUser: number | string): Promise<IInterest[]> {
-        let data: IInterest[] | null = [];
+        let data: IInterest[] = [];
 
         await this.performRequest("getUserInterests", "GET", "v1/user/" + idUser + "/interest", null, (response) => {
             data = response.data.data as IInterest[];
