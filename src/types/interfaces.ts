@@ -86,14 +86,14 @@ export interface IFoyer {
 export interface IEvent {
     id           : string;
     idFoyer      : string;
-    zip          : string;
-    adress       : string;
+    department   : string;
+    address      : string;
     city         : string;
     canceled?    : string;
     reason?      : string;
     start        : string;
     title        : string;
-    idCategorie  : string;
+    idCategory   : string;
     description  : string;
     pic?         : string;
     participants?: IParticipant[];
@@ -192,3 +192,46 @@ export interface ISection {
     name : string;
     route: string;
 }
+
+// CALENDAR
+
+/**
+ * Interface that represents a day of the calendar.
+ */
+export interface ICustomDay {
+    day: number;
+    hasEvents: boolean;
+}
+
+/**
+ * Interface that represents the calendar.
+ * It contains the data of the calendar, the selected date and the current date.
+ */
+export interface ICalendar {
+    data: ICustomMonth[],
+    selected: {
+        day: number;
+        month: number;
+        year: number;
+    },
+
+    current: {
+        day: number;
+        month: number;
+        year: number;
+    }
+};
+
+/**
+ * Interface that represents one month of the calendar.
+ * It contains the days of the previous month, the current month and the next month.
+ * It also contains the month and the year.
+ */
+export interface ICustomMonth {
+    previous: ICustomDay[];
+    current: ICustomDay[];
+    next: ICustomDay[];
+
+    month: number;
+    year: number;
+};

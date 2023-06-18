@@ -515,10 +515,10 @@ class UtilsApi {
         return data;
     }
 
-    async getEventsByZip(zip: number): Promise<IEvent[] | null> {
+    async getEventsByDepartment(dpt: number): Promise<IEvent[] | null> {
         let data = null;
 
-        await this.performRequest("getEventsByZip", "GET", "v1/event/zip/" + zip, null, (response) => {
+        await this.performRequest("getEventsByDepartment", "GET", "v1/event/dpt/" + dpt, null, (response) => {
             if (response.status == HTTPCodes.OK) {
                 data = response.data.data as IEvent[];
             }
@@ -530,12 +530,12 @@ class UtilsApi {
 
     /**
      * @param date Pass date from GMT time to get the events
-     * @param zip 
+     * @param dpt 
      */
-    async getEventsByDateAndZip(date: number, zip: number): Promise<IEvent[] | null> {
+    async getEventsByDateAndDepartment(date: number, dpt: number): Promise<IEvent[] | null> {
         let data: IEvent[] | null = null;
 
-        await this.performRequest("getEventsByDateAndZip", "GET", "v1/event/cal/" + date + "/" + zip, null, (response) => {
+        await this.performRequest("getEventsByDateAndDepartment", "GET", "v1/event/cal/" + date + "/" + dpt, null, (response) => {
             if (response.status == HTTPCodes.OK) {
                 data = response.data.data as IEvent[];
             }
@@ -568,17 +568,17 @@ class UtilsApi {
         return data;
     }
 
-    async addEvent(idFoyer: number, zip: number, address: string, city: string, start: Date, title: string, idCategorie: number, description: string | null): Promise<boolean> {
+    async addEvent(idFoyer: number, dpt: number, address: string, city: string, start: Date, title: string, idCategory: number, description: string | null): Promise<boolean> {
         let data = false;
 
         await this.performRequest("addEvent", "POST", "v1/event/", {
             "idFoyer": idFoyer,
-            "zip": zip,
+            "dpt": dpt,
             "city": city,
             "address": address,
             "start": start,
             "title": title,
-            "idCategorie": idCategorie,
+            "idCategory": idCategory,
             "description": description
         }, (response) => {
             data = response.status == HTTPCodes.CREATED;

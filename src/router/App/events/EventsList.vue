@@ -1,8 +1,8 @@
 <template>
     <div v-for="data in customData" class="flex flex-col w-full gap-y-10">
-        <div :id="data.zip" class="flex items-center justify-center gap-x-4">
+        <div :id="data.department" class="flex items-center justify-center gap-x-4">
             <div class="w-full h-px bg-gray-400 rounded-full"></div>
-            <div class="text-center text-gray-400 w-min whitespace-nowrap text-lg">{{ UtilsZip.getDepartement(data.zip) }}</div>
+            <div class="text-center text-gray-400 w-min whitespace-nowrap text-lg">{{ UtilsZip.getDepartment(data.department) }}</div>
             <div class="w-full h-px bg-gray-400 rounded-full"></div>
         </div>
 
@@ -24,8 +24,8 @@ import UtilsAuth from "../../../utils/UtilsAuth";
 
 // ########################################### VARIABLES ###########################################
 
-const customData = ref<{ zip: string, events: IEvent[] }[]>([]);
-const nearbyZips = ref<string[]>([]);
+const customData = ref<{ department: string, events: IEvent[] }[]>([]);
+const nearbyDpts = ref<string[]>([]);
 const user = UtilsAuth.getCurrentUser();
 const router = useRouter();
 
@@ -36,25 +36,25 @@ onMounted(async () => {
         const foyerRequest = await UtilsApi.getFoyerById(user!.idFoyer);
 
         if (foyerRequest) {
-            const localZip = foyerRequest.zip.substring(0, 2);
+            const department = foyerRequest.zip.substring(0, 2);
 
-            // Get events of local zip
-            const eventsRequest = await UtilsApi.getEventsByZip(parseInt(localZip));
+            // Get events of local dpt
+            const eventsRequest = await UtilsApi.getEventsByDepartment(parseInt(department));
 
             if (eventsRequest) {
-                customData.value.push({ zip: localZip, events: eventsRequest });
+                customData.value.push({ department: department, events: eventsRequest });
             }
 
-            // Get nearby zips
-            nearbyZips.value = UtilsZip.getNearbyZips(parseInt(localZip));
+            // Get nearby dpts
+            nearbyDpts.value = UtilsZip.getNearbyDepartments(parseInt(department));
 
-            // Get events of nearby zips
-            if (nearbyZips.value.length > 0) {
-                for (const zip of nearbyZips.value) {
-                    const eventsRequest = await UtilsApi.getEventsByZip(parseInt(zip));
+            // Get events of nearby dpts
+            if (nearbyDpts.value.length > 0) {
+                for (const dpt of nearbyDpts.value) {
+                    const eventsRequest = await UtilsApi.getEventsByDepartment(parseInt(dpt));
 
                     if (eventsRequest) {
-                        customData.value.push({ zip: zip, events: eventsRequest });
+                        customData.value.push({ department: dpt, events: eventsRequest });
                     }
                 }
             }

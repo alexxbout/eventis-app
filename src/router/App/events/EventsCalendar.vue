@@ -29,58 +29,17 @@ import UtilsApi from "../../../utils/UtilsApi";
 import UtilsAuth from "../../../utils/UtilsAuth";
 import UtilsZip from "../../../utils/UtilsZip";
 
-import type { IEvent } from "../../../types/interfaces";
+import type { ICalendar, ICustomDay, ICustomMonth, IEvent } from "../../../types/interfaces";
 
 import EventCard from "../events/EventCard.vue";
 
 // ########################################### VARIABLES ###########################################
 
-/**
- * Interface that represents a day of the calendar.
- */
-interface ICustomDay {
-    day: number;
-    hasEvents: boolean;
-}
-
-/**
- * Interface that represents the calendar.
- * It contains the data of the calendar, the selected date and the current date.
- */
-interface ICalendar {
-    data: ICustomMonth[],
-    selected: {
-        day: number;
-        month: number;
-        year: number;
-    },
-
-    current: {
-        day: number;
-        month: number;
-        year: number;
-    }
-};
-
-/**
- * Interface that represents one month of the calendar.
- * It contains the days of the previous month, the current month and the next month.
- * It also contains the month and the year.
- */
-interface ICustomMonth {
-    previous: ICustomDay[];
-    current: ICustomDay[];
-    next: ICustomDay[];
-
-    month: number;
-    year: number;
-};
-
 const user = UtilsAuth.getCurrentUser();
 
 const days = ref(["LUN", "MAR", "MER", "JEU", "VEN", "SAM", "DIM"]);
 
-const nearbyZips = ref<string[]>([]);
+const nearbyDpts = ref<string[]>([]);
 
 const calendar = ref<ICalendar>({
     data: [],
@@ -214,22 +173,22 @@ const getEvents = async (day: number, month: number, year: number): Promise<IEve
         const foyerRequest = await UtilsApi.getFoyerById(user!.idFoyer);
 
         if (foyerRequest) {
-            const localZip = foyerRequest.zip.substring(0, 2);
+            const department = foyerRequest.zip.substring(0, 2);
 
-            // Get events of local zip
-            const eventsRequest = await UtilsApi.getEventsByDateAndZip(time, parseInt(localZip));
+            // Get events of local dpt
+            const eventsRequest = await UtilsApi.getEventsByDateAndDepartment(time, parseInt(department));
 
             if (eventsRequest) {
                 events.push(...eventsRequest);
             }
 
-            // Get nearby zips
-            nearbyZips.value = UtilsZip.getNearbyZips(parseInt(localZip));
+            // Get nearby dpts
+            nearbyDpts.value = UtilsZip.getNearbyDepartments(parseInt(department));
 
-            // Get events of nearby zips
-            if (nearbyZips.value.length > 0) {
-                for (const zip of nearbyZips.value) {
-                    const eventsRequest = await UtilsApi.getEventsByDateAndZip(time, parseInt(zip));
+            // Get events of nearby dpts
+            if (nearbyDpts.value.length > 0) {
+                for (const dpt of nearbyDpts.value) {
+                    const eventsRequest = await UtilsApi.getEventsByDateAndDepartment(time, parseInt(dpt));
 
                     if (eventsRequest) {
                         events.push(...eventsRequest);

@@ -1,16 +1,16 @@
 
 class UtilsZip {
 
-  getNearbyZips(zip: string | number): string[] {
-    return nearbyZips[zip];
+  getNearbyDepartments(dpt: string | number): string[] {
+    return nearby[dpt];
   }
 
-  getDepartement(zip: string | number): string {
-    return departements[zip];
+  getDepartment(dpt: string | number): string {
+    return departments[dpt];
   }
 }
 
-const departements: { [key: string]: string } = {
+const departments: { [key: string]: string } = {
   "01": "Ain",
   "02": "Aisne",
   "03": "Allier",
@@ -107,7 +107,7 @@ const departements: { [key: string]: string } = {
   "95": "Val-d'Oise"
 }
 
-const nearbyZips: { [key: string]: string[] } = {
+const nearby: { [key: string]: string[] } = {
   "01": ["69", "38", "71", "39", "74"],
   "02": ["59", "60", "80", "08", "51", "77"],
   "03": ["58", "18", "42", "63", "71", "58"],
