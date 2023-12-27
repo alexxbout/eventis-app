@@ -34,8 +34,8 @@ import { useRouter } from "vue-router";
 
 import EventsList from "./EventsList.vue";
 
-import EventsCalendar from "./EventsCalendar.vue";
 import { useRoute } from "vue-router";
+import EventsCalendar from "./EventsCalendar.vue";
 
 // ########################################### VARIABLES ###########################################
 
